@@ -1,0 +1,29 @@
+{
+  "general": {
+    "404": {
+      "title": "Page not found",
+      "subtext": "The page you were looking for doesn't exist.",
+      "link": "Back to home"
+    },
+    "search": {
+      "no_results": "No results found.",
+      "placeholder": "Search records, merch, artists…"
+    }
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty.",
+    "checkout": "Check out"
+  },
+  "products": {
+    "add_to_cart": "Add to cart",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable"
+  },
+  "customer": {
+    "log_in": "Log in",
+    "log_out": "Log out",
+    "create_account": "Create account",
+    "forgot_password": "Forgot password?"
+  }
+}

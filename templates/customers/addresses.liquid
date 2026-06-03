@@ -1,0 +1,55 @@
+<section class="account-page" id="account">
+  <div class="account-page__inner">
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text">ADDRESSES</span>
+      </div>
+      <div class="window__content account-window__body">
+
+        <nav class="account-nav" aria-label="Account">
+          <a class="account-nav__tab" href="{{ routes.account_url }}">DASHBOARD</a>
+          <a class="account-nav__tab is-active" href="{{ routes.account_addresses_url }}">ADDRESSES</a>
+          <a class="account-nav__tab" href="{{ routes.account_logout_url }}">LOG OUT</a>
+        </nav>
+
+        <div class="account-view">
+          <h2 class="account-view__title">ADDRESSES</h2>
+
+          {%- for address in customer.addresses -%}
+            <div class="account-dashboard__section">
+              <div class="account-dashboard__heading">{% if address == customer.default_address %}DEFAULT{% else %}ADDRESS {{ forloop.index }}{% endif %}</div>
+              <div class="about-us__copy">{{ address | format_address }}</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <a class="account-signout" href="{{ address.url }}/edit">EDIT</a>
+                {%- form 'customer_address', address -%}
+                  <input type="hidden" name="_method" value="delete">
+                  <button class="account-signout" type="submit">DELETE</button>
+                {%- endform -%}
+              </div>
+            </div>
+          {%- endfor -%}
+
+          <div class="account-dashboard__section">
+            <div class="account-dashboard__heading">ADD NEW ADDRESS</div>
+            {%- form 'customer_address', customer.new_address, class: 'account-form' -%}
+              <div class="account-form__row">
+                <input class="checkout-input" type="text" name="address[first_name]" placeholder="FIRST NAME">
+                <input class="checkout-input" type="text" name="address[last_name]"  placeholder="LAST NAME">
+              </div>
+              <input class="checkout-input" type="text" name="address[address1]" placeholder="STREET ADDRESS">
+              <div class="account-form__row">
+                <input class="checkout-input" type="text" name="address[city]" placeholder="CITY">
+                <input class="checkout-input" type="text" name="address[zip]"  placeholder="POSTAL CODE">
+              </div>
+              <input class="checkout-input" type="text" name="address[country]" placeholder="COUNTRY">
+              <button type="submit" class="account-form__submit">SAVE ADDRESS</button>
+            {%- endform -%}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

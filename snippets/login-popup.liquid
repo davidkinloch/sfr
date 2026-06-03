@@ -1,0 +1,34 @@
+{%- comment -%}
+  Login popup — rendered only when customer is not logged in.
+  Uses Shopify's customer_login form so CSRF token is included.
+{%- endcomment -%}
+{%- unless customer -%}
+<div class="login-popup" id="loginPopup" aria-hidden="true" role="dialog">
+  <div class="window">
+    <div class="border-left"></div>
+    <div class="border-right"></div>
+    <div class="window__titlebar">
+      <button class="window__close" id="loginPopupClose" type="button" aria-label="Close"></button>
+      <span class="window__text">LOG IN</span>
+    </div>
+    {%- form 'customer_login', class: 'login-popup__body', id: 'loginPopupForm' -%}
+      <label class="login-popup__row">
+        <span>USER:</span>
+        <input type="email" name="customer[email]" autocomplete="username" required>
+      </label>
+      <label class="login-popup__row">
+        <span>PASSWORD:</span>
+        <input type="password" name="customer[password]" autocomplete="current-password" required>
+      </label>
+      {%- if form.errors -%}
+        <div class="login-popup__error">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <button type="submit" class="login-popup__go">GO</button>
+      <div class="login-popup__links">
+        <a class="checkout-link" href="{{ routes.account_recover_url }}">FORGOT PASSWORD?</a>
+        <a class="checkout-link" href="{{ routes.account_register_url }}">SIGN UP</a>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+{%- endunless -%}

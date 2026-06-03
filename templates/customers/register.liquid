@@ -1,0 +1,39 @@
+<section class="account-page" id="account">
+  <div class="account-page__inner">
+
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text">CREATE ACCOUNT</span>
+      </div>
+      <div class="window__content account-window__body">
+
+        <nav class="account-nav" aria-label="Account">
+          <a class="account-nav__tab" href="{{ routes.account_login_url }}">LOG IN</a>
+          <a class="account-nav__tab is-active" href="{{ routes.account_register_url }}">SIGN UP</a>
+          <a class="account-nav__tab" href="{{ routes.account_recover_url }}">FORGOT</a>
+        </nav>
+
+        <div class="account-view">
+          <h2 class="account-view__title">CREATE ACCOUNT</h2>
+          <p class="account-view__sub">Track orders and check out faster next time.</p>
+          {%- form 'create_customer', class: 'account-form' -%}
+            <div class="account-form__row">
+              <input class="checkout-input" type="text" name="customer[first_name]" placeholder="FIRST NAME" autocomplete="given-name"  required>
+              <input class="checkout-input" type="text" name="customer[last_name]"  placeholder="LAST NAME"  autocomplete="family-name" required>
+            </div>
+            <input class="checkout-input" type="email"    name="customer[email]"    placeholder="EMAIL ADDRESS" autocomplete="email"        required>
+            <input class="checkout-input" type="password" name="customer[password]" placeholder="PASSWORD"      autocomplete="new-password" required>
+            {%- if form.errors -%}
+              <div class="account-form__error is-visible">{{ form.errors | default_errors }}</div>
+            {%- endif -%}
+            <button type="submit" class="account-form__submit">CREATE ACCOUNT</button>
+          {%- endform -%}
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>

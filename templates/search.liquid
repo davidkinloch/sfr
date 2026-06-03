@@ -1,0 +1,30 @@
+<section class="contact-page">
+  <div class="contact-page__inner">
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text">SEARCH</span>
+      </div>
+      <div class="window__content contact-window__body">
+        <div class="contact-window__col" style="grid-column:1/-1; max-width:100%;">
+          <form action="{{ routes.search_url }}" method="get" class="account-form">
+            <input class="checkout-input" type="search" name="q" placeholder="{{ 'general.search.placeholder' | t }}" value="{{ search.terms | escape }}">
+            <button class="account-form__submit" type="submit">SEARCH</button>
+          </form>
+
+          {%- if search.performed -%}
+            <p class="account-view__sub">Showing results for &ldquo;{{ search.terms | escape }}&rdquo; ({{ search.results_count }})</p>
+            <ul class="menu-modal__list">
+              {%- for result in search.results -%}
+                <li><a class="menu__item" href="{{ result.url }}">{{ result.title | upcase }}</a></li>
+              {%- else -%}
+                <li><a class="menu__item">{{ 'general.search.no_results' | t }}</a></li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

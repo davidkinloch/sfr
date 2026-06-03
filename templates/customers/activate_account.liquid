@@ -1,0 +1,25 @@
+<section class="account-page" id="account">
+  <div class="account-page__inner">
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text">ACTIVATE ACCOUNT</span>
+      </div>
+      <div class="window__content account-window__body">
+        <div class="account-view">
+          <h2 class="account-view__title">ACTIVATE ACCOUNT</h2>
+          <p class="account-view__sub">Set a password to activate your account.</p>
+          {%- form 'activate_customer_password', class: 'account-form' -%}
+            <input class="checkout-input" type="password" name="customer[password]"              placeholder="PASSWORD"         autocomplete="new-password" required>
+            <input class="checkout-input" type="password" name="customer[password_confirmation]" placeholder="CONFIRM PASSWORD" autocomplete="new-password" required>
+            {%- if form.errors -%}
+              <div class="account-form__error is-visible">{{ form.errors | default_errors }}</div>
+            {%- endif -%}
+            <button type="submit" class="account-form__submit">ACTIVATE</button>
+          {%- endform -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

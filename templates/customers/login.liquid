@@ -1,0 +1,63 @@
+<section class="account-page" id="account">
+  <div class="account-page__inner">
+
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text" id="accountTitle">LOG IN</span>
+      </div>
+      <div class="window__content account-window__body">
+
+        <nav class="account-nav" aria-label="Account">
+          <a class="account-nav__tab is-active" href="{{ routes.account_login_url }}"   data-view="login">LOG IN</a>
+          <a class="account-nav__tab"            href="{{ routes.account_register_url }}" data-view="signup">SIGN UP</a>
+          <a class="account-nav__tab"            href="#recover"                          data-view="recover">FORGOT</a>
+        </nav>
+
+        <!-- LOG IN view -->
+        <div class="account-view" data-view="login">
+          <h2 class="account-view__title">LOG IN</h2>
+          <p class="account-view__sub">Sign in to access your orders and account.</p>
+          {%- form 'customer_login', class: 'account-form' -%}
+            <input class="checkout-input" type="email"    name="customer[email]"    placeholder="EMAIL ADDRESS" autocomplete="username"        required>
+            <input class="checkout-input" type="password" name="customer[password]" placeholder="PASSWORD"      autocomplete="current-password" required>
+            {%- if form.errors -%}<div class="account-form__error is-visible">{{ form.errors | default_errors }}</div>{%- endif -%}
+            <button type="submit" class="account-form__submit">LOG IN</button>
+          {%- endform -%}
+        </div>
+
+        <!-- FORGOT view -->
+        <div class="account-view" data-view="recover" hidden>
+          <h2 class="account-view__title">FORGOT PASSWORD</h2>
+          <p class="account-view__sub">Enter your email and we'll send a reset link.</p>
+          {%- form 'recover_customer_password', class: 'account-form' -%}
+            <input class="checkout-input" type="email" name="email" placeholder="EMAIL ADDRESS" autocomplete="email" required>
+            {%- if form.posted_successfully? -%}
+              <p class="account-view__sub" style="color:#6a6a6a;">If an account exists for that email, a reset link is on its way.</p>
+            {%- endif -%}
+            <button type="submit" class="account-form__submit">SEND RESET LINK</button>
+          {%- endform -%}
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  const titleEl = document.getElementById('accountTitle');
+  const TITLES = { login: 'LOG IN', recover: 'FORGOT PASSWORD' };
+  function show(name) {
+    if (!TITLES[name]) name = 'login';
+    titleEl.textContent = TITLES[name];
+    document.querySelectorAll('.account-view').forEach(v => v.hidden = v.getAttribute('data-view') !== name);
+    document.querySelectorAll('.account-nav__tab').forEach(t => t.classList.toggle('is-active', t.getAttribute('data-view') === name));
+  }
+  function init() { show((window.location.hash || '#login').slice(1)); }
+  window.addEventListener('hashchange', init);
+  init();
+})();
+</script>

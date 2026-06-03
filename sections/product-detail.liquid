@@ -1,0 +1,241 @@
+{%- comment -%}
+  PDP — works for records, merch, anything.
+  product.type detects merch (any type other than blank/"vinyl"/"record" hides vinyl peek).
+  Metafields (namespace: sfr):
+    cat_no, label, style, release_date, format, color, material, print
+  Sizes/variants come from native product.variants. When variants
+  exist, a size picker is rendered.
+{%- endcomment -%}
+{%- assign is_record = false -%}
+{%- if product.type == blank or product.type == 'Vinyl' or product.type == 'Record' -%}{%- assign is_record = true -%}{%- endif -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign has_sizes = false -%}
+{%- if product.variants.size > 1 -%}{%- assign has_sizes = true -%}{%- endif -%}
+
+<section class="pdp">
+  <div class="pdp__inner">
+
+    <!-- Media -->
+    <div class="pdp__media">
+      <div class="pdp__cover-wrap">
+        {%- if is_record -%}
+          <img class="pdp__vinyl" src="{{ 'record.png' | asset_url }}" aria-hidden="true" alt="">
+        {%- endif -%}
+        <img class="pdp__cover" id="pdpMainImg"
+             src="{{ product.featured_image | image_url: width: 1200 }}"
+             alt="{{ product.title | escape }}">
+      </div>
+      {%- if product.images.size > 1 -%}
+        <div class="pdp__thumbs">
+          {%- for img in product.images -%}
+            <img class="pdp__thumb{% if forloop.first %} is-active{% endif %}"
+                 src="{{ img | image_url: width: 160 }}"
+                 alt="{{ product.title | escape }} — image {{ forloop.index }}"
+                 data-full="{{ img | image_url: width: 1200 }}">
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Info Panel -->
+    <div class="pdp__panel window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text">{% if is_record %}ALBUM INFO{% else %}PRODUCT INFO{% endif %}</span>
+      </div>
+      <div class="window__content pdp__body">
+
+        {%- if has_sizes -%}
+          <div class="pdp__size">
+            <span class="pdp__size-label">SIZE</span>
+            <div class="pdp__size-options" id="pdpSizeOptions">
+              {%- for variant in product.variants -%}
+                <button class="pdp__size-btn{% if variant.id == current_variant.id %} is-selected{% endif %}{% unless variant.available %} is-soldout{% endunless %}"
+                        type="button"
+                        data-variant-id="{{ variant.id }}"
+                        data-available="{{ variant.available }}"
+                        {% unless variant.available %}aria-disabled="true"{% endunless %}>
+                  {{ variant.title }}
+                </button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        <form method="post" action="{{ routes.cart_add_url }}" id="pdpForm" enctype="multipart/form-data">
+          <input type="hidden" name="id" id="pdpVariantId" value="{{ current_variant.id }}">
+          <input type="hidden" name="quantity" id="pdpQtyHidden" value="1">
+
+          <div class="pdp__purchase">
+            <div class="pdp__price">
+              <span class="pdp__price-tag" id="pdpPriceTag">{{ current_variant.price | money_without_trailing_zeros }}</span>
+            </div>
+            <div class="pdp__stock" id="pdpStock">
+              {%- if current_variant.available %}IN STOCK{% else %}OUT OF STOCK{% endif -%}
+            </div>
+            <div class="pdp__buy">
+              <div class="pdp__qty-wrap">
+                <button class="pdp__qty-btn" type="button" id="pdpQtyDown">&#8722;</button>
+                <span class="pdp__qty-val" id="pdpQtyVal">1</span>
+                <button class="pdp__qty-btn" type="button" id="pdpQtyUp">+</button>
+              </div>
+              <button class="pdp__add-cart" type="submit" id="pdpAddCart"
+                      {% unless current_variant.available %}disabled{% endunless %}>
+                {%- if current_variant.available -%}ADD TO CART{%- else -%}OUT OF STOCK{%- endif -%}
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="pdp__stock-msg{% unless current_variant.available %} is-visible{% endunless %}" id="pdpStockMsg">
+          OUT OF STOCK &mdash; PLEASE EMAIL <a href="mailto:{{ settings.stock_email | default: 'stock@sfrrecords.com' }}">{{ settings.stock_email | default: 'STOCK@SFRRECORDS.COM' | upcase }}</a> FOR INCOMING.
+        </div>
+
+        <!-- Info table -->
+        <div class="pdp__table">
+          {%- if product.metafields.sfr.cat_no != blank -%}
+            <div class="pdp__row"><div class="pdp__key">CAT NO</div><div class="pdp__val">{{ product.metafields.sfr.cat_no }}</div></div>
+          {%- endif -%}
+          {%- if is_record -%}
+            <div class="pdp__row"><div class="pdp__key">ARTIST</div><div class="pdp__val">{{ product.vendor | upcase }}</div></div>
+            <div class="pdp__row"><div class="pdp__key">TITLE</div><div class="pdp__val">{{ product.title | upcase }}</div></div>
+            {%- if product.metafields.sfr.label != blank -%}
+              <div class="pdp__row"><div class="pdp__key">LABEL</div><div class="pdp__val">{{ product.metafields.sfr.label | upcase }}</div></div>
+            {%- endif -%}
+            {%- if product.metafields.sfr.style != blank -%}
+              <div class="pdp__row"><div class="pdp__key">STYLE</div><div class="pdp__val">{{ product.metafields.sfr.style | upcase }}</div></div>
+            {%- endif -%}
+            {%- if product.metafields.sfr.release_date != blank -%}
+              <div class="pdp__row"><div class="pdp__key">DATE</div><div class="pdp__val">{{ product.metafields.sfr.release_date | date: '%-m.%y' }}</div></div>
+            {%- endif -%}
+            {%- if product.metafields.sfr.format != blank -%}
+              <div class="pdp__row"><div class="pdp__key">FORMAT</div><div class="pdp__val">{{ product.metafields.sfr.format | upcase }}</div></div>
+            {%- endif -%}
+          {%- else -%}
+            <div class="pdp__row"><div class="pdp__key">TITLE</div><div class="pdp__val">{{ product.title | upcase }}</div></div>
+            {%- if product.type != blank -%}
+              <div class="pdp__row"><div class="pdp__key">TYPE</div><div class="pdp__val">{{ product.type | upcase }}</div></div>
+            {%- endif -%}
+            {%- if product.metafields.sfr.color != blank -%}
+              <div class="pdp__row"><div class="pdp__key">COLOR</div><div class="pdp__val">{{ product.metafields.sfr.color | upcase }}</div></div>
+            {%- endif -%}
+            {%- if product.metafields.sfr.material != blank -%}
+              <div class="pdp__row"><div class="pdp__key">MATERIAL</div><div class="pdp__val">{{ product.metafields.sfr.material | upcase }}</div></div>
+            {%- endif -%}
+            {%- if product.metafields.sfr.print != blank -%}
+              <div class="pdp__row"><div class="pdp__key">PRINT</div><div class="pdp__val">{{ product.metafields.sfr.print | upcase }}</div></div>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        <!-- Description -->
+        {%- if product.description != blank -%}
+          <div class="pdp__desc">
+            <div class="pdp__desc-label">DESCRIPTION</div>
+            <div class="pdp__desc-body">{{ product.description }}</div>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  /* Variant data for client-side switching */
+  const variants = {
+    {%- for variant in product.variants -%}
+      "{{ variant.id }}": {
+        id: {{ variant.id }},
+        title: {{ variant.title | json }},
+        price: {{ variant.price | json }},
+        priceFormatted: {{ variant.price | money_without_trailing_zeros | json }},
+        available: {{ variant.available }},
+        featured_image: {{ variant.featured_image.src | json | default: '""' }}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  };
+
+  /* Qty +/- */
+  const qtyVal = document.getElementById('pdpQtyVal');
+  const qtyHidden = document.getElementById('pdpQtyHidden');
+  document.getElementById('pdpQtyDown').addEventListener('click', () => {
+    const v = Math.max(1, parseInt(qtyVal.textContent, 10) - 1);
+    qtyVal.textContent = v; qtyHidden.value = v;
+  });
+  document.getElementById('pdpQtyUp').addEventListener('click', () => {
+    const v = parseInt(qtyVal.textContent, 10) + 1;
+    qtyVal.textContent = v; qtyHidden.value = v;
+  });
+
+  /* Size variant picker */
+  const sizeOptions = document.getElementById('pdpSizeOptions');
+  const variantIdInput = document.getElementById('pdpVariantId');
+  const priceEl = document.getElementById('pdpPriceTag');
+  const stockEl = document.getElementById('pdpStock');
+  const stockMsg = document.getElementById('pdpStockMsg');
+  const addBtn = document.getElementById('pdpAddCart');
+  function applyVariant(v) {
+    if (!v) return;
+    variantIdInput.value = v.id;
+    if (priceEl) priceEl.textContent = v.priceFormatted;
+    if (stockEl) {
+      stockEl.textContent = v.available ? 'IN STOCK' : 'OUT OF STOCK';
+      stockEl.classList.toggle('is-oos', !v.available);
+    }
+    if (priceEl) priceEl.classList.toggle('is-oos', !v.available);
+    if (stockMsg) stockMsg.classList.toggle('is-visible', !v.available);
+    if (addBtn) {
+      if (v.available) { addBtn.removeAttribute('disabled'); addBtn.textContent = 'ADD TO CART'; }
+      else             { addBtn.setAttribute('disabled', 'disabled'); addBtn.textContent = 'OUT OF STOCK'; }
+    }
+  }
+  if (sizeOptions) {
+    sizeOptions.addEventListener('click', (e) => {
+      const btn = e.target.closest('.pdp__size-btn');
+      if (!btn) return;
+      sizeOptions.querySelectorAll('.pdp__size-btn').forEach(b => b.classList.toggle('is-selected', b === btn));
+      applyVariant(variants[btn.getAttribute('data-variant-id')]);
+    });
+  }
+
+  /* Thumbnail switching */
+  document.querySelectorAll('.pdp__thumb').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.pdp__thumb').forEach(x => x.classList.remove('is-active'));
+      t.classList.add('is-active');
+      const full = t.getAttribute('data-full');
+      if (full) document.getElementById('pdpMainImg').src = full;
+    });
+  });
+
+  /* AJAX add-to-cart (so we don't leave the page) */
+  const form = document.getElementById('pdpForm');
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (!window.SFRCart) { form.submit(); return; }
+    try {
+      await SFRCart.add({
+        id: parseInt(variantIdInput.value, 10),
+        quantity: parseInt(qtyHidden.value, 10) || 1
+      });
+      SFRCart.flash(addBtn, 'ADDED ✓');
+    } catch (err) {
+      SFRCart.flash(addBtn, 'ERROR');
+    }
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Product detail",
+  "settings": [],
+  "presets": [
+    { "name": "Product detail" }
+  ]
+}
+{% endschema %}

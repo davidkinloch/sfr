@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "music-videos",
+      "settings": {},
+      "blocks": {
+        "v1": { "type": "video" },
+        "v2": { "type": "video" },
+        "v3": { "type": "video" }
+      },
+      "block_order": ["v1", "v2", "v3"]
+    }
+  },
+  "order": ["main"]
+}

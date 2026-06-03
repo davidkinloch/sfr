@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "merch-plp",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

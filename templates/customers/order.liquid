@@ -1,0 +1,46 @@
+<section class="account-page" id="account">
+  <div class="account-page__inner">
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text">ORDER {{ order.name }}</span>
+      </div>
+      <div class="window__content account-window__body">
+        <div class="account-view">
+
+          <p class="account-view__sub">Placed {{ order.created_at | date: '%Y-%m-%d %H:%M' }} &middot; {{ order.financial_status_label | upcase }} &middot; {{ order.fulfillment_status_label | upcase }}</p>
+
+          <table class="account-orders-table">
+            <thead><tr><th>ITEM</th><th>QTY</th><th>PRICE</th><th>TOTAL</th></tr></thead>
+            <tbody>
+              {%- for line in order.line_items -%}
+                <tr>
+                  <td>{{ line.title | upcase }}{% unless line.variant.title == 'Default Title' %} &middot; {{ line.variant.title | upcase }}{% endunless %}</td>
+                  <td>{{ line.quantity }}x</td>
+                  <td>{{ line.price | money_without_trailing_zeros }}</td>
+                  <td>{{ line.final_line_price | money_without_trailing_zeros }}</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+
+          <div class="cart-totals" style="margin-top:16px;">
+            <div class="cart-totals__row"><span>SUB TOTAL</span><span>{{ order.subtotal_price | money_without_trailing_zeros }}</span></div>
+            <div class="cart-totals__row"><span>SHIPPING</span><span>{{ order.shipping_price | money_without_trailing_zeros }}</span></div>
+            <div class="cart-totals__row"><span>TAX</span><span>{{ order.tax_price | money_without_trailing_zeros }}</span></div>
+            <div class="cart-totals__row cart-totals__row--total"><span>TOTAL</span><span>{{ order.total_price | money_without_trailing_zeros }}</span></div>
+          </div>
+
+          <div class="account-dashboard__section">
+            <div class="account-dashboard__heading">SHIPPING ADDRESS</div>
+            <div class="about-us__copy">{{ order.shipping_address | format_address }}</div>
+          </div>
+
+          <a class="account-signout" href="{{ routes.account_url }}" style="text-decoration:none;display:inline-flex;align-items:center;">BACK TO DASHBOARD</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

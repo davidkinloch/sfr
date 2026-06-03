@@ -1,0 +1,20 @@
+{%- comment -%}
+  Mobile menu modal. Items mirror the main nav defined by the
+  linklist whose handle is set in theme settings (main_menu_handle).
+{%- endcomment -%}
+<div class="menu-modal" id="menuModal" aria-hidden="true">
+  <div class="window">
+    <div class="border-left"></div>
+    <div class="border-right"></div>
+    <div class="window__titlebar">
+      <button class="window__close" id="menuModalClose" type="button" aria-label="Close menu"></button>
+      <span class="window__text">Menu</span>
+    </div>
+    <ul class="menu-modal__list">
+      {%- assign main_menu = linklists[settings.main_menu_handle | default: 'main-menu'] -%}
+      {%- for link in main_menu.links -%}
+        <li><a class="menu__item{% if link.active %} is-active{% endif %}" href="{{ link.url }}">{{ link.title | upcase }}</a></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+{
+  "current": {
+    "stock_email": "stock@sfrrecords.com",
+    "main_menu_handle": "main-menu"
+  },
+  "presets": {
+    "Default": {
+      "stock_email": "stock@sfrrecords.com",
+      "main_menu_handle": "main-menu"
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{%- comment -%}
+  Records PLP — horizontal slider of product cards.
+  Uses the collection set in section.settings.collection (handle).
+  Per-product metafields (namespace: sfr):
+    cat_no            — single line text, e.g. "SFR012"
+    format            — single line text, e.g. '12" Vinyl'
+{%- endcomment -%}
+{%- assign records = collections[section.settings.collection | default: 'records'] -%}
+<section class="main-content" id="records">
+  <div class="plp">
+    <div class="plp__track-wrap" id="plpWrap">
+      <ul class="plp__track" id="plpTrack">
+        {%- for product in records.products -%}
+          {%- assign cat = product.metafields.sfr.cat_no | default: 'SFR—' -%}
+          {%- assign first_variant = product.selected_or_first_available_variant -%}
+          <li class="plp__card">
+            <a class="plp__artwork-link" href="{{ product.url }}">
+              <img class="plp__artwork"
+                   src="{{ product.featured_image | image_url: width: 600 }}"
+                   alt="{{ product.title | escape }}"
+                   loading="lazy">
+            </a>
+            <div class="plp__info window">
+              <div class="border-left"></div>
+              <div class="border-right"></div>
+              <div class="window__titlebar">
+                <a class="window__text" href="{{ product.url }}">CAT: {{ cat }}</a>
+              </div>
+              <ul class="plp__desc">
+                <li><a class="plp__desc-item" href="{{ product.url }}">ARTIST: {{ product.vendor | upcase }}</a></li>
+                <li><a class="plp__desc-item" href="{{ product.url }}">ALBUM: {{ product.title | upcase }}</a></li>
+                <li>
+                  <a class="mac-btn plp__play" href="{{ product.url }}">
+                    <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor" aria-hidden="true"><polygon points="0,0 0,10 8,5"/></svg>
+                    PLAY CLIPS
+                  </a>
+                </li>
+                <li>
+                  <div class="plp__desc-item plp__cart-row">
+                    <span class="plp__price">{{ first_variant.price | money_without_trailing_zeros }}</span>
+                    <select class="plp__qty" aria-label="Quantity">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <button class="plp__add" type="button" data-variant-id="{{ first_variant.id }}" aria-label="Add to cart">
+                      {% render 'icon-cart-plus' %}
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
+        {%- else -%}
+          <li class="plp__card plp__card--empty">No products yet. Add products to the "{{ section.settings.collection | default: 'records' }}" collection.</li>
+        {%- endfor -%}
+      </ul>
+    </div>
+    <div class="plp__nav">
+      <div class="plp__page-counter">
+        <img class="plp__counter-bg" src="{{ 'plp-counter.png' | asset_url }}" alt="">
+        <span class="plp__counter-text">PAGE <span id="plpPage">1</span>/<span id="plpTotal">1</span></span>
+      </div>
+      <div class="plp__bar-wrap">
+        <button class="plp__arrow plp__arrow--prev" id="plpPrev" aria-label="Previous"></button>
+        <div class="plp__slider-bg">
+          <div class="plp__slider-node" id="plpSliderNode"></div>
+        </div>
+        <button class="plp__arrow plp__arrow--next" id="plpNext" aria-label="Next"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  const track = document.getElementById('plpTrack');
+  const wrap  = document.getElementById('plpWrap');
+  const prevBtn = document.getElementById('plpPrev');
+  const nextBtn = document.getElementById('plpNext');
+  const pageEl  = document.getElementById('plpPage');
+  const totalEl = document.getElementById('plpTotal');
+  const sliderNode = document.getElementById('plpSliderNode');
+
+  function sizePlpCards() {
+    const perPage = window.innerWidth <= 780 ? 1 : 5;
+    if (perPage > 1) {
+      const cardW = (wrap.offsetWidth - 16 - (perPage - 1) * 16) / perPage;
+      wrap.style.setProperty('--plp-card-w', cardW + 'px');
+    } else {
+      wrap.style.removeProperty('--plp-card-w');
+    }
+  }
+  sizePlpCards();
+  window.addEventListener('resize', sizePlpCards);
+
+  function getCardWidth() {
+    const card = track.querySelector('.plp__card');
+    return card ? card.offsetWidth + 16 : 0;
+  }
+  function getPerPage() { return window.innerWidth <= 780 ? 1 : 5; }
+  let isSliderDragging = false;
+  function updatePagination() {
+    const perPage = getPerPage();
+    const items   = track.querySelectorAll('.plp__card').length;
+    const total   = Math.max(1, Math.ceil(items / perPage));
+    const cardW   = getCardWidth();
+    const atEnd   = wrap.scrollLeft + wrap.offsetWidth >= wrap.scrollWidth - 1;
+    const current = atEnd ? total : (cardW > 0 ? Math.min(Math.round(wrap.scrollLeft / (cardW * perPage)) + 1, total) : 1);
+    pageEl.textContent = current;
+    totalEl.textContent = total;
+    const navEl = document.querySelector('.plp__nav');
+    if (navEl) navEl.style.display = total <= 1 ? 'none' : '';
+    if (sliderNode && !isSliderDragging) {
+      const bg  = sliderNode.parentElement;
+      const max = bg.offsetWidth - sliderNode.offsetWidth;
+      const pct = total > 1 ? (current - 1) / (total - 1) : 0;
+      sliderNode.style.left = (pct * max) + 'px';
+    }
+  }
+  prevBtn.addEventListener('click', () => wrap.scrollBy({ left: -(getCardWidth() * getPerPage()), behavior: 'smooth' }));
+  nextBtn.addEventListener('click', () => wrap.scrollBy({ left:   getCardWidth() * getPerPage(),  behavior: 'smooth' }));
+  wrap.addEventListener('scroll', updatePagination);
+  window.addEventListener('resize', updatePagination);
+  updatePagination();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Records PLP",
+  "settings": [
+    {
+      "type": "text",
+      "id": "collection",
+      "label": "Collection handle",
+      "default": "records",
+      "info": "Collection of records to display in the slider."
+    }
+  ],
+  "presets": [
+    { "name": "Records PLP" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,128 @@
+{%- comment -%}
+  Contact / About — single window, two columns:
+  Left: CONTACT INFO header, socials, booking pill, contact form
+  Right: SFR logos row (3 cells), about copy
+  About copy comes from section.settings.about_html (rich text).
+{%- endcomment -%}
+<section class="contact-page" id="contact">
+  <img class="about-us__homie" src="{{ 'sfr-homie.png' | asset_url }}" alt="" aria-hidden="true">
+  <div class="contact-page__inner">
+
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text">{{ section.settings.titlebar | default: 'ABOUT US' }}</span>
+      </div>
+      <div class="window__content contact-window__body">
+
+        <!-- LEFT -->
+        <div class="contact-window__col contact-window__col--left">
+
+          <div class="contact-info__header">CONTACT INFO</div>
+
+          <div class="contact-info__socials">
+            <a class="mac-btn" href="{{ section.settings.instagram_url | default: '#' }}" target="_blank" rel="noopener">INSTAGRAM</a>
+            <a class="mac-btn" href="{{ section.settings.youtube_url   | default: '#' }}" target="_blank" rel="noopener">YOUTUBE</a>
+            <a class="mac-btn" href="{{ section.settings.discogs_url   | default: '#' }}" target="_blank" rel="noopener">DISCOGS</a>
+          </div>
+
+          <button type="button" class="contact-info__booking-btn" id="contactBookingBtn">
+            EVENT BOOKINGS / REQUEST FORM
+          </button>
+
+          {%- form 'contact', class: 'contact-form', id: 'contactForm' -%}
+            <div class="contact-form__group">
+              <label class="contact-form__label" for="cfEmail">CONTACT</label>
+              <input class="contact-form__input" type="email" id="cfEmail" name="contact[email]" placeholder="EMAIL ADDRESS" required>
+            </div>
+
+            <label class="contact-form__check">
+              <input type="checkbox" name="contact[news]" value="1">
+              <span class="contact-form__check-box" aria-hidden="true"></span>
+              <span>EMAIL ME WITH NEWS AND OFFERS</span>
+            </label>
+
+            <div class="contact-form__booking" id="contactBooking" hidden>
+              <label class="contact-form__row"><span>CONTACT NAME:</span> <input type="text" name="contact[contact_name]"></label>
+              <label class="contact-form__row"><span>EVENT NAME:</span> <input type="text" name="contact[event_name]"></label>
+              <label class="contact-form__row"><span>LOCATION:</span> <input type="text" name="contact[location]"></label>
+              <label class="contact-form__row"><span>DATE:</span> <input type="text" name="contact[date]" placeholder="YYYY-MM-DD"></label>
+              <label class="contact-form__row"><span>EXPECTED NUMBER OF GUESTS:</span> <input type="text" name="contact[guests]"></label>
+              <label class="contact-form__row"><span>EVENT HOURS:</span> <input type="text" name="contact[hours]"></label>
+              <label class="contact-form__row"><span>DJ SESSION / MUSIC HOURS:</span> <input type="text" name="contact[dj_hours]"></label>
+              <label class="contact-form__row"><span>PARKING / LOADING INFO:</span> <input type="text" name="contact[parking]"></label>
+              <label class="contact-form__row"><span>WITH PA OR WITHOUT PA:</span> <input type="text" name="contact[pa]"></label>
+              <label class="contact-form__row"><span>CASH OR INVOICE:</span> <input type="text" name="contact[payment]"></label>
+              <label class="contact-form__row contact-form__row--full"><span>OTHER INFO / QUESTIONS:</span> <textarea name="contact[body]" rows="3"></textarea></label>
+            </div>
+
+            {%- if form.errors -%}
+              <div class="contact-form__error is-visible">{{ form.errors | default_errors }}</div>
+            {%- endif -%}
+            {%- if form.posted_successfully? -%}
+              <p class="contact-form__thanks" id="contactThanks" style="color:#838383">
+                THANK YOU!<br>
+                WE WILL REPLY TO YOUR MESSAGE AS SOON AS POSSIBLE<br>
+                &mdash; SFR RECORDS
+              </p>
+            {%- endif -%}
+
+            <button type="submit" class="contact-form__send">SEND</button>
+          {%- endform -%}
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="contact-window__col contact-window__col--right">
+
+          <div class="pdp__purchase about-us__logos">
+            <div class="pdp__price">
+              {%- if section.settings.logo_1 -%}<img src="{{ section.settings.logo_1 | image_url: width: 360 }}" alt="">{%- endif -%}
+            </div>
+            <div class="pdp__stock">
+              {%- if section.settings.logo_2 -%}<img src="{{ section.settings.logo_2 | image_url: width: 360 }}" alt="">{%- endif -%}
+            </div>
+            <div class="pdp__buy">
+              {%- if section.settings.logo_3 -%}<img src="{{ section.settings.logo_3 | image_url: width: 360 }}" alt="">{%- endif -%}
+            </div>
+          </div>
+
+          <div class="about-us__copy">
+            {{ section.settings.about_html }}
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  const btn = document.getElementById('contactBookingBtn');
+  const box = document.getElementById('contactBooking');
+  if (btn && box) btn.addEventListener('click', () => box.hidden = !box.hidden);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Contact / About",
+  "settings": [
+    { "type": "text",         "id": "titlebar",       "label": "Titlebar text", "default": "ABOUT US" },
+    { "type": "url",          "id": "instagram_url",  "label": "Instagram URL" },
+    { "type": "url",          "id": "youtube_url",    "label": "YouTube URL" },
+    { "type": "url",          "id": "discogs_url",    "label": "Discogs URL" },
+    { "type": "image_picker", "id": "logo_1",         "label": "About logo 1" },
+    { "type": "image_picker", "id": "logo_2",         "label": "About logo 2 (green badge)" },
+    { "type": "image_picker", "id": "logo_3",         "label": "About logo 3" },
+    { "type": "richtext",     "id": "about_html",     "label": "About copy" }
+  ],
+  "presets": [
+    { "name": "Contact / About" }
+  ]
+}
+{% endschema %}

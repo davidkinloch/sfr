@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "events-grid",
+      "settings": {},
+      "blocks": {
+        "e1": { "type": "event" },
+        "e2": { "type": "event" },
+        "e3": { "type": "event" },
+        "e4": { "type": "event" }
+      },
+      "block_order": ["e1", "e2", "e3", "e4"]
+    }
+  },
+  "order": ["main"]
+}

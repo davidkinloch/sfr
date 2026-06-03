@@ -1,0 +1,17 @@
+{% layout 'theme' %}
+<section class="contact-page">
+  <div class="contact-page__inner">
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar"><span class="window__text">GIFT CARD</span></div>
+      <div class="window__content contact-window__body">
+        <div class="contact-window__col" style="grid-column:1/-1; max-width:100%;">
+          <h2 class="account-view__title">{{ gift_card.balance | money }}</h2>
+          <p class="account-view__sub">Code: {{ gift_card.code | format_code }}</p>
+          <p class="about-us__copy">{{ shop.name }} gift card.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

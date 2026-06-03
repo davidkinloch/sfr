@@ -1,0 +1,29 @@
+{%- assign footer_links = linklists[section.settings.menu | default: 'footer'] -%}
+<footer class="sitefooter">
+  <div class="footer-btns">
+    {%- for link in footer_links.links -%}
+      <a class="footer-btn" href="{{ link.url }}">{{ link.title | upcase }}</a>
+    {%- endfor -%}
+  </div>
+  <div class="footer-meta">
+    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
+    <span class="footer-meta__sep">·</span>
+    <a class="footer-meta__link" href="{{ shop.url }}/policies/privacy-policy">Privacy Policy</a>
+    <span class="footer-meta__sep">·</span>
+    <span>Build by <a class="footer-meta__link" href="https://dkdd.co" target="_blank" rel="noopener">DKDD</a></span>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Footer links",
+      "default": "footer"
+    }
+  ]
+}
+{% endschema %}

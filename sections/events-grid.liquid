@@ -1,0 +1,68 @@
+{%- comment -%}
+  Events page — oval month header + billboard + DJ banner + grid of event tiles.
+  Event tiles come from blocks (each block = one event image + link).
+{%- endcomment -%}
+<div class="events">
+  <div class="events__header">
+    <div class="events__oval-wrap">
+      <img class="events__oval-bg" src="{{ 'events-oval.png' | asset_url }}" alt="">
+      <div class="events__oval-text">
+        <span class="events__month">{{ section.settings.month | default: 'MARCH' }}</span>
+        <span class="events__year">{{ section.settings.year | default: '2026' }}</span>
+      </div>
+    </div>
+    <div class="events__billboard-wrap">
+      <img class="events__billboard-bg" src="{{ 'events-billboard.png' | asset_url }}" alt="">
+      <div class="events__billboard-text">{{ section.settings.billboard | default: 'UPCOMING EVENTS' }}</div>
+    </div>
+    <div class="events__dj-wrap">
+      <img class="events__dj-bg" src="{{ 'events-dj.png' | asset_url }}" alt="">
+      <div class="events__dj-text">{{ section.settings.dj_text | default: 'LIVE DJ SETS' }}</div>
+    </div>
+  </div>
+
+  <div class="events__grid">
+    {%- for block in section.blocks -%}
+      <a class="events__card" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+        {%- if block.settings.image -%}
+          <img class="events__img" src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.alt | escape }}">
+        {%- endif -%}
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Events",
+  "settings": [
+    { "type": "text", "id": "month",     "label": "Month",     "default": "MARCH" },
+    { "type": "text", "id": "year",      "label": "Year",      "default": "2026" },
+    { "type": "text", "id": "billboard", "label": "Billboard text", "default": "UPCOMING EVENTS" },
+    { "type": "text", "id": "dj_text",   "label": "DJ banner text", "default": "LIVE DJ SETS" }
+  ],
+  "blocks": [
+    {
+      "type": "event",
+      "name": "Event card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url",          "id": "link",  "label": "Link" },
+        { "type": "text",         "id": "alt",   "label": "Alt text" }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Events",
+      "blocks": [
+        { "type": "event" },
+        { "type": "event" },
+        { "type": "event" },
+        { "type": "event" }
+      ]
+    }
+  ]
+}
+{% endschema %}

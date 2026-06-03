@@ -1,0 +1,61 @@
+<section class="account-page" id="account">
+  <div class="account-page__inner">
+
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text">MY ACCOUNT</span>
+      </div>
+      <div class="window__content account-window__body">
+
+        <nav class="account-nav" aria-label="Account">
+          <a class="account-nav__tab is-active" href="{{ routes.account_url }}">DASHBOARD</a>
+          <a class="account-nav__tab" href="{{ routes.account_addresses_url }}">ADDRESSES</a>
+          <a class="account-nav__tab" href="{{ routes.account_logout_url }}">LOG OUT</a>
+        </nav>
+
+        <div class="account-view">
+          <div class="account-dashboard__hello">WELCOME, <span>{{ customer.first_name | default: customer.email | upcase }}</span></div>
+
+          <div class="account-dashboard__section">
+            <div class="account-dashboard__heading">ORDERS</div>
+            {%- if customer.orders.size > 0 -%}
+              <table class="account-orders-table">
+                <thead><tr><th>ORDER</th><th>DATE</th><th>STATUS</th><th>TOTAL</th></tr></thead>
+                <tbody>
+                  {%- for order in customer.orders -%}
+                    <tr>
+                      <td><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
+                      <td>{{ order.created_at | date: '%Y-%m-%d' }}</td>
+                      <td>{{ order.fulfillment_status_label | upcase }}</td>
+                      <td>{{ order.total_price | money_without_trailing_zeros }}</td>
+                    </tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+            {%- else -%}
+              <div class="account-empty">No orders yet.</div>
+            {%- endif -%}
+          </div>
+
+          <div class="account-dashboard__section">
+            <div class="account-dashboard__heading">DEFAULT ADDRESS</div>
+            {%- if customer.default_address -%}
+              <div class="about-us__copy">{{ customer.default_address | format_address }}</div>
+            {%- else -%}
+              <div class="account-empty">No address on file.</div>
+            {%- endif -%}
+            <a class="account-form__submit" href="{{ routes.account_addresses_url }}" style="text-decoration:none;text-align:center;display:inline-flex;align-items:center;justify-content:center;">EDIT ADDRESSES</a>
+          </div>
+
+          <div class="account-dashboard__section">
+            <button type="button" class="account-signout" onclick="window.location.href='{{ routes.account_logout_url }}'">SIGN OUT</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>

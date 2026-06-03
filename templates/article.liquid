@@ -1,0 +1,17 @@
+<section class="contact-page">
+  <div class="contact-page__inner">
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar"><span class="window__text">{{ article.title | upcase }}</span></div>
+      <div class="window__content contact-window__body">
+        <div class="contact-window__col" style="grid-column:1/-1; max-width:100%;">
+          <div class="about-us__copy">
+            <p><em>{{ article.published_at | date: '%Y-%m-%d' }} &middot; {{ article.author }}</em></p>
+            {{ article.content }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

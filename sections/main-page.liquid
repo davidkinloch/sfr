@@ -1,0 +1,28 @@
+<section class="contact-page">
+  <div class="contact-page__inner">
+    <div class="contact-window window">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar">
+        <span class="window__text">{{ page.title }}</span>
+      </div>
+      <div class="window__content contact-window__body">
+        <div class="contact-window__col" style="grid-column:1/-1; max-width:100%;">
+          <div class="about-us__copy">
+            {{ page.content }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": [],
+  "presets": [
+    { "name": "Page" }
+  ]
+}
+{% endschema %}

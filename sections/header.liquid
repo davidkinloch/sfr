@@ -1,0 +1,75 @@
+{%- assign main_menu = linklists[section.settings.menu | default: 'main-menu'] -%}
+{%- assign sfr_hero = section.settings.sfr_logo | default: 'snakefreeroofing-logo.png' -%}
+{%- assign cart_count = cart.item_count | default: 0 -%}
+<nav class="topnav">
+  <div class="container">
+
+    <!-- ═══ MENU ═══ -->
+    <div class="window menu">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar menu__titlebar" onclick="this.parentElement.classList.toggle('is-open')">
+        <div class="window__close"></div>
+        <div class="window__text">Menu</div>
+      </div>
+      <ul class="window__content menu__list">
+        {%- for link in main_menu.links -%}
+          <li><a class="menu__item{% if link.active %} is-active{% endif %}" href="{{ link.url }}">{{ link.title | upcase }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    <!-- ═══ SFR RECORDS (clickable logo → home) ═══ -->
+    <div class="window sfr">
+      <div class="border-left"></div>
+      <div class="border-right"></div>
+      <div class="window__titlebar sfr__titlebar" onclick="this.closest('.window').classList.toggle('is-minimized')">
+        <div class="window__close"></div>
+        <div class="window__text">SFR Records</div>
+      </div>
+      <div class="window__content sfr__body">
+        <a href="{{ routes.root_url }}" aria-label="Back to home">
+          {%- if section.settings.sfr_logo -%}
+            <img class="sfr__hero" src="{{ section.settings.sfr_logo | image_url: width: 920 }}" alt="{{ shop.name }}">
+          {%- else -%}
+            <img class="sfr__hero" src="{{ 'snakefreeroofing-logo.png' | asset_url }}" alt="{{ shop.name }}">
+          {%- endif -%}
+        </a>
+      </div>
+    </div>
+
+    <!-- ═══ LOG IN / ACCOUNT ═══ -->
+    <a class="login" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" data-logged-in="{% if customer %}true{% else %}false{% endif %}">
+      <div class="login__avatar"></div>
+      <span class="login__label">{% if customer %}ACCOUNT{% else %}LOG IN{% endif %}</span>
+    </a>
+
+    <!-- ═══ CHECK OUT ═══ -->
+    <a class="checkout" href="{{ routes.cart_url }}">
+      <div class="checkout__cart">
+        <span class="checkout__badge">{{ cart_count }}</span>
+      </div>
+      <span class="checkout__label">CHECK OUT</span>
+    </a>
+
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main navigation",
+      "default": "main-menu"
+    },
+    {
+      "type": "image_picker",
+      "id": "sfr_logo",
+      "label": "SFR Records hero logo (topnav)"
+    }
+  ]
+}
+{% endschema %}
