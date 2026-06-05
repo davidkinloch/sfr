@@ -2,10 +2,10 @@
   "type": "footer",
   "name": "Footer group",
   "sections": {
-    "footer": {
-      "type": "footer",
+    "main-footer": {
+      "type": "main-footer",
       "settings": {}
     }
   },
-  "order": ["footer"]
+  "order": ["main-footer"]
 }

@@ -2,10 +2,10 @@
   "type": "header",
   "name": "Header group",
   "sections": {
-    "header": {
-      "type": "header",
+    "main-header": {
+      "type": "main-header",
       "settings": {}
     }
   },
-  "order": ["header"]
+  "order": ["main-header"]
 }
