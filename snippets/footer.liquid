@@ -1,5 +1,4 @@
-<!-- main-footer section fired -->
-{%- assign footer_links = linklists[section.settings.menu | default: 'footer'] -%}
+{%- assign footer_links = linklists['footer'] -%}
 <footer class="sitefooter">
   <div class="footer-btns">
     {%- for link in footer_links.links -%}
@@ -15,16 +14,3 @@
   </div>
 </footer>
 
-{% schema %}
-{
-  "name": "Footer",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Footer links",
-      "default": "footer"
-    }
-  ]
-}
-{% endschema %}

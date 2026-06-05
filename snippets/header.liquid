@@ -1,5 +1,4 @@
-<!-- main-header section fired -->
-{%- assign main_menu = linklists[section.settings.menu | default: 'main-menu'] -%}
+{%- assign main_menu = linklists['main-menu'] -%}
 {%- assign cart_count = cart.item_count | default: 0 -%}
 <nav class="topnav">
   <div class="container">
@@ -29,11 +28,7 @@
       </div>
       <div class="window__content sfr__body">
         <a href="{{ routes.root_url }}" aria-label="Back to home">
-          {%- if section.settings.sfr_logo -%}
-            <img class="sfr__hero" src="{{ section.settings.sfr_logo | image_url: width: 920 }}" alt="{{ shop.name }}">
-          {%- else -%}
-            <img class="sfr__hero" src="{{ 'snakefreeroofing-logo.png' | asset_url }}" alt="{{ shop.name }}">
-          {%- endif -%}
+          <img class="sfr__hero" src="{{ 'snakefreeroofing-logo.png' | asset_url }}" alt="{{ shop.name }}">
         </a>
       </div>
     </div>
@@ -55,21 +50,3 @@
   </div>
 </nav>
 
-{% schema %}
-{
-  "name": "Header",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Main navigation",
-      "default": "main-menu"
-    },
-    {
-      "type": "image_picker",
-      "id": "sfr_logo",
-      "label": "SFR Records hero logo (topnav)"
-    }
-  ]
-}
-{% endschema %}

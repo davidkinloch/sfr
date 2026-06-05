@@ -26,13 +26,13 @@
 </head>
 <body class="template-{{ template | replace: '.', '-' | handle }}">
 
-  {% sections 'header-group' %}
+  {% render 'header' %}
 
   <main role="main">
     {{ content_for_layout }}
   </main>
 
-  {% sections 'footer-group' %}
+  {% render 'footer' %}
 
   {% render 'login-popup' %}
   {% render 'menu-modal' %}
