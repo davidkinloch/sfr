@@ -1,14 +1,14 @@
 @font-face {
   font-family: 'merchant_copy_wideregular';
-  src: url('fonts/merchant_copy_wide-webfont.woff2') format('woff2'),
-       url('fonts/merchant_copy_wide-webfont.woff') format('woff');
+  src: url('merchant_copy_wide-webfont.woff2') format('woff2'),
+       url('merchant_copy_wide-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'merchant_copyregular';
-  src: url('fonts/merchant_copy-webfont.woff2') format('woff2'),
-       url('fonts/merchant_copy-webfont.woff') format('woff');
+  src: url('merchant_copy-webfont.woff2') format('woff2'),
+       url('merchant_copy-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
