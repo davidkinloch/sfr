@@ -1,0 +1,43 @@
+<div class="player-overlay" id="playerOverlay"></div>
+<div class="player-flyout" id="playerFlyout" aria-hidden="true">
+  <div class="window">
+    <div class="border-left"></div>
+    <div class="border-right"></div>
+    <div class="window__titlebar">
+      <button class="window__close" id="playerClose" type="button" aria-label="Close player"></button>
+      <span class="window__text">MUSIC PLAYER</span>
+    </div>
+    <div class="player__body">
+      <img class="player__artwork" id="playerArtwork" src="" alt="">
+      <div class="player__bar">
+        <div class="player__bar-title">
+          <span id="playerArtist">—</span> — <span id="playerAlbumTitle">—</span>
+        </div>
+        <div class="player__bar-scrubber" id="playerProgress">
+          <div class="player__bar-track">
+            <div class="player__bar-fill" id="playerProgressFill"></div>
+          </div>
+          <div class="player__bar-thumb" id="playerThumb"></div>
+        </div>
+        <div class="player__bar-now">
+          NOW PLAYING: <span id="playerNowTrack">—</span>
+        </div>
+      </div>
+      <ul class="player__tracklist" id="playerTracklist"></ul>
+      <div class="player__transport">
+        <button class="player__btn player__btn--transport" id="playerPrevTrack" type="button" aria-label="Previous track">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor" aria-hidden="true"><rect x="0" y="0" width="2" height="12"/><polygon points="2,6 16,0 16,12"/></svg>
+        </button>
+        <button class="player__btn player__btn--play" id="playerPlayPause" type="button">
+          <svg width="14" height="14" viewBox="0 0 12 14" fill="currentColor" aria-hidden="true"><polygon points="0,0 0,14 12,7"/></svg>
+        </button>
+        <button class="player__btn player__btn--transport" id="playerNextTrack" type="button" aria-label="Next track">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor" aria-hidden="true"><polygon points="0,0 0,12 14,6"/><rect x="14" y="0" width="2" height="12"/></svg>
+        </button>
+      </div>
+      <a class="player__btn player__btn--detail" id="playerDetailLink" href="#">VIEW ALBUM PAGE</a>
+      <button class="player__btn player__btn--cart" id="playerCartBtn" type="button">ADD TO CART</button>
+      <audio id="playerAudio" preload="auto"></audio>
+    </div>
+  </div>
+</div>

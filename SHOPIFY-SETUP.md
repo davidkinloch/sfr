@@ -77,6 +77,22 @@ In **Settings → Custom data → Products**, add these metafield definitions (a
 | `print` | Single line text | `FRONT + BACK SCREEN PRINT` | Merch PDP info table |
 | `subtitle` | Single line text | `LIMITED EDITION ART ZINE` | Merch PLP card row 2 |
 | `cta` | Single line text | `VIEW SHIRT` / `VIEW ZINE` | Merch PLP card button label |
+| `clips` | JSON | `[{"title":"A1 LUFUS L1","url":"https://cdn.shopify.com/.../track.mp3"}]` | Powers the music player flyout |
+
+**Setting up audio clips (`sfr.clips`):**
+
+1. **Upload MP3s** — Settings → Files → Upload your shop-clip MP3s. Copy each file's URL.
+2. **Define the metafield** — Settings → Custom data → Products → Add definition → Namespace `sfr`, key `clips`, **Type: JSON**.
+3. **Set the value per product** — on each record, in the Metafields section, paste an array like:
+   ```json
+   [
+     { "title": "A1. LUFUS L1",          "url": "https://cdn.shopify.com/s/files/.../shop-clip-1.mp3" },
+     { "title": "A2. DIGITAL PERFORMER", "url": "https://cdn.shopify.com/s/files/.../shop-clip-2.mp3" }
+   ]
+   ```
+4. The PLAY CLIPS button on the PLP card now opens the music-player flyout with that product's tracks; clicking ADD TO CART inside the player adds the product's default variant to the cart.
+
+Products without a `sfr.clips` metafield keep their PLAY CLIPS button as a regular link to the product page (no flyout).
 
 Fill these per product in each product's "Metafields" section.
 

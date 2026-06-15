@@ -30,7 +30,16 @@
                 <li><a class="plp__desc-item" href="{{ product.url }}">ARTIST: {{ product.vendor | upcase }}</a></li>
                 <li><a class="plp__desc-item" href="{{ product.url }}">ALBUM: {{ product.title | upcase }}</a></li>
                 <li>
-                  <a class="mac-btn plp__play" href="{{ product.url }}">
+                  {%- assign clips_json = product.metafields.sfr.clips | json -%}
+                  <a class="mac-btn plp__play"
+                     href="{{ product.url }}"
+                     {% if clips_json != 'null' %}
+                       data-clips="{{ clips_json | escape }}"
+                       data-title="{{ product.title | escape }}"
+                       data-artist="{{ product.vendor | escape }}"
+                       data-cover="{{ product.featured_image | image_url: width: 1200 }}"
+                       data-variant-id="{{ first_variant.id }}"
+                     {% endif %}>
                     <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor" aria-hidden="true"><polygon points="0,0 0,10 8,5"/></svg>
                     PLAY CLIPS
                   </a>
