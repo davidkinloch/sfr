@@ -172,7 +172,34 @@ The static demo is preserved at `V5/preview/` so you can compare.
 
 ---
 
-## 6. First-run checklist
+## 6. URL redirects (vanity short URLs)
+
+Basic Shopify locks the URL prefixes (`/pages/`, `/products/`, `/collections/`) — you can't strip them. Workaround is bulk-importing redirects so `/contact` 301s to `/pages/contact`, etc. Visitors who type the short form get the right page; canonical URL is still the Shopify one.
+
+**Bulk import** — Online Store → Navigation → URL redirects → Import → upload a CSV with this format:
+
+```csv
+Redirect from,Redirect to
+/contact,/pages/contact
+/about,/pages/contact
+/events,/pages/events
+/music-videos,/pages/music-videos
+/videos,/pages/music-videos
+/records,/collections/records
+/merch,/collections/merch
+/snake-free-merch,/collections/merch
+/login,/account/login
+/signup,/account/register
+/account/signup,/account/register
+```
+
+Add any other vanity short URLs you want — Shopify allows up to 100,000 redirects on Basic.
+
+After import, use the short form in your nav linklists and footer links — Google's redirect chain handling is fine, and visitors get the clean URL even if internal links still point at the canonical.
+
+---
+
+## 7. First-run checklist
 
 - [ ] `shopify theme push --unpublished`
 - [ ] Create `records` and `merch` collections; assign products
