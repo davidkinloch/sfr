@@ -4,7 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#D3D0D4">
-  <link rel="canonical" href="{{ canonical_url }}">
+  {%- comment -%}
+    Homepage renders the records PLP and would duplicate /collections/records.
+    Point canonical at the collection URL so Google consolidates ranking there.
+  {%- endcomment -%}
+  {%- if template == 'index' -%}
+    <link rel="canonical" href="{{ shop.url }}{{ collections.records.url | default: '/collections/records' }}">
+  {%- else -%}
+    <link rel="canonical" href="{{ canonical_url }}">
+  {%- endif -%}
   {%- if settings.favicon != blank -%}
     <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
   {%- endif -%}
