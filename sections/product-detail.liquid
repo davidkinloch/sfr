@@ -137,6 +137,30 @@
           </div>
         {%- endif -%}
 
+        <!-- Play clips (only for products with sfr.clips files attached) -->
+        {%- assign pdp_clips = product.metafields.sfr.clips.value -%}
+        {%- if pdp_clips.size > 0 -%}
+          {%- capture pdp_clips_json -%}
+            [
+            {%- for file in pdp_clips -%}
+              {%- assign t = file.filename | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | strip -%}
+              {"title":"{{ t | escape }}","url":"{{ file.url }}"}{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+            ]
+          {%- endcapture -%}
+          <div class="pdp__clips-bar">
+            <button type="button" class="pdp__play-clips plp__play"
+                    data-clips="{{ pdp_clips_json | strip | escape }}"
+                    data-title="{{ product.title | escape }}"
+                    data-artist="{{ product.vendor | escape }}"
+                    data-cover="{{ product.featured_image | image_url: width: 1200 }}"
+                    data-variant-id="{{ current_variant.id }}">
+              <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><polygon points="0,0 0,14 12,7"/></svg>
+              PLAY CLIPS
+            </button>
+          </div>
+        {%- endif -%}
+
       </div>
     </div>
 

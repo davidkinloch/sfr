@@ -30,11 +30,19 @@
                 <li><a class="plp__desc-item" href="{{ product.url }}">ARTIST: {{ product.vendor | upcase }}</a></li>
                 <li><a class="plp__desc-item" href="{{ product.url }}">ALBUM: {{ product.title | upcase }}</a></li>
                 <li>
-                  {%- assign clips_json = product.metafields.sfr.clips | json -%}
+                  {%- assign clip_files = product.metafields.sfr.clips.value -%}
+                  {%- capture clips_json -%}
+                    [
+                    {%- for file in clip_files -%}
+                      {%- assign t = file.filename | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | strip -%}
+                      {"title":"{{ t | escape }}","url":"{{ file.url }}"}{% unless forloop.last %},{% endunless %}
+                    {%- endfor -%}
+                    ]
+                  {%- endcapture -%}
                   <a class="mac-btn plp__play"
                      href="{{ product.url }}"
-                     {% if clips_json != 'null' %}
-                       data-clips="{{ clips_json | escape }}"
+                     {% if clip_files.size > 0 %}
+                       data-clips="{{ clips_json | strip | escape }}"
                        data-title="{{ product.title | escape }}"
                        data-artist="{{ product.vendor | escape }}"
                        data-cover="{{ product.featured_image | image_url: width: 1200 }}"
