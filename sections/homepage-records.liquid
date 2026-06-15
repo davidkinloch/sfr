@@ -5,7 +5,7 @@
     cat_no            — single line text, e.g. "SFR012"
     format            — single line text, e.g. '12" Vinyl'
 {%- endcomment -%}
-{%- assign records = collections[section.settings.collection | default: 'records'] -%}
+{%- assign records = collections.records -%}
 <section class="main-content" id="records">
   <div class="plp">
     <div class="plp__track-wrap" id="plpWrap">
@@ -130,18 +130,7 @@
 
 {% schema %}
 {
-  "name": "Records PLP",
-  "settings": [
-    {
-      "type": "text",
-      "id": "collection",
-      "label": "Collection handle",
-      "default": "records",
-      "info": "Collection of records to display in the slider."
-    }
-  ],
-  "presets": [
-    { "name": "Records PLP" }
-  ]
+  "name": "Homepage records",
+  "settings": []
 }
 {% endschema %}
