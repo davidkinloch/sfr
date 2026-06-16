@@ -1,15 +1,34 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "music-videos",
-      "settings": {},
       "blocks": {
-        "v1": { "type": "video" },
-        "v2": { "type": "video" },
-        "v3": { "type": "video" }
+        "video_hdNwz6": {
+          "type": "video",
+          "settings": {
+            "artist": "Endless Mood",
+            "title": "Jane in Palma",
+            "poster": "shopify://shop_images/video-placeholder.png",
+            "video_url": ""
+          }
+        }
       },
-      "block_order": ["v1", "v2", "v3"]
+      "block_order": [
+        "video_hdNwz6"
+      ],
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
