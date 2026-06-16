@@ -51,6 +51,7 @@
                        data-artist="{{ product.vendor | escape }}"
                        data-cover="{{ product.featured_image | image_url: width: 1200 }}"
                        data-variant-id="{{ first_variant.id }}"
+                       data-available="{{ first_variant.available }}"
                      {% endif %}>
                     <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor" aria-hidden="true"><polygon points="0,0 0,10 8,5"/></svg>
                     PLAY CLIPS

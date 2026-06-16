@@ -331,6 +331,13 @@ main {
 .player__btn--play { min-width: 52px; font-size: 14px; }
 .player__btn--detail { width: 100%; font-size: 12px; letter-spacing: 1px; }
 .player__btn--cart { width: 100%; font-size: 12px; letter-spacing: 1px; }
+.player__btn--cart[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #f0f0f0;
+  color: #555;
+}
+.player__btn--cart[disabled]:hover { background: #f0f0f0; }
 .player__loading {
   display: none;
   text-align: center;

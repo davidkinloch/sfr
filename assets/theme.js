@@ -275,6 +275,7 @@ document.querySelectorAll('.window__close').forEach(btn => {
         cover:      btn.getAttribute('data-cover'),
         productUrl: btn.getAttribute('href'),
         variantId:  btn.getAttribute('data-variant-id'),
+        available:  btn.getAttribute('data-available') !== 'false',
         clips:      parsed
       };
     }
@@ -287,6 +288,13 @@ document.querySelectorAll('.window__close').forEach(btn => {
       titleEl.textContent  = data.title  || '—';
       detailLnk.href = data.productUrl || '#';
       cartBtn.setAttribute('data-variant-id', data.variantId || '');
+      if (data.available === false) {
+        cartBtn.setAttribute('disabled', 'disabled');
+        cartBtn.textContent = 'OUT OF STOCK';
+      } else {
+        cartBtn.removeAttribute('disabled');
+        cartBtn.textContent = 'ADD TO CART';
+      }
       buildList();
       if (clips.length > 0) playTrack();
     }

@@ -158,7 +158,8 @@
                     data-title="{{ product.title | escape }}"
                     data-artist="{{ product.vendor | escape }}"
                     data-cover="{{ product.featured_image | image_url: width: 1200 }}"
-                    data-variant-id="{{ current_variant.id }}">
+                    data-variant-id="{{ current_variant.id }}"
+                    data-available="{{ current_variant.available }}">
               <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><polygon points="0,0 0,14 12,7"/></svg>
               PLAY CLIPS
             </button>
