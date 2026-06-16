@@ -89,7 +89,9 @@ In **Settings → Custom data → Products**, add these metafield definitions (a
 2. **Upload + assign** — open a product (e.g. Endless Mood) → scroll to Metafields → **Clips** → click "Select files" → upload your shop-clip MP3s in order (A1, A2, B1, ...).
 3. The PLAY CLIPS button on the PLP card now opens the music-player flyout with that product's tracks; clicking ADD TO CART inside the player adds the product's default variant to the cart.
 
-Track titles auto-derive from filenames: `01-a1-lufus-l1.mp3` → "01 A1 LUFUS L1" (split on `.`, take stem, swap `-`/`_` for spaces). So name your files clearly before upload — rename them in the Files library if needed.
+Track titles:
+- **Best:** set the file's **Alt text** (Settings → Files → click the MP3 → "Alt text") to the track title you want (e.g. `A1. LUFUS L1`). The player uses this verbatim.
+- **Fallback:** if no alt text is set, the title derives from the filename (`01-a1-lufus-l1.mp3` → `01 A1 LUFUS L1`).
 
 Products without `custom.clips` keep their PLAY CLIPS button as a plain link to the product page (no flyout).
 

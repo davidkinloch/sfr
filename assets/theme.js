@@ -7,8 +7,10 @@
    /account/login (form rendered server-side for CSRF).
    ───────────────────────────────────────────────────────────── */
 
-/* Window minimise toggle */
+/* Window minimise toggle — skips modal close buttons that have their own handlers */
+const MODAL_CLOSE_IDS = ['playerClose', 'vmClose', 'loginPopupClose', 'menuModalClose'];
 document.querySelectorAll('.window__close').forEach(btn => {
+  if (MODAL_CLOSE_IDS.indexOf(btn.id) !== -1) return;
   btn.addEventListener('click', e => {
     e.stopPropagation();
     btn.closest('.window').classList.toggle('is-minimized');
@@ -198,32 +200,47 @@ document.querySelectorAll('.window__close').forEach(btn => {
     const flyout = document.getElementById('playerFlyout');
     if (!flyout) return;
 
-    const overlay   = document.getElementById('playerOverlay');
-    const closeBtn  = document.getElementById('playerClose');
-    const audio     = document.getElementById('playerAudio');
-    const artwork   = document.getElementById('playerArtwork');
-    const artistEl  = document.getElementById('playerArtist');
-    const titleEl   = document.getElementById('playerAlbumTitle');
-    const nowEl     = document.getElementById('playerNowTrack');
-    const list      = document.getElementById('playerTracklist');
-    const playBtn   = document.getElementById('playerPlayPause');
-    const prevBtn   = document.getElementById('playerPrevTrack');
-    const nextBtn   = document.getElementById('playerNextTrack');
-    const progress  = document.getElementById('playerProgress');
-    const progFill  = document.getElementById('playerProgressFill');
-    const thumb     = document.getElementById('playerThumb');
-    const detailLnk = document.getElementById('playerDetailLink');
-    const cartBtn   = document.getElementById('playerCartBtn');
-    const titlebar  = flyout.querySelector('.window__titlebar');
+    const overlay     = document.getElementById('playerOverlay');
+    const closeBtn    = document.getElementById('playerClose');
+    const audio       = document.getElementById('playerAudio');
+    const artwork     = document.getElementById('playerArtwork');
+    const artistEl    = document.getElementById('playerArtist');
+    const titleEl     = document.getElementById('playerAlbumTitle');
+    const nowEl       = document.getElementById('playerNowTrack');
+    const list        = document.getElementById('playerTracklist');
+    const playBtn     = document.getElementById('playerPlayPause');
+    const prevBtn     = document.getElementById('playerPrevTrack');
+    const nextBtn     = document.getElementById('playerNextTrack');
+    const prevAlbum   = document.getElementById('playerPrevAlbum');
+    const nextAlbum   = document.getElementById('playerNextAlbum');
+    const progress    = document.getElementById('playerProgress');
+    const progFill    = document.getElementById('playerProgressFill');
+    const thumb       = document.getElementById('playerThumb');
+    const detailLnk   = document.getElementById('playerDetailLink');
+    const cartBtn     = document.getElementById('playerCartBtn');
+    const titlebar    = flyout.querySelector('.window__titlebar');
+    const windowEl    = flyout.querySelector('.window');
+    const bodyEl      = flyout.querySelector('.player__body');
 
     let clips = [], idx = 0;
+    let albumBtns = [], albumIdx = -1;
 
+    function resetSidebar() {
+      flyout.style.left = '';
+      flyout.style.top = '';
+      flyout.style.right = '';
+      flyout.style.transform = '';
+      flyout.style.height = '';
+      if (windowEl) windowEl.style.height = '';
+      if (bodyEl)   bodyEl.style.overflow = '';
+    }
     function close() {
       flyout.classList.remove('is-open');
       flyout.setAttribute('aria-hidden', 'true');
       overlay.classList.remove('is-open');
       audio.pause();
       playBtn.innerHTML = ICON_PLAY;
+      resetSidebar();
     }
     function playTrack() {
       const clip = clips[idx];
@@ -249,7 +266,19 @@ document.querySelectorAll('.window__close').forEach(btn => {
         list.appendChild(li);
       });
     }
-    function open(data) {
+    function dataFromBtn(btn) {
+      let parsed = [];
+      try { parsed = JSON.parse(btn.getAttribute('data-clips') || '[]'); } catch (_) {}
+      return {
+        title:      btn.getAttribute('data-title'),
+        artist:     btn.getAttribute('data-artist'),
+        cover:      btn.getAttribute('data-cover'),
+        productUrl: btn.getAttribute('href'),
+        variantId:  btn.getAttribute('data-variant-id'),
+        clips:      parsed
+      };
+    }
+    function applyData(data) {
       clips = Array.isArray(data.clips) ? data.clips : [];
       idx = 0;
       artwork.src = data.cover || '';
@@ -259,13 +288,30 @@ document.querySelectorAll('.window__close').forEach(btn => {
       detailLnk.href = data.productUrl || '#';
       cartBtn.setAttribute('data-variant-id', data.variantId || '');
       buildList();
+      if (clips.length > 0) playTrack();
+    }
+    function updateAlbumNav() {
+      if (!prevAlbum || !nextAlbum) return;
+      const hasList = albumBtns.length > 1 && albumIdx >= 0;
+      prevAlbum.style.display = hasList ? '' : 'none';
+      nextAlbum.style.display = hasList ? '' : 'none';
+      if (hasList) {
+        prevAlbum.disabled = albumIdx <= 0;
+        nextAlbum.disabled = albumIdx >= albumBtns.length - 1;
+      }
+    }
+    function open(triggerBtn) {
+      /* Build the album list from PLAY CLIPS buttons on this page */
+      albumBtns = Array.from(document.querySelectorAll('.plp__play[data-clips]'));
+      albumIdx  = albumBtns.indexOf(triggerBtn);
+      applyData(dataFromBtn(triggerBtn));
+      updateAlbumNav();
       flyout.classList.add('is-open');
       flyout.removeAttribute('aria-hidden');
       overlay.classList.add('is-open');
-      if (clips.length > 0) playTrack();
     }
 
-    closeBtn.addEventListener('click', close);
+    closeBtn.addEventListener('click', e => { e.stopPropagation(); close(); });
     overlay.addEventListener('click', close);
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && flyout.classList.contains('is-open')) close();
@@ -277,6 +323,13 @@ document.querySelectorAll('.window__close').forEach(btn => {
     });
     prevBtn.addEventListener('click', () => { if (idx > 0)                  { idx--; playTrack(); }});
     nextBtn.addEventListener('click', () => { if (idx < clips.length - 1)   { idx++; playTrack(); }});
+
+    if (prevAlbum) prevAlbum.addEventListener('click', () => {
+      if (albumIdx > 0) { albumIdx--; applyData(dataFromBtn(albumBtns[albumIdx])); updateAlbumNav(); }
+    });
+    if (nextAlbum) nextAlbum.addEventListener('click', () => {
+      if (albumIdx < albumBtns.length - 1) { albumIdx++; applyData(dataFromBtn(albumBtns[albumIdx])); updateAlbumNav(); }
+    });
 
     audio.addEventListener('timeupdate', () => {
       if (!audio.duration) return;
@@ -303,23 +356,58 @@ document.querySelectorAll('.window__close').forEach(btn => {
       catch (e) { SFRCart.flash(cartBtn, 'ERROR'); }
     });
 
-    if (window.SFRDrag) SFRDrag.wire(flyout, titlebar, closeBtn);
+    /* Custom drag — flyout transitions from sidebar (full-height) to floating window (auto height) on first drag */
+    function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+    let dragging = false, offX = 0, offY = 0;
+    function dragStart(x, y) {
+      if (!flyout.classList.contains('is-open')) return;
+      const rect = flyout.getBoundingClientRect();
+      offX = x - rect.left;
+      offY = y - rect.top;
+      flyout.style.left      = rect.left + 'px';
+      flyout.style.top       = rect.top + 'px';
+      flyout.style.right     = 'auto';
+      flyout.style.transform = 'none';
+      flyout.style.height    = 'auto';      /* hug content */
+      if (windowEl) windowEl.style.height = 'auto';
+      if (bodyEl)   bodyEl.style.overflow = 'visible';
+      overlay.classList.remove('is-open');  /* let the user click through */
+      dragging = true;
+      document.body.style.userSelect = 'none';
+    }
+    function dragMove(x, y) {
+      if (!dragging) return;
+      const MIN_VISIBLE = 80, TITLEBAR_H = 30;
+      const w = flyout.offsetWidth;
+      const vw = window.innerWidth, vh = window.innerHeight;
+      flyout.style.left = clamp(x - offX, MIN_VISIBLE - w, vw - MIN_VISIBLE) + 'px';
+      flyout.style.top  = clamp(y - offY, 0,               vh - TITLEBAR_H ) + 'px';
+    }
+    function dragEnd() { dragging = false; document.body.style.userSelect = ''; }
+
+    titlebar.addEventListener('mousedown', e => {
+      if (e.target === closeBtn) return;
+      dragStart(e.clientX, e.clientY);
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', e => dragMove(e.clientX, e.clientY));
+    document.addEventListener('mouseup', dragEnd);
+    titlebar.addEventListener('touchstart', e => {
+      if (e.target === closeBtn) return;
+      dragStart(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    document.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      dragMove(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    document.addEventListener('touchend', dragEnd);
 
     /* PLAY CLIPS buttons on PLP cards trigger this player */
     document.addEventListener('click', e => {
       const btn = e.target.closest('.plp__play[data-clips]');
       if (!btn) return;
       e.preventDefault();
-      let parsed = [];
-      try { parsed = JSON.parse(btn.getAttribute('data-clips') || '[]'); } catch (_) {}
-      open({
-        title:      btn.getAttribute('data-title'),
-        artist:     btn.getAttribute('data-artist'),
-        cover:      btn.getAttribute('data-cover'),
-        productUrl: btn.getAttribute('href'),
-        variantId:  btn.getAttribute('data-variant-id'),
-        clips:      parsed
-      });
+      open(btn);
     });
   });
 })();
