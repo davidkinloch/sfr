@@ -11,7 +11,7 @@
     <div class="plp__track-wrap" id="plpWrap">
       <ul class="plp__track" id="plpTrack">
         {%- for product in records.products -%}
-          {%- assign cat = product.metafields.sfr.cat_no | default: 'SFR—' -%}
+          {%- assign cat = product.metafields.custom.cat_no | default: 'SFR—' -%}
           {%- assign first_variant = product.selected_or_first_available_variant -%}
           <li class="plp__card">
             <a class="plp__artwork-link" href="{{ product.url }}">
@@ -30,7 +30,7 @@
                 <li><a class="plp__desc-item" href="{{ product.url }}">ARTIST: {{ product.vendor | upcase }}</a></li>
                 <li><a class="plp__desc-item" href="{{ product.url }}">ALBUM: {{ product.title | upcase }}</a></li>
                 <li>
-                  {%- assign clip_files = product.metafields.sfr.clips.value -%}
+                  {%- assign clip_files = product.metafields.custom.clips.value -%}
                   {%- capture clips_json -%}
                     [
                     {%- for file in clip_files -%}

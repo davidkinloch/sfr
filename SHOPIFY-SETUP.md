@@ -63,7 +63,7 @@ For Events and Music Videos, you'll edit the content via the **theme editor's se
 
 ### Product metafields
 
-In **Settings → Custom data → Products**, add these metafield definitions (all under namespace `sfr`):
+In **Settings → Custom data → Products**, add these metafield definitions (all under namespace `custom`):
 
 | Key | Type | Example value | Used on |
 |-----|------|---------------|---------|
@@ -79,10 +79,10 @@ In **Settings → Custom data → Products**, add these metafield definitions (a
 | `cta` | Single line text | `VIEW SHIRT` / `VIEW ZINE` | Merch PLP card button label |
 | `clips` | List of files | `[file1.mp3, file2.mp3, ...]` | Powers the music player flyout |
 
-**Setting up audio clips (`sfr.clips`):**
+**Setting up audio clips (`custom.clips`):**
 
 1. **Define the metafield** — Settings → Custom data → Products → Add definition →
-   - Namespace: `sfr`
+   - Namespace: `custom` (Shopify's default — it now locks namespace selection on create)
    - Key: `clips`
    - **Type: File → "Accept multiple values"** (Shopify calls this `list.file_reference`)
    - Accepted file types: leave open or restrict to "Other" (covers MP3).
@@ -91,7 +91,7 @@ In **Settings → Custom data → Products**, add these metafield definitions (a
 
 Track titles auto-derive from filenames: `01-a1-lufus-l1.mp3` → "01 A1 LUFUS L1" (split on `.`, take stem, swap `-`/`_` for spaces). So name your files clearly before upload — rename them in the Files library if needed.
 
-Products without `sfr.clips` keep their PLAY CLIPS button as a plain link to the product page (no flyout).
+Products without `custom.clips` keep their PLAY CLIPS button as a plain link to the product page (no flyout).
 
 Fill these per product in each product's "Metafields" section.
 
@@ -146,7 +146,7 @@ Open Music Videos in the theme editor → **Music videos** section:
 
 ### Not wired (Basic Shopify constraints)
 - **Checkout is Shopify-hosted** on Basic. Our `templates/cart.json` is the closest custom UI you can have. Clicking PLACE ORDER submits to Shopify's checkout, which carries the customer's name/email/address from cart-form fields where supported. The shipping form on our cart is illustrative — Shopify will collect the real address at checkout.
-- **Music player (audio clips per record)** — not ported. The records PDP doesn't have the PLAY CLIPS flyout because there's no clean way to store per-track MP3s without a metafield design pass. If you want this, we can add a `sfr.clips` metafield (JSON list of `{title, url}`) and revive the flyout next session.
+- **Music player (audio clips per record)** — not ported. The records PDP doesn't have the PLAY CLIPS flyout because there's no clean way to store per-track MP3s without a metafield design pass. If you want this, we can add a `custom.clips` metafield (JSON list of `{title, url}`) and revive the flyout next session.
 - **Expressed payment buttons** (Shop Pay / PayPal / Apple Pay) — Shopify renders these automatically via `{{ content_for_additional_checkout_buttons }}` once enabled in Settings → Payments. The cart template already wires this in.
 
 ### Known caveats
@@ -218,7 +218,7 @@ After import, use the short form in your nav linklists and footer links — Goog
 
 - [ ] `shopify theme push --unpublished`
 - [ ] Create `records` and `merch` collections; assign products
-- [ ] Add product metafields (`sfr.cat_no`, `sfr.format`, etc.) and fill them in
+- [ ] Add product metafields (`custom.cat_no`, `custom.format`, etc.) and fill them in
 - [ ] Create `main-menu` and `footer` linklists with the suggested links
 - [ ] Create the four pages (contact, events, music-videos, distribution) and assign templates
 - [ ] Configure the Events and Music Videos pages via the theme editor

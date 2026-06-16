@@ -94,37 +94,37 @@
 
         <!-- Info table -->
         <div class="pdp__table">
-          {%- if product.metafields.sfr.cat_no != blank -%}
-            <div class="pdp__row"><div class="pdp__key">CAT NO</div><div class="pdp__val">{{ product.metafields.sfr.cat_no }}</div></div>
+          {%- if product.metafields.custom.cat_no != blank -%}
+            <div class="pdp__row"><div class="pdp__key">CAT NO</div><div class="pdp__val">{{ product.metafields.custom.cat_no }}</div></div>
           {%- endif -%}
           {%- if is_record -%}
             <div class="pdp__row"><div class="pdp__key">ARTIST</div><div class="pdp__val">{{ product.vendor | upcase }}</div></div>
             <div class="pdp__row"><div class="pdp__key">TITLE</div><div class="pdp__val">{{ product.title | upcase }}</div></div>
-            {%- if product.metafields.sfr.label != blank -%}
-              <div class="pdp__row"><div class="pdp__key">LABEL</div><div class="pdp__val">{{ product.metafields.sfr.label | upcase }}</div></div>
+            {%- if product.metafields.custom.label != blank -%}
+              <div class="pdp__row"><div class="pdp__key">LABEL</div><div class="pdp__val">{{ product.metafields.custom.label | upcase }}</div></div>
             {%- endif -%}
-            {%- if product.metafields.sfr.style != blank -%}
-              <div class="pdp__row"><div class="pdp__key">STYLE</div><div class="pdp__val">{{ product.metafields.sfr.style | upcase }}</div></div>
+            {%- if product.metafields.custom.style != blank -%}
+              <div class="pdp__row"><div class="pdp__key">STYLE</div><div class="pdp__val">{{ product.metafields.custom.style | upcase }}</div></div>
             {%- endif -%}
-            {%- if product.metafields.sfr.release_date != blank -%}
-              <div class="pdp__row"><div class="pdp__key">DATE</div><div class="pdp__val">{{ product.metafields.sfr.release_date | date: '%-m.%y' }}</div></div>
+            {%- if product.metafields.custom.release_date != blank -%}
+              <div class="pdp__row"><div class="pdp__key">DATE</div><div class="pdp__val">{{ product.metafields.custom.release_date | date: '%-m.%y' }}</div></div>
             {%- endif -%}
-            {%- if product.metafields.sfr.format != blank -%}
-              <div class="pdp__row"><div class="pdp__key">FORMAT</div><div class="pdp__val">{{ product.metafields.sfr.format | upcase }}</div></div>
+            {%- if product.metafields.custom.format != blank -%}
+              <div class="pdp__row"><div class="pdp__key">FORMAT</div><div class="pdp__val">{{ product.metafields.custom.format | upcase }}</div></div>
             {%- endif -%}
           {%- else -%}
             <div class="pdp__row"><div class="pdp__key">TITLE</div><div class="pdp__val">{{ product.title | upcase }}</div></div>
             {%- if product.type != blank -%}
               <div class="pdp__row"><div class="pdp__key">TYPE</div><div class="pdp__val">{{ product.type | upcase }}</div></div>
             {%- endif -%}
-            {%- if product.metafields.sfr.color != blank -%}
-              <div class="pdp__row"><div class="pdp__key">COLOR</div><div class="pdp__val">{{ product.metafields.sfr.color | upcase }}</div></div>
+            {%- if product.metafields.custom.color != blank -%}
+              <div class="pdp__row"><div class="pdp__key">COLOR</div><div class="pdp__val">{{ product.metafields.custom.color | upcase }}</div></div>
             {%- endif -%}
-            {%- if product.metafields.sfr.material != blank -%}
-              <div class="pdp__row"><div class="pdp__key">MATERIAL</div><div class="pdp__val">{{ product.metafields.sfr.material | upcase }}</div></div>
+            {%- if product.metafields.custom.material != blank -%}
+              <div class="pdp__row"><div class="pdp__key">MATERIAL</div><div class="pdp__val">{{ product.metafields.custom.material | upcase }}</div></div>
             {%- endif -%}
-            {%- if product.metafields.sfr.print != blank -%}
-              <div class="pdp__row"><div class="pdp__key">PRINT</div><div class="pdp__val">{{ product.metafields.sfr.print | upcase }}</div></div>
+            {%- if product.metafields.custom.print != blank -%}
+              <div class="pdp__row"><div class="pdp__key">PRINT</div><div class="pdp__val">{{ product.metafields.custom.print | upcase }}</div></div>
             {%- endif -%}
           {%- endif -%}
         </div>
@@ -138,7 +138,7 @@
         {%- endif -%}
 
         <!-- Play clips (only for products with sfr.clips files attached) -->
-        {%- assign pdp_clips = product.metafields.sfr.clips.value -%}
+        {%- assign pdp_clips = product.metafields.custom.clips.value -%}
         {%- if pdp_clips.size > 0 -%}
           {%- capture pdp_clips_json -%}
             [

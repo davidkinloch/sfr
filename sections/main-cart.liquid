@@ -120,7 +120,7 @@
               </thead>
               <tbody id="coItems">
                 {%- for item in cart.items -%}
-                  {%- assign cat = item.product.metafields.sfr.cat_no | default: '—' -%}
+                  {%- assign cat = item.product.metafields.custom.cat_no | default: '—' -%}
                   <tr data-line="{{ forloop.index }}" data-key="{{ item.key }}">
                     <td>{{ cat }}</td>
                     <td>{{ item.product.title | upcase }}{% unless item.variant.title == 'Default Title' %} &middot; {{ item.variant.title | upcase }}{% endunless %}</td>

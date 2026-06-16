@@ -1,6 +1,6 @@
 {%- comment -%}
   Merch PLP — same slider as records but with merch labelling.
-  Uses {{ product.title }} (quoted name) + {{ product.metafields.sfr.subtitle }}
+  Uses {{ product.title }} (quoted name) + {{ product.metafields.custom.subtitle }}
   for the two text rows. CTA label set per product.type ("Zine" vs default).
 {%- endcomment -%}
 {%- assign merch = collection.products | default: collections[section.settings.collection].products -%}
@@ -9,10 +9,10 @@
     <div class="plp__track-wrap" id="plpWrap">
       <ul class="plp__track" id="plpTrack">
         {%- for product in merch -%}
-          {%- assign cat = product.metafields.sfr.cat_no | default: 'SFRMERCH—' -%}
-          {%- assign subtitle = product.metafields.sfr.subtitle | default: product.type -%}
+          {%- assign cat = product.metafields.custom.cat_no | default: 'SFRMERCH—' -%}
+          {%- assign subtitle = product.metafields.custom.subtitle | default: product.type -%}
           {%- assign first_variant = product.selected_or_first_available_variant -%}
-          {%- assign cta = product.metafields.sfr.cta | default: 'VIEW' -%}
+          {%- assign cta = product.metafields.custom.cta | default: 'VIEW' -%}
           <li class="plp__card">
             <a class="plp__artwork-link" href="{{ product.url }}">
               <img class="plp__artwork"
