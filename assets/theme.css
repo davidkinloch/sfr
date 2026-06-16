@@ -599,7 +599,6 @@ a.menu__item:hover {
 .pdp__stock-msg {
   display: none;
   padding: 10px 16px;
-  border-bottom: 2px solid #000;
   font-family: 'merchant_copy_wideregular';
   font-size: 14px;
   letter-spacing: 0.04em;
