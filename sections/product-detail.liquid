@@ -173,6 +173,10 @@
 
 <script>
 (function () {
+  /* Slide the vinyl out from behind the cover */
+  const vinyl = document.querySelector('.pdp__vinyl');
+  if (vinyl) requestAnimationFrame(() => { vinyl.style.left = '100%'; });
+
   /* Variant data for client-side switching */
   const variants = {
     {%- for variant in product.variants -%}
