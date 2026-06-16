@@ -440,6 +440,7 @@ a.menu__item:hover {
 @media (min-width: 781px) {
   .window.sfr { display: flex; flex-direction: column; height: 181px; }
   .window.sfr.is-minimized { height: auto; }
+  .window.sfr.is-minimized .sfr__body { display: none; }
   .sfr__body { height: 157px; padding: 10px; min-height: 0; }
   .sfr__hero { max-width: 100%; max-height: 100%; object-fit: contain; }
 }
