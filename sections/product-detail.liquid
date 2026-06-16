@@ -173,9 +173,11 @@
 
 <script>
 (function () {
-  /* Slide the vinyl out from behind the cover */
+  /* Slide the vinyl out from behind the cover.
+     Double rAF guarantees the initial left:0 paints before we change to left:100%
+     so the CSS transition actually runs. */
   const vinyl = document.querySelector('.pdp__vinyl');
-  if (vinyl) requestAnimationFrame(() => { vinyl.style.left = '100%'; });
+  if (vinyl) requestAnimationFrame(() => requestAnimationFrame(() => { vinyl.style.left = '100%'; }));
 
   /* Variant data for client-side switching */
   const variants = {
