@@ -1,9 +1,15 @@
 {%- assign footer_links = linklists['footer'] -%}
 <footer class="sitefooter">
   <div class="footer-btns">
-    {%- for link in footer_links.links -%}
-      <a class="footer-btn" href="{{ link.url }}">{{ link.title | upcase }}</a>
-    {%- endfor -%}
+    {%- if footer_links.links.size > 0 -%}
+      {%- for link in footer_links.links -%}
+        <a class="footer-btn" href="{{ link.url }}">{{ link.title | upcase }}</a>
+      {%- endfor -%}
+    {%- else -%}
+      <a class="footer-btn" href="/collections/records">RECORDS</a>
+      <a class="footer-btn" href="mailto:mail@sfrrecords.com">EMAIL</a>
+      <a class="footer-btn" href="/pages/contact">CONTACT</a>
+    {%- endif -%}
   </div>
   <div class="footer-meta">
     <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
