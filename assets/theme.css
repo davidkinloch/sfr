@@ -594,8 +594,8 @@ a.menu__item:hover {
 }
 
 /* Out-of-stock variants */
-.pdp__stock.is-oos { background-image: url('yellow-bg.png'); }
-.pdp__price-tag.is-oos { background-image: url('yellow-bg.png'); }
+.pdp__stock.is-oos     { background-image: url('yellow-bg.png'); background-color: #ffeb99; }
+.pdp__price-tag.is-oos { background-image: url('yellow-bg.png'); background-color: #ffeb99; }
 .pdp__stock-msg {
   display: none;
   padding: 10px 16px;

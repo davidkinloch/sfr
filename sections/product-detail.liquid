@@ -69,9 +69,9 @@
 
           <div class="pdp__purchase">
             <div class="pdp__price">
-              <span class="pdp__price-tag" id="pdpPriceTag">{{ current_variant.price | money_without_trailing_zeros }}</span>
+              <span class="pdp__price-tag{% unless current_variant.available %} is-oos{% endunless %}" id="pdpPriceTag">{{ current_variant.price | money_without_trailing_zeros }}</span>
             </div>
-            <div class="pdp__stock" id="pdpStock">
+            <div class="pdp__stock{% unless current_variant.available %} is-oos{% endunless %}" id="pdpStock">
               {%- if current_variant.available %}IN STOCK{% else %}OUT OF STOCK{% endif -%}
             </div>
             <div class="pdp__buy">
