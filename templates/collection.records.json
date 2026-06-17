@@ -1,10 +1,8 @@
 {
   "sections": {
     "main": {
-      "type": "records-plp",
-      "settings": {
-        "collection": "records"
-      }
+      "type": "homepage-records",
+      "settings": {}
     }
   },
   "order": ["main"]
