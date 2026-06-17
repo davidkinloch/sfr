@@ -55,7 +55,24 @@
       <span class="window__text" id="vmTitle">VIDEO</span>
     </div>
     <div class="vm__body">
-      <video class="vm__video" id="vmVideo" playsinline controls></video>
+      <video class="vm__video" id="vmVideo" playsinline></video>
+      <div class="vm__controls">
+        <div class="vm__scrubber" id="vmScrubber">
+          <div class="vm__scrub-track">
+            <div class="vm__scrub-fill" id="vmFill"></div>
+          </div>
+          <div class="vm__scrub-thumb" id="vmThumb"></div>
+        </div>
+        <div class="vm__transport">
+          <button class="player__btn player__btn--transport" id="vmPlayPause" aria-label="Play">
+            <svg width="14" height="14" viewBox="0 0 12 14" fill="currentColor"><polygon points="0,0 0,14 12,7"/></svg>
+          </button>
+          <span class="vm__time" id="vmTime">0:00 / 0:00</span>
+          <button class="player__btn vm__fs-btn" id="vmFs" aria-label="Fullscreen">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M0 0v5h2V2h3V0H0zm9 0v2h3v3h2V0H9zM0 9v5h5v-2H2V9H0zm12 3h-3v2h5V9h-2v3z"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -86,15 +103,66 @@
   window.addEventListener('resize', update);
   update();
 
-  /* Video modal */
-  const modal = document.getElementById('vmModal');
-  const video = document.getElementById('vmVideo');
-  const titleEl = document.getElementById('vmTitle');
-  const closeBtn = document.getElementById('vmClose');
-  const titlebar = document.getElementById('vmTitlebar');
+  /* Video modal — custom player (scrubber + transport + fullscreen) */
+  const modal     = document.getElementById('vmModal');
+  const video     = document.getElementById('vmVideo');
+  const titleEl   = document.getElementById('vmTitle');
+  const closeBtn  = document.getElementById('vmClose');
+  const titlebar  = document.getElementById('vmTitlebar');
+  const playPause = document.getElementById('vmPlayPause');
+  const scrubber  = document.getElementById('vmScrubber');
+  const fill      = document.getElementById('vmFill');
+  const thumb     = document.getElementById('vmThumb');
+  const timeEl    = document.getElementById('vmTime');
+  const fsBtn     = document.getElementById('vmFs');
+
+  const ICON_PLAY  = '<svg width="14" height="14" viewBox="0 0 12 14" fill="currentColor"><polygon points="0,0 0,14 12,7"/></svg>';
+  const ICON_PAUSE = '<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><rect x="0" y="0" width="4" height="14"/><rect x="8" y="0" width="4" height="14"/></svg>';
+
+  function fmt(s) {
+    if (!s || isNaN(s)) return '0:00';
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+  function updateScrubber() {
+    if (!video.duration) return;
+    const pct = video.currentTime / video.duration;
+    fill.style.width = (pct * 100) + '%';
+    const trackW = scrubber.offsetWidth - 20;
+    thumb.style.left = (10 + pct * trackW) + 'px';
+    timeEl.textContent = fmt(video.currentTime) + ' / ' + fmt(video.duration);
+  }
+  video.addEventListener('timeupdate', updateScrubber);
+  video.addEventListener('play',  () => { playPause.innerHTML = ICON_PAUSE; });
+  video.addEventListener('pause', () => { playPause.innerHTML = ICON_PLAY; });
+  video.addEventListener('ended', () => { playPause.innerHTML = ICON_PLAY; });
+  playPause.addEventListener('click', () => { if (video.paused) video.play(); else video.pause(); });
+
+  let seeking = false;
+  function seek(clientX) {
+    const rect = scrubber.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    if (video.duration) video.currentTime = pct * video.duration;
+    updateScrubber();
+  }
+  scrubber.addEventListener('mousedown', e => { e.stopPropagation(); seeking = true; seek(e.clientX); });
+  document.addEventListener('mousemove', e => { if (seeking) seek(e.clientX); });
+  document.addEventListener('mouseup', () => { seeking = false; });
+
+  fsBtn.addEventListener('click', () => {
+    if (video.requestFullscreen) video.requestFullscreen();
+    else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+    else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen(); /* iOS */
+  });
+
   function open(src, title) {
     if (!src) return;
-    video.src = src; titleEl.textContent = title || 'VIDEO';
+    video.src = src;
+    titleEl.textContent = title || 'VIDEO';
+    fill.style.width = '0%';
+    thumb.style.left = '10px';
+    timeEl.textContent = '0:00 / 0:00';
+    playPause.innerHTML = ICON_PLAY;
     modal.style.display = 'block';
     modal.classList.add('is-open');
     video.play().catch(() => {});
@@ -103,6 +171,7 @@
     video.pause(); video.src = '';
     modal.style.display = 'none';
     modal.classList.remove('is-open');
+    playPause.innerHTML = ICON_PLAY;
   }
   document.addEventListener('click', e => {
     const trig = e.target.closest('[data-video-src]');
