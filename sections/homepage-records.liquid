@@ -1,9 +1,11 @@
 {%- comment -%}
   Records PLP — horizontal slider of product cards.
-  Uses the collection set in section.settings.collection (handle).
-  Per-product metafields (namespace: sfr):
+  Renders the `records` collection (used by both the homepage and
+  templates/collection.records.json).
+  Per-product metafields (namespace: custom):
     cat_no            — single line text, e.g. "SFR012"
     format            — single line text, e.g. '12" Vinyl'
+    clips             — list.file_reference — powers the PLAY CLIPS flyout
 {%- endcomment -%}
 {%- assign records = collections.records -%}
 <section class="main-content" id="records">
