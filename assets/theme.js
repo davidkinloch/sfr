@@ -76,6 +76,7 @@ document.querySelectorAll('.window__close').forEach(btn => {
       modal.style.left = rect.left + 'px';
       modal.style.top  = rect.top  + 'px';
       modal.style.right = 'auto';
+      modal.style.transform = 'none'; /* drop any CSS centering transform so left/top are absolute */
       dragging = true;
       document.body.style.userSelect = 'none';
     }
