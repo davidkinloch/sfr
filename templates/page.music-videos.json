@@ -12,17 +12,27 @@
     "main": {
       "type": "music-videos",
       "blocks": {
+        "video_QLR9gG": {
+          "type": "video",
+          "settings": {
+            "title": "Disaster Wall on Sala TV",
+            "artist": "Jane In Palma",
+            "poster": "shopify://shop_images/video-placeholder.png",
+            "video_url": ""
+          }
+        },
         "video_hdNwz6": {
           "type": "video",
           "settings": {
-            "artist": "Endless Mood",
-            "title": "Jane in Palma",
+            "title": "Endless Mood",
+            "artist": "Jane in Palma",
             "poster": "shopify://shop_images/video-placeholder.png",
             "video_url": "https://cdn.shopify.com/videos/c/o/v/e35d923decbb4d09bd60bd1f3f0ed433.mp4"
           }
         }
       },
       "block_order": [
+        "video_QLR9gG",
         "video_hdNwz6"
       ],
       "settings": {}
