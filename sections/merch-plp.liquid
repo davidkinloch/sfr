@@ -1,7 +1,10 @@
 {%- comment -%}
-  Merch PLP — same slider as records but with merch labelling.
-  Uses {{ product.title }} (quoted name) + {{ product.metafields.custom.subtitle }}
-  for the two text rows. CTA label set per product.type ("Zine" vs default).
+  Collection PLP (default collection.json) — one slider, two card types:
+    - Vinyl/Record products  → records card (ARTIST/ALBUM + PLAY CLIPS clip flyout),
+                               matching the homepage-records section.
+    - Everything else (merch) → title + subtitle + VIEW cta.
+  This handles the records collection too, since it routes through the default
+  collection template (no per-collection template assignment required).
 {%- endcomment -%}
 {%- assign merch = collection.products | default: collections[section.settings.collection].products -%}
 <section class="main-content" id="merch">
@@ -9,10 +12,17 @@
     <div class="plp__track-wrap" id="plpWrap">
       <ul class="plp__track" id="plpTrack">
         {%- for product in merch -%}
-          {%- assign cat = product.metafields.custom.cat_no | default: 'SFRMERCH—' -%}
-          {%- assign subtitle = product.metafields.custom.subtitle | default: product.type -%}
           {%- assign first_variant = product.selected_or_first_available_variant -%}
-          {%- assign cta = product.metafields.custom.cta | default: 'VIEW' -%}
+          {%- comment -%} Vinyl/Record products render the records card (PLAY CLIPS); everything else is merch. {%- endcomment -%}
+          {%- assign is_record = false -%}
+          {%- if product.type == 'Vinyl' or product.type == 'Record' -%}{%- assign is_record = true -%}{%- endif -%}
+          {%- if is_record -%}
+            {%- assign cat = product.metafields.custom.cat_no | default: 'SFR—' -%}
+          {%- else -%}
+            {%- assign cat = product.metafields.custom.cat_no | default: 'SFRMERCH—' -%}
+            {%- assign subtitle = product.metafields.custom.subtitle | default: product.type -%}
+            {%- assign cta = product.metafields.custom.cta | default: 'VIEW' -%}
+          {%- endif -%}
           <li class="plp__card">
             <a class="plp__artwork-link" href="{{ product.url }}">
               <img class="plp__artwork"
@@ -27,9 +37,38 @@
                 <a class="window__text" href="{{ product.url }}">CAT: {{ cat }}</a>
               </div>
               <ul class="plp__desc">
-                <li><a class="plp__desc-item" href="{{ product.url }}">{{ product.title | upcase }}</a></li>
-                <li><a class="plp__desc-item" href="{{ product.url }}">{{ subtitle | upcase }}</a></li>
-                <li><a class="mac-btn plp__play" href="{{ product.url }}">{{ cta | upcase }}</a></li>
+                {%- if is_record -%}
+                  {%- assign clip_files = product.metafields.custom.clips.value -%}
+                  {%- capture clips_json -%}
+                    [
+                    {%- for file in clip_files -%}
+                      {%- if file.alt != blank -%}{%- assign t = file.alt -%}{%- else -%}{%- assign t = file.filename | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | strip -%}{%- endif -%}
+                      {"title":"{{ t | escape }}","url":"{{ file.url }}"}{% unless forloop.last %},{% endunless %}
+                    {%- endfor -%}
+                    ]
+                  {%- endcapture -%}
+                  <li><a class="plp__desc-item" href="{{ product.url }}">ARTIST: {{ product.vendor | upcase }}</a></li>
+                  <li><a class="plp__desc-item" href="{{ product.url }}">ALBUM: {{ product.title | upcase }}</a></li>
+                  <li>
+                    <a class="mac-btn plp__play"
+                       href="{{ product.url }}"
+                       {% if clip_files.size > 0 %}
+                         data-clips="{{ clips_json | strip | escape }}"
+                         data-title="{{ product.title | escape }}"
+                         data-artist="{{ product.vendor | escape }}"
+                         data-cover="{{ product.featured_image | image_url: width: 1200 }}"
+                         data-variant-id="{{ first_variant.id }}"
+                         data-available="{{ first_variant.available }}"
+                       {% endif %}>
+                      <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor" aria-hidden="true"><polygon points="0,0 0,10 8,5"/></svg>
+                      PLAY CLIPS
+                    </a>
+                  </li>
+                {%- else -%}
+                  <li><a class="plp__desc-item" href="{{ product.url }}">{{ product.title | upcase }}</a></li>
+                  <li><a class="plp__desc-item" href="{{ product.url }}">{{ subtitle | upcase }}</a></li>
+                  <li><a class="mac-btn plp__play" href="{{ product.url }}">{{ cta | upcase }}</a></li>
+                {%- endif -%}
                 <li>
                   <div class="plp__desc-item plp__cart-row">
                     <span class="plp__price">{{ first_variant.price | money_without_trailing_zeros }}</span>
