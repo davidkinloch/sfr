@@ -179,7 +179,37 @@
   });
   closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.style.display !== 'none') close(); });
-  if (window.SFRDrag) SFRDrag.wire(modal, titlebar, closeBtn);
+
+  /* Drag modal by titlebar — self-contained (mirrors V5; no dependency on theme.js load order) */
+  let dragging = false, offX = 0, offY = 0;
+  function dragStart(clientX, clientY, target) {
+    if (target === closeBtn) return;
+    const rect = modal.getBoundingClientRect();
+    /* switch from CSS centering to absolute position on first drag */
+    modal.style.left = rect.left + 'px';
+    modal.style.top  = rect.top  + 'px';
+    modal.style.right = 'auto';
+    modal.style.transform = 'none';
+    offX = clientX - rect.left;
+    offY = clientY - rect.top;
+    dragging = true;
+    document.body.style.userSelect = 'none';
+  }
+  function dragMove(clientX, clientY) {
+    if (!dragging) return;
+    const MIN_VISIBLE = 80, TITLEBAR_H = 30;
+    const w = modal.offsetWidth, vw = window.innerWidth, vh = window.innerHeight;
+    modal.style.left = Math.max(MIN_VISIBLE - w, Math.min(vw - MIN_VISIBLE, clientX - offX)) + 'px';
+    modal.style.top  = Math.max(0,               Math.min(vh - TITLEBAR_H,  clientY - offY)) + 'px';
+  }
+  function dragEnd() { dragging = false; document.body.style.userSelect = ''; }
+
+  titlebar.addEventListener('mousedown', e => { dragStart(e.clientX, e.clientY, e.target); e.preventDefault(); });
+  document.addEventListener('mousemove', e => dragMove(e.clientX, e.clientY));
+  document.addEventListener('mouseup', dragEnd);
+  titlebar.addEventListener('touchstart', e => dragStart(e.touches[0].clientX, e.touches[0].clientY, e.target), { passive: true });
+  document.addEventListener('touchmove', e => { if (dragging) dragMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+  document.addEventListener('touchend', dragEnd);
 })();
 </script>
 
