@@ -1616,10 +1616,9 @@ button.mv__desc-item:hover {
   justify-content: space-between;
   color: #2e7d32;
 }
-.cart-discount__entry { display: flex; gap: 8px; }
 .cart-discount__input {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   padding: 8px 10px;
   border: 2px solid #000;
   background: #fff;
@@ -1629,7 +1628,7 @@ button.mv__desc-item:hover {
   text-transform: uppercase;
 }
 .cart-discount__input::placeholder { color: #9a9a9a; }
-.cart-discount__apply { white-space: nowrap; }
+.cart-discount__apply { width: 100%; white-space: nowrap; }
 
 @media (max-width: 900px) {
   .checkout-page__inner { padding: 0 16px; }

@@ -61,7 +61,10 @@
                 <span class="pdp__price-tag cart-summary__count" id="coCount">{{ cart.item_count }}</span>
               </div>
               <div class="pdp__stock">CART ITEMS</div>
-              <div class="pdp__buy"></div>
+              <div class="pdp__buy">
+                <input class="cart-discount__input" type="text" id="cartDiscountInput" placeholder="DISCOUNT CODE" autocomplete="off" autocapitalize="characters">
+                <button type="button" class="mac-btn cart-discount__apply" id="cartDiscountApply">APPLY</button>
+              </div>
             </div>
 
             <table class="cart-table">
@@ -94,20 +97,16 @@
               </tbody>
             </table>
 
-            <div class="cart-discount">
-              {%- assign code_discounts = cart.discount_applications | where: 'type', 'discount_code' -%}
-              {%- if code_discounts.size > 0 -%}
+            {%- assign code_discounts = cart.discount_applications | where: 'type', 'discount_code' -%}
+            {%- if code_discounts.size > 0 -%}
+              <div class="cart-discount">
                 <ul class="cart-discount__applied">
                   {%- for d in code_discounts -%}
                     <li><span>{{ d.title | upcase }}</span><span>&minus;{{ d.total_allocated_amount | money_without_trailing_zeros }}</span></li>
                   {%- endfor -%}
                 </ul>
-              {%- endif -%}
-              <div class="cart-discount__entry">
-                <input class="cart-discount__input" type="text" id="cartDiscountInput" placeholder="DISCOUNT CODE" autocomplete="off" autocapitalize="characters">
-                <button type="button" class="mac-btn cart-discount__apply" id="cartDiscountApply">APPLY</button>
               </div>
-            </div>
+            {%- endif -%}
 
             <div class="cart-totals">
               <div class="cart-totals__row"><span>SUB TOTAL</span><span id="coSub">{{ cart.items_subtotal_price | money_without_trailing_zeros }}</span></div>
