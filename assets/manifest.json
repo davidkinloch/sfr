@@ -3,14 +3,15 @@
   "short_name": "SFR",
   "icons": [
     {
-      "src": "login-avatar.png",
+      "src": "icon-192.png",
       "type": "image/png",
-      "sizes": "178x173"
+      "sizes": "192x192",
+      "purpose": "any"
     },
     {
-      "src": "login-avatar.png",
+      "src": "icon-512.png",
       "type": "image/png",
-      "sizes": "any",
+      "sizes": "512x512",
       "purpose": "any"
     }
   ],
