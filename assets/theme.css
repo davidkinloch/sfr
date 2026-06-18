@@ -1147,6 +1147,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
   font-family: 'merchant_copy_wideregular';
   font-size: clamp(10px, 2vw, 18px);
   letter-spacing: 0.35em;
+  text-indent: 0.35em; /* offset trailing letter-spacing so the year optically centers */
   color: #e2e4e3;
   line-height: 1.2;
 }
