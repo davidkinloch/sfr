@@ -130,16 +130,27 @@
 
 <script>
 (function () {
-  /* Remove line item with /cart/change.js */
+  /* Remove line item with /cart/change.js. SFRCart lives in the deferred
+     theme.js, which hasn't run when this inline script parses — so attach the
+     listener unconditionally and resolve SFRCart at click time (with a direct
+     fetch fallback). */
   const tbody = document.getElementById('coItems');
-  if (tbody && window.SFRCart) {
+  if (tbody) {
     tbody.addEventListener('click', async function (e) {
       const btn = e.target.closest('.cart-remove-btn');
       if (!btn) return;
       const key = btn.getAttribute('data-key');
       btn.disabled = true;
       try {
-        await SFRCart.change({ id: key, quantity: 0 });
+        if (window.SFRCart) {
+          await SFRCart.change({ id: key, quantity: 0 });
+        } else {
+          await fetch('/cart/change.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ id: key, quantity: 0 })
+          });
+        }
         window.location.reload();
       } catch (err) {
         btn.disabled = false;
