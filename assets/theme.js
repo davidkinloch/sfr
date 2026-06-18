@@ -32,6 +32,7 @@ document.querySelectorAll('.window__close').forEach(btn => {
     });
     if (!res.ok) throw new Error('Cart add failed');
     await updateBadge();
+    if (window.SFRToast) SFRToast.show('ADDED TO CART');
     return res.json();
   }
   async function change(payload) {
@@ -61,6 +62,41 @@ document.querySelectorAll('.window__close').forEach(btn => {
   }
   window.SFRCart = { read, add, change, updateBadge, flash };
   document.addEventListener('DOMContentLoaded', updateBadge);
+})();
+
+/* ── Toast notifications ── */
+(function () {
+  let wrap;
+  function ensureWrap() {
+    if (wrap) return wrap;
+    wrap = document.createElement('div');
+    wrap.className = 'sfr-toast-wrap';
+    wrap.setAttribute('aria-live', 'polite');
+    (document.body || document.documentElement).appendChild(wrap);
+    return wrap;
+  }
+  function show(msg) {
+    if (!msg) return;
+    const el = document.createElement('div');
+    el.className = 'sfr-toast';
+    el.textContent = msg;
+    ensureWrap().appendChild(el);
+    requestAnimationFrame(() => el.classList.add('is-visible'));
+    setTimeout(() => {
+      el.classList.remove('is-visible');
+      setTimeout(() => el.remove(), 300);
+    }, 2400);
+  }
+  /* Queue a toast to show after a navigation/reload (e.g. cart remove reloads). */
+  function queue(msg) {
+    try { sessionStorage.setItem('sfrToast', msg); } catch (e) {}
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    let pending = null;
+    try { pending = sessionStorage.getItem('sfrToast'); sessionStorage.removeItem('sfrToast'); } catch (e) {}
+    if (pending) show(pending);
+  });
+  window.SFRToast = { show, queue };
 })();
 
 /* ── Shared drag helper for any modal ── */

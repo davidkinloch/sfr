@@ -151,6 +151,7 @@
             body: JSON.stringify({ id: key, quantity: 0 })
           });
         }
+        if (window.SFRToast) SFRToast.queue('REMOVED FROM CART');
         window.location.reload();
       } catch (err) {
         btn.disabled = false;
