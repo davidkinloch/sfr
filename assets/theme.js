@@ -186,8 +186,13 @@ document.querySelectorAll('.window__close').forEach(btn => {
     if (!modal) return;
     const closeBtn = document.getElementById('menuModalClose');
     const titlebar = modal.querySelector('.window__titlebar');
+    const modalList  = modal.querySelector('.menu-modal__list');
+    const sourceList = document.querySelector('.menu .menu__list');
 
-    function open()  { modal.classList.add('is-open'); modal.removeAttribute('aria-hidden'); }
+    /* Mirror the desktop nav into the modal on open (as V5 does) so the
+       full menu always shows, regardless of the server-side list. */
+    function syncItems() { if (modalList && sourceList) modalList.innerHTML = sourceList.innerHTML; }
+    function open()  { syncItems(); modal.classList.add('is-open'); modal.removeAttribute('aria-hidden'); }
     function close() { modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); }
 
     closeBtn && closeBtn.addEventListener('click', close);
