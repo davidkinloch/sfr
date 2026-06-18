@@ -1,8 +1,9 @@
 {%- comment -%}
-  Cart page — mirrors our static "checkout" layout. The actual
-  Shopify checkout is hosted, so the form posts to /checkout.
-  Left side: customer info (collected once on checkout anyway, here
-  it's UI shell), right side: live cart items + totals.
+  Cart page. Checkout is Shopify-hosted (Basic plan), which collects
+  email + shipping address + rates itself, so this page only shows the
+  live cart and proceeds to checkout. No contact/delivery fields here —
+  posting them to /cart does nothing.
+  Left: account state, express buttons, PLACE ORDER. Right: items + totals.
 {%- endcomment -%}
 <section class="checkout-page" id="checkout">
   <div class="checkout-page__inner">
@@ -22,76 +23,33 @@
 
             <div class="contact-info__header">{{ shop.name | upcase }}</div>
 
-            <!-- Express checkout buttons (Shopify renders these via additional_checkout_buttons when supported) -->
+            <!-- Account state -->
             <div class="checkout-section">
-              <div class="checkout-section__head">
-                <span class="checkout-label">EXPRESS CHECK OUT OPTIONS</span>
-              </div>
-              {%- if additional_checkout_buttons -%}
-                <div class="checkout-express additional-checkout-buttons">
-                  {{ content_for_additional_checkout_buttons }}
-                </div>
+              {%- if customer -%}
+                <span class="checkout-section__aux">LOGGED IN AS {{ customer.email | upcase }} &middot; <a class="checkout-link" href="{{ routes.account_logout_url }}">LOG OUT</a></span>
               {%- else -%}
-                <div class="checkout-express">
-                  <a class="checkout-pay-btn checkout-pay-btn--shop" href="{{ routes.cart_url }}" aria-label="Shop Pay"><span class="checkout-pay-btn__label">shop <strong>Pay</strong></span></a>
-                  <a class="checkout-pay-btn checkout-pay-btn--paypal" href="{{ routes.cart_url }}" aria-label="PayPal"><span class="checkout-pay-btn__label"><em>Pay</em>Pal</span></a>
-                  <a class="checkout-pay-btn checkout-pay-btn--apple" href="{{ routes.cart_url }}" aria-label="Apple Pay"><span class="checkout-pay-btn__label">&#63743; Pay</span></a>
-                </div>
+                <span class="checkout-section__aux">HAVE AN ACCOUNT? <a class="checkout-link" href="{{ routes.account_login_url }}">LOG IN</a></span>
               {%- endif -%}
             </div>
 
-            <!-- Contact -->
-            <div class="checkout-section">
-              <div class="checkout-section__head">
-                <span class="checkout-label checkout-label--big">CONTACT</span>
-                {%- if customer -%}
-                  <span class="checkout-section__aux">LOGGED IN AS {{ customer.email | upcase }} &middot; <a class="checkout-link" href="{{ routes.account_logout_url }}">LOG OUT</a></span>
-                {%- else -%}
-                  <span class="checkout-section__aux">HAVE AN ACCOUNT? <a class="checkout-link" href="{{ routes.account_login_url }}">LOG IN</a></span>
-                {%- endif -%}
+            <!-- Express checkout buttons — only render when Shopify provides them -->
+            {%- if additional_checkout_buttons -%}
+              <div class="checkout-section">
+                <div class="checkout-section__head">
+                  <span class="checkout-label">EXPRESS CHECK OUT OPTIONS</span>
+                </div>
+                <div class="checkout-express additional-checkout-buttons">
+                  {{ content_for_additional_checkout_buttons }}
+                </div>
               </div>
-              <input class="checkout-input" type="text" name="checkout[email]" placeholder="EMAIL ADDRESS OR PHONE NUMBER" value="{{ customer.email }}">
-              <label class="contact-form__check">
-                <input type="checkbox" name="checkout[buyer_accepts_marketing]" value="1">
-                <span class="contact-form__check-box" aria-hidden="true"></span>
-                <span>EMAIL ME WITH NEWS AND OFFERS</span>
-              </label>
+            {%- endif -%}
+
+            <div class="checkout-empty">
+              SHIPPING, TAXES &amp; DISCOUNT CODES<br>
+              ENTERED AT CHECKOUT
             </div>
 
-            <!-- Delivery -->
-            <div class="checkout-section">
-              <div class="checkout-label checkout-label--big">DELIVERY</div>
-              <div class="checkout-input checkout-select">
-                <span>COUNTRY / REGION</span>
-                <select name="checkout[shipping_address][country]" aria-label="Country / region">
-                  {%- for country in shop.enabled_currencies -%}
-                    <option>{{ country.iso_code }}</option>
-                  {%- endfor -%}
-                  <option>UNITED STATES</option>
-                  <option>UNITED KINGDOM</option>
-                  <option>SPAIN</option>
-                  <option>FRANCE</option>
-                  <option>GERMANY</option>
-                </select>
-              </div>
-              <div class="checkout-row-2">
-                <input class="checkout-input" type="text" name="checkout[shipping_address][first_name]" placeholder="FIRST NAME">
-                <input class="checkout-input" type="text" name="checkout[shipping_address][last_name]"  placeholder="LAST NAME">
-              </div>
-              <div class="checkout-input checkout-address">
-                <input type="text" name="checkout[shipping_address][address1]" placeholder="ADDRESS">
-                <button type="button" class="checkout-address__find">Find</button>
-              </div>
-              <a class="checkout-link" href="#">ENTER ADDRESS MANUALLY</a>
-              <div class="checkout-label checkout-label--big">SHIPPING METHOD</div>
-              <div class="checkout-empty">
-                ENTER YOUR SHIPPING ADDRESS TO<br>
-                VIEW AVAILABLE SHIPPING METHODS
-              </div>
-            </div>
-
-            <input type="hidden" name="checkout" value="">
-            <button type="submit" name="checkout" class="contact-form__send checkout-submit">PLACE ORDER</button>
+            <button type="submit" name="checkout" class="contact-form__send checkout-submit"{% if cart.item_count == 0 %} disabled{% endif %}>PLACE ORDER</button>
 
           </div>
 
@@ -103,9 +61,7 @@
                 <span class="pdp__price-tag cart-summary__count" id="coCount">{{ cart.item_count }}</span>
               </div>
               <div class="pdp__stock">CART ITEMS</div>
-              <div class="pdp__buy">
-                <a class="checkout-link cart-summary__discount" href="#" id="coDiscount">DISCOUNT CODE</a>
-              </div>
+              <div class="pdp__buy"></div>
             </div>
 
             <table class="cart-table">
