@@ -71,6 +71,17 @@
             <button type="submit" class="contact-form__send">SEND</button>
           {%- endform -%}
 
+          {%- comment -%}
+            Hidden newsletter signup — Shopify's `customer` form really subscribes
+            the email to email marketing. Submitted via JS (sendBeacon) when the
+            "EMAIL ME WITH NEWS AND OFFERS" box is ticked, so it runs alongside
+            the contact form's normal submit.
+          {%- endcomment -%}
+          {%- form 'customer', id: 'contactNewsletterForm', class: 'contact-newsletter-form' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <input type="hidden" name="contact[email]" id="cfNewsEmail" value="">
+          {%- endform -%}
+
         </div>
 
         <!-- RIGHT -->
@@ -105,6 +116,24 @@
   const btn = document.getElementById('contactBookingBtn');
   const box = document.getElementById('contactBooking');
   if (btn && box) btn.addEventListener('click', () => box.hidden = !box.hidden);
+
+  /* Real newsletter signup: when the news checkbox is ticked, subscribe the
+     entered email via the hidden customer (newsletter) form. sendBeacon posts
+     in the background so it survives the contact form's full-page submit. */
+  const contactForm = document.getElementById('contactForm');
+  const newsForm    = document.getElementById('contactNewsletterForm');
+  const newsCheck   = contactForm && contactForm.querySelector('input[name="contact[news]"]');
+  const emailInput  = document.getElementById('cfEmail');
+  const newsEmail   = document.getElementById('cfNewsEmail');
+  if (contactForm && newsForm && newsCheck && emailInput && newsEmail) {
+    contactForm.addEventListener('submit', function () {
+      /* submit only fires once HTML5 validation passes, so email is valid here */
+      if (newsCheck.checked && emailInput.value) {
+        newsEmail.value = emailInput.value;
+        try { navigator.sendBeacon(newsForm.action, new FormData(newsForm)); } catch (e) {}
+      }
+    });
+  }
 })();
 </script>
 
