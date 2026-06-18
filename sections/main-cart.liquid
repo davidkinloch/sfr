@@ -94,6 +94,21 @@
               </tbody>
             </table>
 
+            <div class="cart-discount">
+              {%- assign code_discounts = cart.discount_applications | where: 'type', 'discount_code' -%}
+              {%- if code_discounts.size > 0 -%}
+                <ul class="cart-discount__applied">
+                  {%- for d in code_discounts -%}
+                    <li><span>{{ d.title | upcase }}</span><span>&minus;{{ d.total_allocated_amount | money_without_trailing_zeros }}</span></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+              <div class="cart-discount__entry">
+                <input class="cart-discount__input" type="text" id="cartDiscountInput" placeholder="DISCOUNT CODE" autocomplete="off" autocapitalize="characters">
+                <button type="button" class="mac-btn cart-discount__apply" id="cartDiscountApply">APPLY</button>
+              </div>
+            </div>
+
             <div class="cart-totals">
               <div class="cart-totals__row"><span>SUB TOTAL</span><span id="coSub">{{ cart.items_subtotal_price | money_without_trailing_zeros }}</span></div>
               <div class="cart-totals__row"><span>SHIPPING</span><span id="coShip">CALCULATED AT CHECKOUT</span></div>
@@ -131,6 +146,21 @@
         btn.disabled = false;
       }
     });
+  }
+
+  /* Discount code — apply via Shopify's /discount/{code}, which stores it on
+     the cart and carries through to the hosted checkout. */
+  const dInput = document.getElementById('cartDiscountInput');
+  const dApply = document.getElementById('cartDiscountApply');
+  function applyDiscount() {
+    const code = (dInput.value || '').trim();
+    if (!code) return;
+    dApply.disabled = true;
+    window.location.href = '/discount/' + encodeURIComponent(code) + '?redirect=' + encodeURIComponent('{{ routes.cart_url }}');
+  }
+  if (dApply && dInput) {
+    dApply.addEventListener('click', applyDiscount);
+    dInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); applyDiscount(); } });
   }
 })();
 </script>

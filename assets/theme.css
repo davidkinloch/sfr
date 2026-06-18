@@ -1601,6 +1601,36 @@ button.mv__desc-item:hover {
 }
 .cart-totals__row--total { font-size: 20px; background: none; }
 
+/* Discount code */
+.cart-discount { padding: 12px 16px 0; }
+.cart-discount__applied {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  font-family: 'merchant_copy_wideregular';
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+.cart-discount__applied li {
+  display: flex;
+  justify-content: space-between;
+  color: #2e7d32;
+}
+.cart-discount__entry { display: flex; gap: 8px; }
+.cart-discount__input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 2px solid #000;
+  background: #fff;
+  font-family: 'merchant_copy_wideregular';
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cart-discount__input::placeholder { color: #9a9a9a; }
+.cart-discount__apply { white-space: nowrap; }
+
 @media (max-width: 900px) {
   .checkout-page__inner { padding: 0 16px; }
   .cart-summary__strip { grid-template-columns: 1fr; }
