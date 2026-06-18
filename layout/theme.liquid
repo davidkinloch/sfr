@@ -13,9 +13,17 @@
   {%- else -%}
     <link rel="canonical" href="{{ canonical_url }}">
   {%- endif -%}
+  {%- comment -%} Favicon / app icons — defaults to login-avatar.png, overridable via the theme Favicon setting {%- endcomment -%}
   {%- if settings.favicon != blank -%}
-    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ settings.favicon | image_url: width: 32 }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ settings.favicon | image_url: width: 16 }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon | image_url: width: 180 }}">
+  {%- else -%}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ 'login-avatar.png' | asset_url }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ 'login-avatar.png' | asset_url }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ 'login-avatar.png' | asset_url }}">
   {%- endif -%}
+  <link rel="manifest" href="{{ 'manifest.json' | asset_url }}">
 
   <title>
     {{ page_title }}

@@ -1,0 +1,20 @@
+{
+  "name": "SFR Records",
+  "short_name": "SFR",
+  "icons": [
+    {
+      "src": "login-avatar.png",
+      "type": "image/png",
+      "sizes": "178x173"
+    },
+    {
+      "src": "login-avatar.png",
+      "type": "image/png",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#D3D0D4",
+  "background_color": "#D3D0D4",
+  "display": "standalone"
+}
