@@ -1628,7 +1628,15 @@ button.mv__desc-item:hover {
   text-transform: uppercase;
 }
 .cart-discount__input::placeholder { color: #9a9a9a; }
-.cart-discount__apply { width: 100%; white-space: nowrap; }
+.cart-discount__apply {
+  width: 100%;
+  height: 28px;
+  padding: 0 12px;
+  font-size: 13px;
+  box-shadow: 2px 2px 0 #000;
+  white-space: nowrap;
+}
+.cart-discount__apply:active { transform: translate(2px, 2px); }
 
 @media (max-width: 900px) {
   .checkout-page__inner { padding: 0 16px; }
