@@ -12,6 +12,14 @@
     "main": {
       "type": "events-grid",
       "blocks": {
+        "event_wj9eNk": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/event-1.png",
+            "link": "",
+            "alt": ""
+          }
+        },
         "event_yFDNwj": {
           "type": "event",
           "settings": {
@@ -38,13 +46,14 @@
         }
       },
       "block_order": [
+        "event_wj9eNk",
         "event_yFDNwj",
         "e1",
         "e2"
       ],
       "settings": {
-        "month": "JUNE",
-        "year": "2026",
+        "month": "JULY",
+        "year": "2030",
         "billboard": "UPCOMING EVENTS",
         "dj_text": "LIVE DJ SETS"
       }
