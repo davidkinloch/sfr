@@ -1,9 +1,29 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "contact-about",
-      "settings": {}
+      "settings": {
+        "titlebar": "ABOUT US",
+        "instagram_url": "https://www.instagram.com/sfr.rec/",
+        "youtube_url": "https://www.youtube.com/@sfrrec",
+        "discogs_url": "https://www.discogs.com/label/1120319-Snake-Free-Roofing",
+        "logo_1": "shopify://shop_images/sfr-logo-1.png",
+        "logo_2": "shopify://shop_images/sfr-logo-2.png",
+        "logo_3": "shopify://shop_images/sfr-logo-3.png",
+        "about_html": "<p>SFR RECORDS — FROM LOS ANGELES TO ISLAS BALEARES</p><p>The main goal behind SFR Records is to not to be goal minded — more to be a reflection of our artists visions. We are here to instigate human sustainability though consciousness and independence. Message music. Music with an opinion. A 100% or 0% DIY get after it mentality. Looking for any opportunity to cut out the middle man, from lifestyle to direct relationship to the listener. To forge a label experience that has been long since forgotten — artwork, prank calls, music videos etc etc. It all about the connection to others, pure transparency in a world of smoke and mirrors, we don't dig stats and new world millennial keywords. \"Followers\".. that's an unhealthy term. This is about unity friends, not some sheep business. Write us, send us a demo, tell us a story, we will write back.</p><p>The label was founded by artist Julian Smith who initially launched his Jane in Palma LP in 2016. Prior to that Julian had released music extensively working with labels both stateside and Europe, predominantly with WNCL recordings focused on more on the club sound, much changed but none forgotten. Moving forward, Julian and the team are focused on introducing new and established artists to the SFR Records roster, all with a likeminded ethos.</p>"
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
