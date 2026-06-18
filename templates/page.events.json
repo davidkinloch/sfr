@@ -1,16 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "events-grid",
-      "settings": {},
       "blocks": {
-        "e1": { "type": "event" },
-        "e2": { "type": "event" },
-        "e3": { "type": "event" },
-        "e4": { "type": "event" }
+        "event_yFDNwj": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/event-1.png",
+            "link": "",
+            "alt": "event"
+          }
+        },
+        "e1": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/event-1.png",
+            "link": "",
+            "alt": "#"
+          }
+        },
+        "e2": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/event-1.png",
+            "link": "",
+            "alt": "#"
+          }
+        }
       },
-      "block_order": ["e1", "e2", "e3", "e4"]
+      "block_order": [
+        "event_yFDNwj",
+        "e1",
+        "e2"
+      ],
+      "settings": {
+        "month": "MARCH",
+        "year": "2026",
+        "billboard": "UPCOMING EVENTS",
+        "dj_text": "LIVE DJ SETS"
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
