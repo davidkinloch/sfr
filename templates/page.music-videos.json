@@ -12,26 +12,46 @@
     "main": {
       "type": "music-videos",
       "blocks": {
+        "video_PBiNdm": {
+          "type": "video",
+          "settings": {
+            "title": "Safety Net",
+            "artist": "Jane In Palma",
+            "poster": "shopify://shop_images/Music_Video_JaneInPalma_SafetyNet_web.jpg",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/9949688930cc470484d537074402a46c.mp4"
+          }
+        },
+        "video_nG7qyy": {
+          "type": "video",
+          "settings": {
+            "title": "Para No Id (Paranoid)",
+            "artist": "Jane in Palma",
+            "poster": "shopify://shop_images/Music_Video_JaneInPalma_ParaNoID_web.jpg",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/bffb57589a074235bdfe3f40123e0f73.mp4"
+          }
+        },
         "video_QLR9gG": {
           "type": "video",
           "settings": {
             "title": "Disaster Wall on Sala TV",
             "artist": "Jane In Palma",
-            "poster": "shopify://shop_images/video-placeholder.png",
-            "video_url": ""
+            "poster": "shopify://shop_images/Music_Video_JaneInPalma_DisasterWall_web.jpg",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/48dddbfae3c2491a85ac43b0a17982d0.mp4"
           }
         },
         "video_hdNwz6": {
           "type": "video",
           "settings": {
-            "title": "Endless Mood",
+            "title": "Quipe Qut (Magazine Freaks)",
             "artist": "Jane in Palma",
-            "poster": "shopify://shop_images/video-placeholder.png",
+            "poster": "shopify://shop_images/Music_Video_JaneInPalma_MagazineFreaks_web.jpg",
             "video_url": "https://cdn.shopify.com/videos/c/o/v/e35d923decbb4d09bd60bd1f3f0ed433.mp4"
           }
         }
       },
       "block_order": [
+        "video_PBiNdm",
+        "video_nG7qyy",
         "video_QLR9gG",
         "video_hdNwz6"
       ],
