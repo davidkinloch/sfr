@@ -445,6 +445,9 @@ a.menu__item:hover {
 .login:active .login__label { box-shadow: none; transform: translate(3px, 3px); }
 
 @media (min-width: 781px) {
+  /* Reserve the full row height so minimising Menu/SFR can't collapse the row
+     and pull the centred login + checkout upward */
+  .topnav .container { min-height: 189px; }
   .window.sfr { display: flex; flex-direction: column; height: 181px; }
   .window.sfr.is-minimized { height: auto; }
   .window.sfr.is-minimized .sfr__body { display: none; }
@@ -600,9 +603,9 @@ a.menu__item:hover {
   display: block;
 }
 
-/* Out-of-stock variants */
-.pdp__stock.is-oos     { background-image: url('yellow-bg.png'); background-color: #ffeb99; }
-.pdp__price-tag.is-oos { background-image: url('yellow-bg.png'); background-color: #ffeb99; }
+/* Out-of-stock variants — red textured bg (yellow tile multiplied with red) */
+.pdp__stock.is-oos     { background-image: url('yellow-bg.png'); background-color: #d81e1e; background-blend-mode: multiply; color: #fff; }
+.pdp__price-tag.is-oos { background-image: url('yellow-bg.png'); background-color: #d81e1e; background-blend-mode: multiply; color: #fff; }
 .pdp__stock-msg {
   display: none;
   padding: 10px 16px;
@@ -610,12 +613,13 @@ a.menu__item:hover {
   font-size: 14px;
   letter-spacing: 0.04em;
   text-align: center;
-  background: url('yellow-bg.png') repeat center center;
+  background: url('yellow-bg.png') repeat center center #d81e1e;
+  background-blend-mode: multiply;
   background-size: 240px;
-  color: #000;
+  color: #fff;
 }
 .pdp__stock-msg.is-visible { display: block; line-height: 1.5; }
-.pdp__stock-msg a { color: #000; text-decoration: underline; }
+.pdp__stock-msg a { color: #fff; text-decoration: underline; }
 
 /* Qty + add-to-cart */
 .pdp__qty-wrap { display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -661,6 +665,15 @@ a.menu__item:hover {
 }
 .pdp__add-cart[disabled]:hover { background: #fff; }
 .pdp__add-cart[disabled]:active { box-shadow: 3px 3px 0 #000; transform: none; }
+/* When out of stock, fade the qty stepper to match the disabled CTA */
+.pdp__buy:has(.pdp__add-cart[disabled]) .pdp__qty-wrap {
+  opacity: 0.45;
+  pointer-events: none;
+}
+/* Close the purchase strip with a bottom border on the price + buy cells,
+   but only when out of stock (OOS message showing) */
+.pdp__purchase:has(.pdp__price-tag.is-oos) .pdp__price,
+.pdp__purchase:has(.pdp__price-tag.is-oos) .pdp__buy { border-bottom: 2px solid #000; }
 
 /* Size selector */
 .pdp__size {
@@ -754,7 +767,8 @@ a.menu__item:hover {
 .pdp__desc-body {
   padding: 14px;
   font-family: 'merchant_copy_wideregular';
-  font-size: 16px;
+  font-size: 14px;
+  text-transform: uppercase;
   line-height: 1.2;
 }
 .pdp__desc-body p + p { margin-top: 10px; }
@@ -1079,7 +1093,8 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .about-us__copy {
   padding: 24px 28px 28px;
   font-family: 'merchant_copy_wideregular';
-  font-size: 15px;
+  font-size: 14px;
+  text-transform: uppercase;
   line-height: 1.55;
   letter-spacing: 0.01em;
   color: #050505;
@@ -1233,7 +1248,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 }
 .mv__card:nth-child(3n+1) { scroll-snap-align: start; }
 .mv__artwork-link { display: block; cursor: pointer; }
-.mv__artwork { width: 100%; display: block; aspect-ratio: 703 / 1343; object-fit: cover; }
+.mv__artwork { width: 100%; display: block; aspect-ratio: 4 / 3; object-fit: cover; }
 .mv__info { margin-top: 8px; }
 .mv__desc { list-style: none; padding: 0; background: #fff; }
 .mv__desc li {
@@ -1299,13 +1314,38 @@ button.mv__desc-item:hover {
     text-overflow: ellipsis;
   }
 }
-.vm__body { background: #000; line-height: 0; }
+.vm__body { background: #000; line-height: 0; position: relative; }
 .vm__video {
   width: 100%;
   aspect-ratio: 16 / 9;
   display: block;
   background: #000;
 }
+/* Buffering indicator */
+.vm__buffering {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  font-family: 'merchant_copy_wideregular';
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  color: #fff;
+  pointer-events: none;
+  line-height: 1;
+}
+.vm__buffering.is-visible { display: flex; }
+.vm__buffering-dots {
+  width: 32px; height: 32px;
+  border: 3px solid rgba(255,255,255,0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: vmSpin 0.8s linear infinite;
+}
+@keyframes vmSpin { to { transform: rotate(360deg); } }
 .vm__controls { background: #fff; }
 .vm__scrubber {
   position: relative;
@@ -1641,15 +1681,17 @@ button.mv__desc-item:hover {
 /* ── Toast notifications ── */
 .sfr-toast-wrap {
   position: fixed;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
+  top: 96px;
+  right: 24px;
   z-index: 400;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
   pointer-events: none;
+}
+@media (max-width: 900px) {
+  .sfr-toast-wrap { top: 72px; right: 12px; }
 }
 .sfr-toast {
   background: #fff;

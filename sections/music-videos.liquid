@@ -56,6 +56,10 @@
     </div>
     <div class="vm__body">
       <video class="vm__video" id="vmVideo" playsinline></video>
+      <div class="vm__buffering" id="vmBuffering" aria-hidden="true">
+        <span class="vm__buffering-dots"></span>
+        <span class="vm__buffering-text">BUFFERING</span>
+      </div>
       <div class="vm__controls">
         <div class="vm__scrubber" id="vmScrubber">
           <div class="vm__scrub-track">
@@ -115,6 +119,20 @@
   const thumb     = document.getElementById('vmThumb');
   const timeEl    = document.getElementById('vmTime');
   const fsBtn     = document.getElementById('vmFs');
+  const buffering = document.getElementById('vmBuffering');
+
+  /* Buffering indicator — show while the video stalls waiting for data */
+  function showBuffering() { if (buffering) buffering.classList.add('is-visible'); }
+  function hideBuffering() { if (buffering) buffering.classList.remove('is-visible'); }
+  video.addEventListener('waiting',    showBuffering);
+  video.addEventListener('stalled',    showBuffering);
+  video.addEventListener('seeking',    showBuffering);
+  video.addEventListener('loadstart',  showBuffering);
+  video.addEventListener('playing',    hideBuffering);
+  video.addEventListener('canplay',    hideBuffering);
+  video.addEventListener('seeked',     hideBuffering);
+  video.addEventListener('pause',      hideBuffering);
+  video.addEventListener('error',      hideBuffering);
 
   const ICON_PLAY  = '<svg width="14" height="14" viewBox="0 0 12 14" fill="currentColor"><polygon points="0,0 0,14 12,7"/></svg>';
   const ICON_PAUSE = '<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><rect x="0" y="0" width="4" height="14"/><rect x="8" y="0" width="4" height="14"/></svg>';
@@ -172,6 +190,7 @@
     modal.style.display = 'none';
     modal.classList.remove('is-open');
     playPause.innerHTML = ICON_PLAY;
+    hideBuffering();
   }
   document.addEventListener('click', e => {
     const trig = e.target.closest('[data-video-src]');
@@ -224,7 +243,7 @@
       "settings": [
         { "type": "text",         "id": "title",     "label": "Title" },
         { "type": "text",         "id": "artist",    "label": "Artist" },
-        { "type": "image_picker", "id": "poster",    "label": "Poster image (portrait)" },
+        { "type": "image_picker", "id": "poster",    "label": "Poster image (landscape 4:3)" },
         { "type": "url",          "id": "video_url", "label": "Video URL (MP4)" }
       ]
     }
