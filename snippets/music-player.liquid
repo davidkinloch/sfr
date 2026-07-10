@@ -39,7 +39,9 @@
         <button class="player__btn player__btn--album" id="playerPrevAlbum" type="button">PREV ALBUM</button>
         <button class="player__btn player__btn--album" id="playerNextAlbum" type="button">NEXT ALBUM</button>
       </div>
-      <a class="player__btn player__btn--detail" id="playerDetailLink" href="#">VIEW ALBUM PAGE</a>
+      {%- unless template.name == 'product' -%}
+        <a class="player__btn player__btn--detail" id="playerDetailLink" href="#">VIEW ALBUM PAGE</a>
+      {%- endunless -%}
       <button class="player__btn player__btn--cart" id="playerCartBtn" type="button">ADD TO CART</button>
       <audio id="playerAudio" preload="auto"></audio>
     </div>

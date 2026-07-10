@@ -42,7 +42,7 @@
                   {%- capture clips_json -%}
                     [
                     {%- for file in clip_files -%}
-                      {%- if file.alt != blank -%}{%- assign t = file.alt -%}{%- else -%}{%- assign t = file.filename | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | strip -%}{%- endif -%}
+                      {%- if file.alt != blank -%}{%- assign t = file.alt -%}{%- else -%}{%- assign t = file.url | split: '?' | first | split: '/' | last | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | replace: '%20', ' ' | strip -%}{%- endif -%}
                       {"title":"{{ t | escape }}","url":"{{ file.url }}"}{% unless forloop.last %},{% endunless %}
                     {%- endfor -%}
                     ]

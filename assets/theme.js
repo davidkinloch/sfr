@@ -328,7 +328,7 @@ document.querySelectorAll('.window__close').forEach(btn => {
       artwork.alt = data.title || '';
       artistEl.textContent = data.artist || '—';
       titleEl.textContent  = data.title  || '—';
-      detailLnk.href = data.productUrl || '#';
+      if (detailLnk) detailLnk.href = data.productUrl || '#';
       cartBtn.setAttribute('data-variant-id', data.variantId || '');
       if (data.available === false) {
         cartBtn.setAttribute('disabled', 'disabled');
