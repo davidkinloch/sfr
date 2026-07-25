@@ -1,14 +1,14 @@
 /* ─────────────────────────────────────────────────────────────
    SFR Theme JS — Shopify build
-   Wires up: window minimise, AJAX cart, login popup drag/close,
-   mobile menu modal, draggable popups with viewport clamp.
-   Cart is backed by Shopify's /cart/*.js endpoints. Login is
-   handled by snippets/login-popup.liquid posting to
-   /account/login (form rendered server-side for CSRF).
+   Wires up: window minimise, AJAX cart, mobile menu modal,
+   draggable popups with viewport clamp.
+   Cart is backed by Shopify's /cart/*.js endpoints. Login is NOT
+   handled here — the topnav LOG IN link goes to routes.account_login_url
+   and Shopify redirects to its hosted customer accounts flow.
    ───────────────────────────────────────────────────────────── */
 
 /* Window minimise toggle — skips modal close buttons that have their own handlers */
-const MODAL_CLOSE_IDS = ['playerClose', 'vmClose', 'loginPopupClose', 'menuModalClose'];
+const MODAL_CLOSE_IDS = ['playerClose', 'vmClose', 'menuModalClose'];
 document.querySelectorAll('.window__close').forEach(btn => {
   if (MODAL_CLOSE_IDS.indexOf(btn.id) !== -1) return;
   btn.addEventListener('click', e => {
@@ -145,38 +145,9 @@ document.querySelectorAll('.window__close').forEach(btn => {
   window.SFRDrag = { wire };
 })();
 
-/* ── Login popup (markup rendered server-side in snippets/login-popup.liquid) ── */
-(function () {
-  document.addEventListener('DOMContentLoaded', function () {
-    const popup    = document.getElementById('loginPopup');
-    if (!popup) return; /* customer logged in — snippet not rendered */
-    const closeBtn = document.getElementById('loginPopupClose');
-    const titlebar = popup.querySelector('.window__titlebar');
-
-    function open() {
-      popup.classList.add('is-open');
-      popup.removeAttribute('aria-hidden');
-      const input = popup.querySelector('input[name="customer[email]"]');
-      if (input) setTimeout(() => input.focus(), 50);
-    }
-    function close() {
-      popup.classList.remove('is-open');
-      popup.setAttribute('aria-hidden', 'true');
-    }
-
-    /* Topnav LOG IN icon opens popup (only when logged out) */
-    document.querySelectorAll('a.login[data-logged-in="false"]').forEach(el => {
-      el.addEventListener('click', e => { e.preventDefault(); open(); });
-    });
-
-    closeBtn && closeBtn.addEventListener('click', close);
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && popup.classList.contains('is-open')) close();
-    });
-
-    if (window.SFRDrag && titlebar) SFRDrag.wire(popup, titlebar, closeBtn);
-  });
-})();
+/* The topnav LOG IN link is a plain anchor to routes.account_login_url. Shopify
+   redirects it to the hosted customer accounts flow, so there is no popup to
+   intercept it — see snippets/header.liquid. */
 
 /* ── Mobile menu modal (≤780px) — markup rendered in snippets/menu-modal.liquid ── */
 (function () {

@@ -140,11 +140,15 @@ Open Music Videos in the theme editor → **Music videos** section:
 ### Wired
 - Cart: AJAX add / remove / change via Shopify Cart API. Topnav badge updates live.
 - Variants: PDP size picker swaps price, stock state, add-to-cart label.
-- Login / register / forgot / reset / activate / account / addresses / order — all use Shopify's `customer_*` forms.
-- Login popup posts to `/account/login` with CSRF token (rendered via `{% form 'customer_login' %}`).
+- Login / register / account / order history — handled entirely by **Shopify-hosted customer accounts**. The topnav LOG IN link points at `routes.account_login_url`; Shopify 302s it to `https://shopify.com/<shop-id>/account`. Nothing theme-side to maintain.
 - Mobile menu modal mirrors the main nav linklist.
 - Footer auto-pulls from the `footer` linklist.
 - PDP form posts to `/cart/add` (AJAX, falls back to native if JS off).
+
+### Customer accounts — removed from the theme (2026-07-25)
+The seven `templates/customers/*.liquid` files and the login popup were **deleted**. They were legacy-customer-account code and were never rendered: this store runs the current hosted customer accounts, so Shopify 302s every `/account*` route to `shopify.com/104258470229/account` before the theme is reached. Legacy customer accounts were deprecated 2026-02-26 with sunset later in 2026, so they cannot be reinstated — do not re-add these templates.
+
+The `.account-page` / `.account-view` / `.account-form` / `.checkout-input` CSS **is still in use** by `templates/404.liquid`, `password.liquid`, `search.liquid` and `gift_card.liquid` — it is the shared window-panel scaffolding, not account-specific. Only the truly account-only rules (`.account-nav*`, `.account-dashboard*`, `.account-orders-table`, `.account-empty`, `.account-signout`, `.account-form__row`) were removed.
 
 ### Not wired (Basic Shopify constraints)
 - **Checkout is Shopify-hosted** on Basic. Our `templates/cart.json` is the closest custom UI you can have. Clicking PLACE ORDER submits to Shopify's checkout, which carries the customer's name/email/address from cart-form fields where supported. The shipping form on our cart is illustrative — Shopify will collect the real address at checkout.
@@ -173,7 +177,6 @@ Open Music Videos in the theme editor → **Music videos** section:
 | Contact page         | `sections/contact-about.liquid` |
 | Events page          | `sections/events-grid.liquid` |
 | Music videos page    | `sections/music-videos.liquid` |
-| Login popup          | `snippets/login-popup.liquid` |
 | Mobile menu modal    | `snippets/menu-modal.liquid` |
 | Trash icon           | `snippets/icon-trash.liquid` |
 
