@@ -1,0 +1,96 @@
+{%- assign footer_links = section.settings.menu -%}
+{%- assign privacy_url = section.settings.privacy_page.url | default: '/pages/privacy-policy' -%}
+{%- assign privacy_label = section.settings.privacy_label | default: 'Privacy Policy' -%}
+{%- assign credit_url = section.settings.credit_url | default: 'https://davidkinloch.com/' -%}
+<footer class="sitefooter">
+  <div class="footer-btns">
+    {%- if footer_links.links.size > 0 -%}
+      {%- for link in footer_links.links -%}
+        <a class="footer-btn" href="{{ link.url }}">{{ link.title | upcase }}</a>
+      {%- endfor -%}
+    {%- else -%}
+      <a class="footer-btn" href="{{ routes.collections_url }}/records">RECORDS</a>
+      <a class="footer-btn" href="mailto:mail@sfrrecords.com">EMAIL</a>
+      <a class="footer-btn" href="{{ pages.contact.url | default: '/pages/contact' }}">CONTACT</a>
+    {%- endif -%}
+  </div>
+  <div class="footer-meta">
+    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
+    {%- if section.settings.show_privacy -%}
+      <span class="footer-meta__sep">·</span>
+      <a class="footer-meta__link" href="{{ privacy_url }}">{{ privacy_label }}</a>
+    {%- endif -%}
+    {%- if section.settings.show_credit and section.settings.credit_name != blank -%}
+      <span class="footer-meta__sep">·</span>
+      <span>
+        {{ section.settings.credit_prefix }}
+        {%- if credit_url != blank -%}
+          <a class="footer-meta__link" href="{{ credit_url }}" target="_blank" rel="noopener">{{ section.settings.credit_name }}</a>
+        {%- else -%}
+          {{ section.settings.credit_name }}
+        {%- endif -%}
+      </span>
+    {%- endif -%}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Footer menu",
+      "default": "footer",
+      "info": "Edit the links in Online Store > Navigation. If this menu is empty, the theme falls back to RECORDS / EMAIL / CONTACT."
+    },
+    {
+      "type": "header",
+      "content": "Bottom row"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_privacy",
+      "label": "Show privacy policy link",
+      "default": true
+    },
+    {
+      "type": "page",
+      "id": "privacy_page",
+      "label": "Privacy policy page",
+      "info": "Leave empty to use /pages/privacy-policy."
+    },
+    {
+      "type": "text",
+      "id": "privacy_label",
+      "label": "Privacy link text",
+      "default": "Privacy Policy"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_credit",
+      "label": "Show build credit",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "credit_prefix",
+      "label": "Credit prefix",
+      "default": "Build by"
+    },
+    {
+      "type": "text",
+      "id": "credit_name",
+      "label": "Credit name",
+      "default": "DKDD"
+    },
+    {
+      "type": "url",
+      "id": "credit_url",
+      "label": "Credit link",
+      "info": "Leave empty to use https://davidkinloch.com/. A url setting cannot declare an arbitrary default, so the fallback lives in Liquid."
+    }
+  ]
+}
+{% endschema %}
