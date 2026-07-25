@@ -852,6 +852,67 @@ a.menu__item:hover {
 .footer-meta__link { color: #555; text-decoration: none; }
 .footer-meta__link:hover { text-decoration: underline; }
 
+/* ───────── Policy pages (/policies/*) ─────────
+   Shopify renders these itself — a templates/policy.liquid is IGNORED, so the
+   markup (.shopify-policy__*) cannot be changed. It does render inside this
+   theme's layout, so styling those classes is the only lever. Recreates the
+   window chrome in CSS: .shopify-policy__title is the titlebar.
+   Deliberately NOT .about-us__copy — that style is uppercase, which is
+   unreadable at 3,000+ words. */
+.shopify-policy__container {
+  max-width: 900px;
+  margin: 100px auto 80px;
+  border: 2px solid #000;
+  background: #fff;
+  box-shadow: 6px 6px 0 #000;
+}
+.shopify-policy__title {
+  background: #000;
+  padding: 10px 14px;
+}
+.shopify-policy__title h1 {
+  font-family: 'merchant_copy_wideregular';
+  font-size: 18px;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin: 0;
+}
+.shopify-policy__body {
+  padding: 24px 28px 28px;
+  font-family: 'merchant_copy_wideregular';
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  color: #050505;
+}
+.shopify-policy__body > *:first-child,
+.shopify-policy__body .rte > *:first-child { margin-top: 0; }
+.shopify-policy__body p { margin: 0 0 14px; }
+.shopify-policy__body h1,
+.shopify-policy__body h2,
+.shopify-policy__body h3,
+.shopify-policy__body h4 {
+  font-size: 16px;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 24px 0 10px;
+}
+.shopify-policy__body strong { font-weight: normal; text-transform: uppercase; }
+.shopify-policy__body ul,
+.shopify-policy__body ol { margin: 0 0 14px; padding-left: 22px; }
+.shopify-policy__body li { margin-bottom: 6px; }
+.shopify-policy__body a { color: #050505; text-decoration: underline; }
+.shopify-policy__body table { width: 100%; border-collapse: collapse; margin: 0 0 14px; }
+.shopify-policy__body th,
+.shopify-policy__body td { border: 1px solid #000; padding: 8px 10px; text-align: left; }
+@media (max-width: 780px) {
+  .shopify-policy__container { margin: 60px 16px 50px; box-shadow: 4px 4px 0 #000; }
+  .shopify-policy__body { padding: 18px 16px 22px; font-size: 14px; }
+}
+
 /* ───────── PLP (product listing page — records / merch) ───────── */
 .main-content { padding: 100px 0; }
 .plp { padding: 40px 0 20px; }
