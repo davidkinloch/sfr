@@ -1,7 +1,24 @@
 {%- assign footer_links = section.settings.menu -%}
-{%- assign privacy_url = section.settings.privacy_page.url | default: '/pages/privacy-policy' -%}
-{%- assign privacy_label = section.settings.privacy_label | default: 'Privacy Policy' -%}
+{%- assign legal_links = section.settings.legal_menu -%}
 {%- assign credit_url = section.settings.credit_url | default: 'https://davidkinloch.com/' -%}
+
+{%- comment -%}
+  Resolve policy URLs from shop.policies rather than hardcoding /policies/*.
+  Legal falls back to the contact-information policy, which carries the
+  trader-identification detail while the dedicated Legal notice is empty.
+{%- endcomment -%}
+{%- assign privacy_url = '' -%}
+{%- assign terms_url = '' -%}
+{%- assign legal_url = '' -%}
+{%- assign contact_info_url = '' -%}
+{%- for policy in shop.policies -%}
+  {%- if policy.url contains '/privacy-policy' -%}{%- assign privacy_url = policy.url -%}{%- endif -%}
+  {%- if policy.url contains '/terms-of-service' -%}{%- assign terms_url = policy.url -%}{%- endif -%}
+  {%- if policy.url contains '/legal-notice' -%}{%- assign legal_url = policy.url -%}{%- endif -%}
+  {%- if policy.url contains '/contact-information' -%}{%- assign contact_info_url = policy.url -%}{%- endif -%}
+{%- endfor -%}
+{%- if legal_url == blank -%}{%- assign legal_url = contact_info_url -%}{%- endif -%}
+
 <footer class="sitefooter">
   <div class="footer-btns">
     {%- if footer_links.links.size > 0 -%}
@@ -14,23 +31,48 @@
       <a class="footer-btn" href="{{ pages.contact.url | default: '/pages/contact' }}">CONTACT</a>
     {%- endif -%}
   </div>
+
   <div class="footer-meta">
-    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
-    {%- if section.settings.show_privacy -%}
-      <span class="footer-meta__sep">·</span>
-      <a class="footer-meta__link" href="{{ privacy_url }}">{{ privacy_label }}</a>
-    {%- endif -%}
-    {%- if section.settings.show_credit and section.settings.credit_name != blank -%}
-      <span class="footer-meta__sep">·</span>
-      <span>
-        {{ section.settings.credit_prefix }}
-        {%- if credit_url != blank -%}
-          <a class="footer-meta__link" href="{{ credit_url }}" target="_blank" rel="noopener">{{ section.settings.credit_name }}</a>
+    {%- if section.settings.show_legal -%}
+      <div class="footer-meta__row">
+        {%- if legal_links.links.size > 0 -%}
+          {%- for link in legal_links.links -%}
+            {%- unless forloop.first -%}<span class="footer-meta__sep">·</span>{%- endunless -%}
+            <a class="footer-meta__link" href="{{ link.url }}">{{ link.title }}</a>
+          {%- endfor -%}
         {%- else -%}
-          {{ section.settings.credit_name }}
+          {%- assign shown = 0 -%}
+          {%- if privacy_url != blank -%}
+            <a class="footer-meta__link" href="{{ privacy_url }}">Privacy Policy</a>
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endif -%}
+          {%- if terms_url != blank -%}
+            {%- if shown > 0 -%}<span class="footer-meta__sep">·</span>{%- endif -%}
+            <a class="footer-meta__link" href="{{ terms_url }}">Terms</a>
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endif -%}
+          {%- if legal_url != blank -%}
+            {%- if shown > 0 -%}<span class="footer-meta__sep">·</span>{%- endif -%}
+            <a class="footer-meta__link" href="{{ legal_url }}">Legal</a>
+          {%- endif -%}
         {%- endif -%}
-      </span>
+      </div>
     {%- endif -%}
+
+    <div class="footer-meta__row">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
+      {%- if section.settings.show_credit and section.settings.credit_name != blank -%}
+        <span class="footer-meta__sep">·</span>
+        <span>
+          {{ section.settings.credit_prefix }}
+          {%- if credit_url != blank -%}
+            <a class="footer-meta__link" href="{{ credit_url }}" target="_blank" rel="noopener">{{ section.settings.credit_name }}</a>
+          {%- else -%}
+            {{ section.settings.credit_name }}
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+    </div>
   </div>
 </footer>
 
@@ -43,29 +85,27 @@
       "id": "menu",
       "label": "Footer menu",
       "default": "footer",
-      "info": "Edit the links in Online Store > Navigation. If this menu is empty, the theme falls back to RECORDS / EMAIL / CONTACT."
+      "info": "The big buttons. Edit the links in Online Store > Navigation. If this menu is empty, the theme falls back to RECORDS / EMAIL / CONTACT."
     },
     {
       "type": "header",
-      "content": "Bottom row"
+      "content": "Legal row"
     },
     {
       "type": "checkbox",
-      "id": "show_privacy",
-      "label": "Show privacy policy link",
+      "id": "show_legal",
+      "label": "Show legal links",
       "default": true
     },
     {
-      "type": "page",
-      "id": "privacy_page",
-      "label": "Privacy policy page",
-      "info": "Leave empty to use /pages/privacy-policy."
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Legal menu",
+      "info": "Leave empty to auto-list Privacy Policy, Terms and Legal from Settings > Policies. Pick a menu here to control the wording or add more links."
     },
     {
-      "type": "text",
-      "id": "privacy_label",
-      "label": "Privacy link text",
-      "default": "Privacy Policy"
+      "type": "header",
+      "content": "Copyright row"
     },
     {
       "type": "checkbox",
