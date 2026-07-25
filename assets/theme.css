@@ -4,6 +4,7 @@
        url('merchant_copy_wide-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: 'merchant_copyregular';
@@ -11,6 +12,7 @@
        url('merchant_copy-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,7 +30,7 @@ body {
 }
 main {
   flex: 1;
-  background: url('background.png') no-repeat center / cover;
+  background: url('background.webp') no-repeat center / cover;
 }
 
 /* ═══ WINDOW ═══ */
@@ -1017,9 +1019,15 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
   outline: none;
 }
 .contact-form__input::placeholder { color: #999; letter-spacing: 0.04em; }
-.contact-form__input:focus,
-.contact-form__row input:focus,
-.contact-form__row textarea:focus { box-shadow: inset 0 0 0 1px #000; }
+/* Focus: 2px outline offset clear of the 1px border, so the focused state is
+   unmistakably distinct from the resting state (WCAG 2.4.11). */
+.contact-form__input:focus-visible,
+.contact-form__row input:focus-visible,
+.contact-form__row textarea:focus-visible {
+  box-shadow: inset 0 0 0 1px #000;
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
 
 /* Custom checkbox */
 .contact-form__check {
@@ -1484,8 +1492,12 @@ button.mv__desc-item:hover {
   box-sizing: border-box;
 }
 .checkout-input::placeholder { color: #838383; }
-.checkout-input:focus,
-.checkout-input:focus-within { box-shadow: inset 0 0 0 1px #000; }
+.checkout-input:focus-visible,
+.checkout-input:focus-within {
+  box-shadow: inset 0 0 0 1px #000;
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
 
 /* Select with leading label */
 .checkout-select {
@@ -1527,7 +1539,13 @@ button.mv__desc-item:hover {
   letter-spacing: 0.03em;
   color: #000;
 }
-.checkout-address > input:focus { box-shadow: inset 0 0 0 1px #000; }
+/* Inset outline: the .checkout-address wrapper is overflow:hidden, so an
+   outward outline-offset would be clipped. */
+.checkout-address > input:focus-visible {
+  box-shadow: inset 0 0 0 1px #000;
+  outline: 2px solid #000;
+  outline-offset: -2px;
+}
 .checkout-address > input::placeholder { color: #838383; }
 .checkout-address__find {
   flex-shrink: 0;
