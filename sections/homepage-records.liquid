@@ -15,12 +15,21 @@
         {%- for product in records.products -%}
           {%- assign cat = product.metafields.custom.cat_no | default: 'SFR—' -%}
           {%- assign first_variant = product.selected_or_first_available_variant -%}
+          {%- assign cover_url = '' -%}
+          {%- if product.featured_image -%}
+            {%- assign cover_url = product.featured_image | image_url: width: 1200 -%}
+          {%- endif -%}
           <li class="plp__card">
             <a class="plp__artwork-link" href="{{ product.url }}">
-              <img class="plp__artwork"
-                   src="{{ product.featured_image | image_url: width: 600 }}"
-                   alt="{{ product.title | escape }}"
-                   loading="lazy">
+              {%- if product.featured_image -%}
+                <img class="plp__artwork"
+                     src="{{ product.featured_image | image_url: width: 600 }}"
+                     alt="{{ product.title | escape }}"
+                     width="600" height="600"
+                     loading="lazy">
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'plp__artwork' }}
+              {%- endif -%}
             </a>
             <div class="plp__info window">
               <div class="border-left"></div>
@@ -51,7 +60,7 @@
                        data-clips="{{ clips_json | strip | escape }}"
                        data-title="{{ product.title | escape }}"
                        data-artist="{{ product.vendor | escape }}"
-                       data-cover="{{ product.featured_image | image_url: width: 1200 }}"
+                       data-cover="{{ cover_url }}"
                        data-variant-id="{{ first_variant.id }}"
                        data-available="{{ first_variant.available }}"
                      {% endif %}>
@@ -84,7 +93,8 @@
     </div>
     <div class="plp__nav">
       <div class="plp__page-counter">
-        <img class="plp__counter-bg" src="{{ 'plp-counter.png' | asset_url }}" alt="">
+        <img class="plp__counter-bg" src="{{ 'plp-counter.png' | asset_url }}" alt=""
+             width="321" height="67" loading="lazy">
         <span class="plp__counter-text">PAGE <span id="plpPage">1</span>/<span id="plpTotal">1</span></span>
       </div>
       <div class="plp__bar-wrap">

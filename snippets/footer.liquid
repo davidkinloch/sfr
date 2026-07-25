@@ -6,9 +6,9 @@
         <a class="footer-btn" href="{{ link.url }}">{{ link.title | upcase }}</a>
       {%- endfor -%}
     {%- else -%}
-      <a class="footer-btn" href="/collections/records">RECORDS</a>
+      <a class="footer-btn" href="{{ routes.collections_url }}/records">RECORDS</a>
       <a class="footer-btn" href="mailto:mail@sfrrecords.com">EMAIL</a>
-      <a class="footer-btn" href="/pages/contact">CONTACT</a>
+      <a class="footer-btn" href="{{ pages.contact.url | default: '/pages/contact' }}">CONTACT</a>
     {%- endif -%}
   </div>
   <div class="footer-meta">

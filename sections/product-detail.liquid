@@ -19,11 +19,18 @@
     <div class="pdp__media">
       <div class="pdp__cover-wrap">
         {%- if is_record -%}
-          <img class="pdp__vinyl" src="{{ 'record.png' | asset_url }}" aria-hidden="true" alt="">
+          <img class="pdp__vinyl" src="{{ 'record.png' | asset_url }}" aria-hidden="true" alt=""
+               width="494" height="1565">
         {%- endif -%}
-        <img class="pdp__cover" id="pdpMainImg"
-             src="{{ product.featured_image | image_url: width: 1200 }}"
-             alt="{{ product.title | escape }}">
+        {%- if product.featured_image -%}
+          <img class="pdp__cover" id="pdpMainImg"
+               src="{{ product.featured_image | image_url: width: 1200 }}"
+               alt="{{ product.title | escape }}"
+               width="1200" height="1200"
+               loading="eager" fetchpriority="high">
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'pdp__cover' }}
+        {%- endif -%}
       </div>
       {%- if product.images.size > 1 -%}
         <div class="pdp__thumbs">
@@ -31,6 +38,8 @@
             <img class="pdp__thumb{% if forloop.first %} is-active{% endif %}"
                  src="{{ img | image_url: width: 160 }}"
                  alt="{{ product.title | escape }} — image {{ forloop.index }}"
+                 width="160" height="160"
+                 loading="lazy"
                  data-full="{{ img | image_url: width: 1200 }}">
           {%- endfor -%}
         </div>

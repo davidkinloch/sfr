@@ -1,0 +1,9 @@
+# Editor / atomic-write temp files. Without these the `theme dev` watcher can catch a
+# *.tmp.<pid>.<hash> file mid-save and try to upload it, which Shopify rejects as an
+# illegal filename.
+*.tmp
+*.tmp.*
+*~
+*.swp
+*.swo
+.DS_Store

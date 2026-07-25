@@ -8,7 +8,8 @@
       <span class="window__text">MUSIC PLAYER</span>
     </div>
     <div class="player__body">
-      <img class="player__artwork" id="playerArtwork" src="" alt="">
+      {%- comment -%} src is set by the player JS when a track loads {%- endcomment -%}
+      <img class="player__artwork" id="playerArtwork" alt="" width="600" height="600" loading="lazy">
       <div class="player__bar">
         <div class="player__bar-title">
           <span id="playerArtist">—</span> — <span id="playerAlbumTitle">—</span>

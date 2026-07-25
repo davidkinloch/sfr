@@ -10,7 +10,8 @@
           <li class="mv__card" {{ block.shopify_attributes }}>
             <a class="mv__artwork-link" href="#" data-video-src="{{ block.settings.video_url }}" data-video-title="{{ block.settings.title | escape }}">
               {%- if block.settings.poster -%}
-                <img class="mv__artwork" src="{{ block.settings.poster | image_url: width: 700 }}" alt="{{ block.settings.title | escape }}">
+                <img class="mv__artwork" src="{{ block.settings.poster | image_url: width: 700 }}" alt="{{ block.settings.title | escape }}"
+                     width="700" height="525" loading="lazy">
               {%- endif -%}
             </a>
             <div class="mv__info window">
@@ -31,7 +32,8 @@
     </div>
     <div class="mv__nav">
       <div class="mv__page-counter">
-        <img class="mv__counter-bg" src="{{ 'plp-counter.png' | asset_url }}" alt="">
+        <img class="mv__counter-bg" src="{{ 'plp-counter.png' | asset_url }}" alt=""
+             width="321" height="67" loading="lazy">
         <span class="mv__counter-text">PAGE <span id="mvPage">1</span>/<span id="mvTotal">1</span></span>
       </div>
       <div class="mv__bar-wrap">

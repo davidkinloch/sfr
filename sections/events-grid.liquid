@@ -5,18 +5,21 @@
 <div class="events">
   <div class="events__header">
     <div class="events__oval-wrap">
-      <img class="events__oval-bg" src="{{ 'events-oval.png' | asset_url }}" alt="">
+      <img class="events__oval-bg" src="{{ 'events-oval.png' | asset_url }}" alt=""
+           width="781" height="229">
       <div class="events__oval-text">
         <span class="events__month">{{ section.settings.month | default: 'MARCH' }}</span>
         <span class="events__year">{{ section.settings.year | default: '2026' }}</span>
       </div>
     </div>
     <div class="events__billboard-wrap">
-      <img class="events__billboard-bg" src="{{ 'events-billboard.png' | asset_url }}" alt="">
+      <img class="events__billboard-bg" src="{{ 'events-billboard.png' | asset_url }}" alt=""
+           width="1176" height="227">
       <div class="events__billboard-text">{{ section.settings.billboard | default: 'UPCOMING EVENTS' }}</div>
     </div>
     <div class="events__dj-wrap">
-      <img class="events__dj-bg" src="{{ 'events-dj.png' | asset_url }}" alt="">
+      <img class="events__dj-bg" src="{{ 'events-dj.png' | asset_url }}" alt=""
+           width="582" height="86">
       <div class="events__dj-text">{{ section.settings.dj_text | default: 'LIVE DJ SETS' }}</div>
     </div>
   </div>
@@ -25,7 +28,9 @@
     {%- for block in section.blocks -%}
       <a class="events__card" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
         {%- if block.settings.image -%}
-          <img class="events__img" src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.alt | escape }}">
+          <img class="events__img" src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.alt | escape }}"
+               width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}"
+               loading="lazy">
         {%- endif -%}
       </a>
     {%- endfor -%}

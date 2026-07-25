@@ -15,6 +15,10 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Images carry width/height attributes for CLS. Without this the attributes act as
+   presentational hints and pin a fixed pixel height, overriding aspect-ratio. */
+img { max-width: 100%; height: auto; }
+
 body {
   min-height: 100vh;
   background: #D3D0D4;
@@ -1524,6 +1528,7 @@ button.mv__desc-item:hover {
   letter-spacing: 0.03em;
   color: #000;
 }
+.checkout-address > input:focus { box-shadow: inset 0 0 0 1px #000; }
 .checkout-address > input::placeholder { color: #838383; }
 .checkout-address__find {
   flex-shrink: 0;

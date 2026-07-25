@@ -5,7 +5,8 @@
   About copy comes from section.settings.about_html (rich text).
 {%- endcomment -%}
 <section class="contact-page" id="contact">
-  <img class="about-us__homie" src="{{ 'sfr-homie.png' | asset_url }}" alt="" aria-hidden="true">
+  <img class="about-us__homie" src="{{ 'sfr-homie.png' | asset_url }}" alt="" aria-hidden="true"
+       width="917" height="963" loading="lazy">
   <div class="contact-page__inner">
 
     <div class="contact-window window">
@@ -89,13 +90,13 @@
 
           <div class="pdp__purchase about-us__logos">
             <div class="pdp__price">
-              {%- if section.settings.logo_1 -%}<img src="{{ section.settings.logo_1 | image_url: width: 360 }}" alt="">{%- endif -%}
+              {%- if section.settings.logo_1 -%}<img src="{{ section.settings.logo_1 | image_url: width: 360 }}" alt="" width="{{ section.settings.logo_1.width }}" height="{{ section.settings.logo_1.height }}" loading="lazy">{%- endif -%}
             </div>
             <div class="pdp__stock">
-              {%- if section.settings.logo_2 -%}<img src="{{ section.settings.logo_2 | image_url: width: 360 }}" alt="">{%- endif -%}
+              {%- if section.settings.logo_2 -%}<img src="{{ section.settings.logo_2 | image_url: width: 360 }}" alt="" width="{{ section.settings.logo_2.width }}" height="{{ section.settings.logo_2.height }}" loading="lazy">{%- endif -%}
             </div>
             <div class="pdp__buy">
-              {%- if section.settings.logo_3 -%}<img src="{{ section.settings.logo_3 | image_url: width: 360 }}" alt="">{%- endif -%}
+              {%- if section.settings.logo_3 -%}<img src="{{ section.settings.logo_3 | image_url: width: 360 }}" alt="" width="{{ section.settings.logo_3.width }}" height="{{ section.settings.logo_3.height }}" loading="lazy">{%- endif -%}
             </div>
           </div>
 
