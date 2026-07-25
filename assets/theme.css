@@ -859,24 +859,67 @@ a.menu__item:hover {
    window chrome in CSS: .shopify-policy__title is the titlebar.
    Deliberately NOT .about-us__copy — that style is uppercase, which is
    unreadable at 3,000+ words. */
+/* Rebuilds .window chrome without its markup: the two side borders come from
+   multiple backgrounds instead of the .border-left/.border-right divs, which
+   we cannot add here. */
 .shopify-policy__container {
+  position: relative;
   max-width: 900px;
   margin: 100px auto 80px;
-  border: 2px solid #000;
-  background: #fff;
-  box-shadow: 6px 6px 0 #000;
+  padding: 3px 3px 0;
+  background-color: #fff;
+  background-image: url('vertical-left.png'), url('vertical-right.png');
+  background-repeat: repeat-y, repeat-y;
+  background-position: top left, top right;
+  background-size: 3px auto, 3px auto;
 }
+.shopify-policy__container::before,
+.shopify-policy__container::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 3px;
+  background: url('horizontal.png') repeat-x top left;
+  background-size: 164px 3px;
+}
+.shopify-policy__container::before { top: 0; }
+.shopify-policy__container::after { bottom: -2px; background-position: bottom left; }
+/* Titlebar: white with the lines.png stripe, title centred on a white patch */
 .shopify-policy__title {
-  background: #000;
-  padding: 10px 14px;
+  position: relative;
+  height: 24px;
+  padding: 2px 6px;
+  background: #fff url('horizontal.png') repeat-x bottom left;
+  background-size: 164px 2px;
+  text-transform: uppercase;
+}
+.shopify-policy__title::after {
+  content: '';
+  position: absolute;
+  display: block;
+  top: 2px; left: 6px;
+  height: 18px;
+  background: url('lines.png') repeat-x center left;
+  width: calc(100% - 12px);
+  background-size: 174px 14px;
 }
 .shopify-policy__title h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 3px;
+  height: 16px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  background: #fff;
+  padding: 0 8px;
   font-family: 'merchant_copy_wideregular';
   font-size: 18px;
   font-weight: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #fff;
+  letter-spacing: 0.02em;
+  color: #000;
   margin: 0;
 }
 .shopify-policy__body {
@@ -909,7 +952,8 @@ a.menu__item:hover {
 .shopify-policy__body th,
 .shopify-policy__body td { border: 1px solid #000; padding: 8px 10px; text-align: left; }
 @media (max-width: 780px) {
-  .shopify-policy__container { margin: 60px 16px 50px; box-shadow: 4px 4px 0 #000; }
+  .shopify-policy__container { margin: 60px 16px 50px; }
+  .shopify-policy__title h1 { font-size: 15px; }
   .shopify-policy__body { padding: 18px 16px 22px; font-size: 14px; }
 }
 
