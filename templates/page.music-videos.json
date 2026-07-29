@@ -12,22 +12,13 @@
     "main": {
       "type": "music-videos",
       "blocks": {
-        "video_PBiNdm": {
+        "video_hdNwz6": {
           "type": "video",
           "settings": {
-            "title": "Safety Net",
-            "artist": "Jane In Palma",
-            "poster": "shopify://shop_images/Frame.png",
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/9949688930cc470484d537074402a46c.mp4"
-          }
-        },
-        "video_nG7qyy": {
-          "type": "video",
-          "settings": {
-            "title": "Para No Id (Paranoid)",
+            "title": "Quipe Qut (Magazine Freaks)",
             "artist": "Jane in Palma",
-            "poster": "shopify://shop_images/Frame_2c63663c-2c99-45bf-9802-4b886b9ac45f.png",
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/bffb57589a074235bdfe3f40123e0f73.mp4"
+            "poster": "shopify://shop_images/Frame_9cbc6ba2-9f25-4778-9177-bee2cbb579ad.png",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/e35d923decbb4d09bd60bd1f3f0ed433.mp4"
           }
         },
         "video_QLR9gG": {
@@ -39,21 +30,31 @@
             "video_url": "https://cdn.shopify.com/videos/c/o/v/48dddbfae3c2491a85ac43b0a17982d0.mp4"
           }
         },
-        "video_hdNwz6": {
+        "video_PBiNdm": {
           "type": "video",
           "settings": {
-            "title": "Quipe Qut (Magazine Freaks)",
+            "title": "Safety Net",
+            "artist": "Jane In Palma",
+            "poster": "shopify://shop_images/Frame.png",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/9949688930cc470484d537074402a46c.mp4"
+          }
+        },
+        "video_nG7qyy": {
+          "type": "video",
+          "disabled": true,
+          "settings": {
+            "title": "Para No Id (Paranoid)",
             "artist": "Jane in Palma",
-            "poster": "shopify://shop_images/Frame_9cbc6ba2-9f25-4778-9177-bee2cbb579ad.png",
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/e35d923decbb4d09bd60bd1f3f0ed433.mp4"
+            "poster": "shopify://shop_images/Frame_2c63663c-2c99-45bf-9802-4b886b9ac45f.png",
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/bffb57589a074235bdfe3f40123e0f73.mp4"
           }
         }
       },
       "block_order": [
-        "video_PBiNdm",
-        "video_nG7qyy",
+        "video_hdNwz6",
         "video_QLR9gG",
-        "video_hdNwz6"
+        "video_PBiNdm",
+        "video_nG7qyy"
       ],
       "settings": {}
     }
