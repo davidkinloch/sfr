@@ -8,7 +8,7 @@
       </div>
       <div class="window__content contact-window__body">
         <div class="contact-window__col" style="grid-column:1/-1; max-width:100%;">
-          <div class="about-us__copy">
+          <div class="about-us__copy{% if section.settings.text_align == 'center' %} about-us__copy--center{% endif %}">
             {{ page.content }}
           </div>
         </div>
@@ -20,7 +20,18 @@
 {% schema %}
 {
   "name": "Page",
-  "settings": [],
+  "settings": [
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Body text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Centre" }
+      ],
+      "default": "left"
+    }
+  ],
   "presets": [
     { "name": "Page" }
   ]

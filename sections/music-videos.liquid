@@ -34,7 +34,11 @@
       <div class="mv__page-counter">
         <img class="mv__counter-bg" src="{{ 'plp-counter.png' | asset_url }}" alt=""
              width="321" height="67" loading="lazy">
-        <span class="mv__counter-text">PAGE <span id="mvPage">1</span>/<span id="mvTotal">1</span></span>
+        {%- comment -%}
+          &nbsp; not a plain space: .mv__counter-text is a flex container, which
+          strips the trailing whitespace off the "PAGE" text run.
+        {%- endcomment -%}
+        <span class="mv__counter-text">PAGE&nbsp;<span id="mvPage">1</span>/<span id="mvTotal">1</span></span>
       </div>
       <div class="mv__bar-wrap">
         <button class="mv__arrow mv__arrow--prev" id="mvPrev" aria-label="Previous"></button>

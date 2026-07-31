@@ -69,19 +69,7 @@
                   </a>
                 </li>
                 <li>
-                  <div class="plp__desc-item plp__cart-row">
-                    <span class="plp__price">{{ first_variant.price | money_without_trailing_zeros }}</span>
-                    <select class="plp__qty" aria-label="Quantity">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                    </select>
-                    <button class="plp__add" type="button" data-variant-id="{{ first_variant.id }}" aria-label="Add to cart">
-                      {% render 'icon-cart-plus' %}
-                    </button>
-                  </div>
+                  {% render 'plp-cart-row', product: product, variant: first_variant %}
                 </li>
               </ul>
             </div>
@@ -95,7 +83,11 @@
       <div class="plp__page-counter">
         <img class="plp__counter-bg" src="{{ 'plp-counter.png' | asset_url }}" alt=""
              width="321" height="67" loading="lazy">
-        <span class="plp__counter-text">PAGE <span id="plpPage">1</span>/<span id="plpTotal">1</span></span>
+        {%- comment -%}
+          &nbsp; not a plain space: .plp__counter-text is a flex container, which
+          strips the trailing whitespace off the "PAGE" text run.
+        {%- endcomment -%}
+        <span class="plp__counter-text">PAGE&nbsp;<span id="plpPage">1</span>/<span id="plpTotal">1</span></span>
       </div>
       <div class="plp__bar-wrap">
         <button class="plp__arrow plp__arrow--prev" id="plpPrev" aria-label="Previous"></button>

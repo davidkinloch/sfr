@@ -98,7 +98,7 @@
         </form>
 
         <div class="pdp__stock-msg{% unless current_variant.available %} is-visible{% endunless %}" id="pdpStockMsg">
-          OUT OF STOCK &mdash; PLEASE EMAIL <a href="mailto:{{ settings.stock_email | default: 'stock@sfrrecords.com' }}">{{ settings.stock_email | default: 'STOCK@SFRRECORDS.COM' | upcase }}</a> FOR INCOMING.
+          OUT OF STOCK &mdash; PLEASE EMAIL <a href="mailto:{{ settings.stock_email | default: 'info@sfr-records.com' }}">{{ settings.stock_email | default: 'info@sfr-records.com' | upcase }}</a> FOR INCOMING.
         </div>
 
         <!-- Info table -->
@@ -189,39 +189,61 @@
   const vinyl = document.querySelector('.pdp__vinyl');
   if (vinyl) requestAnimationFrame(() => requestAnimationFrame(() => { vinyl.style.left = '100%'; }));
 
-  /* Variant data for client-side switching */
+  /* Variant data for client-side switching.
+     `max` is the purchasable ceiling: real stock when Shopify tracks the variant
+     with a "deny" policy, otherwise NO_CAP because oversell is permitted. */
+  const NO_CAP = 9999;
   const variants = {
     {%- for variant in product.variants -%}
+      {%- liquid
+        assign v_max = 9999
+        if variant.inventory_management != blank and variant.inventory_policy == 'deny'
+          assign v_max = variant.inventory_quantity | at_least: 0
+        endif
+      -%}
       "{{ variant.id }}": {
         id: {{ variant.id }},
         title: {{ variant.title | json }},
         price: {{ variant.price | json }},
         priceFormatted: {{ variant.price | money_without_trailing_zeros | json }},
         available: {{ variant.available }},
+        max: {{ v_max }},
         featured_image: {{ variant.featured_image.src | json | default: '""' }}
       }{% unless forloop.last %},{% endunless %}
     {%- endfor -%}
   };
 
-  /* Qty +/- */
   const qtyVal = document.getElementById('pdpQtyVal');
   const qtyHidden = document.getElementById('pdpQtyHidden');
-  document.getElementById('pdpQtyDown').addEventListener('click', () => {
-    const v = Math.max(1, parseInt(qtyVal.textContent, 10) - 1);
-    qtyVal.textContent = v; qtyHidden.value = v;
-  });
-  document.getElementById('pdpQtyUp').addEventListener('click', () => {
-    const v = parseInt(qtyVal.textContent, 10) + 1;
-    qtyVal.textContent = v; qtyHidden.value = v;
-  });
-
-  /* Size variant picker */
+  const qtyUpBtn = document.getElementById('pdpQtyUp');
+  const qtyDownBtn = document.getElementById('pdpQtyDown');
   const sizeOptions = document.getElementById('pdpSizeOptions');
   const variantIdInput = document.getElementById('pdpVariantId');
   const priceEl = document.getElementById('pdpPriceTag');
   const stockEl = document.getElementById('pdpStock');
   const stockMsg = document.getElementById('pdpStockMsg');
   const addBtn = document.getElementById('pdpAddCart');
+
+  /* Qty +/- — clamped to the selected variant's stock, so + stops dead at the
+     last available unit instead of counting up forever. */
+  function variantMax() {
+    const v = variants[variantIdInput.value];
+    return v && typeof v.max === 'number' ? Math.max(1, v.max) : NO_CAP;
+  }
+  function setQty(n) {
+    const max = variantMax();
+    const v = Math.min(Math.max(1, parseInt(n, 10) || 1), max);
+    qtyVal.textContent = v;
+    qtyHidden.value = v;
+    qtyUpBtn.disabled = v >= max;
+    qtyDownBtn.disabled = v <= 1;
+    return v;
+  }
+  qtyDownBtn.addEventListener('click', () => setQty(parseInt(qtyVal.textContent, 10) - 1));
+  qtyUpBtn.addEventListener('click', () => setQty(parseInt(qtyVal.textContent, 10) + 1));
+  setQty(1);
+
+  /* Size variant picker */
   function applyVariant(v) {
     if (!v) return;
     variantIdInput.value = v.id;
@@ -236,6 +258,8 @@
       if (v.available) { addBtn.removeAttribute('disabled'); addBtn.textContent = 'ADD TO CART'; }
       else             { addBtn.setAttribute('disabled', 'disabled'); addBtn.textContent = 'OUT OF STOCK'; }
     }
+    /* Re-clamp: the new variant may hold less stock than the old one. */
+    setQty(qtyVal.textContent);
   }
   if (sizeOptions) {
     sizeOptions.addEventListener('click', (e) => {
@@ -261,14 +285,28 @@
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
     if (!window.SFRCart) { form.submit(); return; }
+    const id = parseInt(variantIdInput.value, 10);
+    const want = parseInt(qtyHidden.value, 10) || 1;
+    const max = variantMax();
     try {
-      await SFRCart.add({
-        id: parseInt(variantIdInput.value, 10),
-        quantity: parseInt(qtyHidden.value, 10) || 1
-      });
-      SFRCart.flash(addBtn, 'ADDED ✓');
+      let qty = want;
+      if (max < NO_CAP) {
+        /* The stepper caps a single add; this also accounts for units already
+           sitting in the cart, since /cart/add.js stacks onto existing lines. */
+        const room = max - (await SFRCart.inCart(id));
+        if (room <= 0) {
+          SFRCart.flash(addBtn, 'MAX IN CART');
+          if (window.SFRToast) SFRToast.show('ALL AVAILABLE STOCK IS ALREADY IN YOUR CART');
+          return;
+        }
+        qty = Math.min(want, room);
+      }
+      await SFRCart.add({ id: id, quantity: qty });
+      SFRCart.flash(addBtn, qty < want ? 'ADDED ' + qty + ' ✓' : 'ADDED ✓');
+      if (qty < want && window.SFRToast) SFRToast.show('ONLY ' + qty + ' LEFT — ADDED ' + qty);
     } catch (err) {
       SFRCart.flash(addBtn, 'ERROR');
+      if (window.SFRToast && err && err.cartMessage) SFRToast.show(err.cartMessage.toUpperCase());
     }
   });
 })();

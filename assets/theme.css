@@ -30,7 +30,9 @@ body {
 }
 main {
   flex: 1;
-  background: url('background.webp') no-repeat center / cover;
+  /* Tiled full-bleed: anchored to the top, scaled to the viewport width and
+     repeated down the y axis so long pages never run out of background. */
+  background: url('background.webp') repeat-y center top / 100% auto;
 }
 
 /* ═══ WINDOW ═══ */
@@ -640,7 +642,9 @@ a.menu__item:hover {
   line-height: 1;
   padding: 0;
 }
-.pdp__qty-btn:active { box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080; }
+.pdp__qty-btn:active:not(:disabled) { box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080; }
+/* Greyed at 1 and at the stock ceiling — the classic disabled-chrome look. */
+.pdp__qty-btn:disabled { color: #808080; cursor: default; }
 .pdp__qty-val {
   font-family: 'merchant_copy_wideregular';
   font-size: 18px;
@@ -981,6 +985,16 @@ a.menu__item:hover {
 }
 .plp__card:nth-child(5n+1) { scroll-snap-align: start; }
 .plp__card:nth-child(even) { margin-top: 120px; }
+/* A partial row (1–4 cards) can never fill the track, so centre it rather
+   than leaving dead space on the right. Desktop only — mobile cards are 65vw
+   and have to stay scrollable. */
+@media (min-width: 781px) {
+  .plp__track:not(:has(> .plp__card:nth-child(5))) {
+    width: 100%;
+    justify-content: center;
+    padding: 0 16px 60px;
+  }
+}
 .plp__artwork-link { display: block; cursor: pointer; }
 .plp__artwork { width: 100%; display: block; aspect-ratio: 1 / 1; object-fit: cover; }
 .plp__info { margin-top: 8px; }
@@ -1020,6 +1034,17 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .plp__play {
   padding: 0 12px; height: 28px; font-size: 13px;
   display: flex; width: fit-content; margin: 8px auto;
+  /* A flex container drops the whitespace between the icon and the label. */
+  gap: 8px;
+}
+.plp__soldout {
+  padding: 0 8px; height: 20px; line-height: 20px;
+  font-family: 'merchant_copy_wideregular'; font-size: 11px;
+  color: #fff;
+  background-image: url('yellow-bg.png');
+  background-color: #d81e1e;
+  background-blend-mode: multiply;
+  background-size: 240px;
 }
 .plp__desc li:nth-child(1) .plp__desc-item,
 .plp__desc li:nth-child(2) .plp__desc-item { min-height: 18px; }
@@ -1220,6 +1245,10 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .about-us__copy p:last-child { margin-bottom: 0; }
 .about-us__copy strong { font-weight: normal; text-transform: uppercase; }
 .about-us__copy em { font-style: normal; color: #6a6a6a; font-size: 13px; letter-spacing: 0.04em; }
+/* Opt-in per page via the Page section's "Body text alignment" setting. */
+.about-us__copy--center { text-align: center; }
+.about-us__copy--center ul,
+.about-us__copy--center ol { list-style-position: inside; padding-left: 0; }
 
 /* SFR homie — scrolls across screen on 3s delay */
 .about-us__homie {

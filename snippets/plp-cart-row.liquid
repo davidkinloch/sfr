@@ -1,0 +1,51 @@
+{% doc %}
+  Renders the bottom row of a PLP card: price + quantity + add-to-cart, or a
+  SOLD OUT label in place of the buy UI when nothing is purchasable.
+
+  The quantity options never exceed the variant's real stock. Inventory is only
+  a ceiling when Shopify is tracking it AND the policy is "deny" — with
+  "continue" (oversell allowed) or no tracking, inventory_quantity is
+  meaningless here, so the row falls back to the standard 1–5 choices.
+
+  @param {object} product - The product being carded.
+  @param {object} variant - The variant the add button targets.
+
+  @example
+  {% render 'plp-cart-row', product: product, variant: first_variant %}
+{% enddoc %}
+
+{%- liquid
+  assign qty_ceiling = 5
+  assign stock_tracked = false
+  assign stock_cap = 0
+  if variant.inventory_management != blank and variant.inventory_policy == 'deny'
+    assign stock_tracked = true
+    assign stock_cap = variant.inventory_quantity | at_least: 0
+  endif
+  assign qty_max = qty_ceiling
+  if stock_tracked
+    assign qty_max = stock_cap | at_most: qty_ceiling
+  endif
+-%}
+
+{%- if product.available and qty_max >= 1 -%}
+  <div class="plp__desc-item plp__cart-row">
+    <span class="plp__price">{{ variant.price | money_without_trailing_zeros }}</span>
+    <select class="plp__qty" aria-label="Quantity">
+      {%- for i in (1..qty_max) -%}
+        <option value="{{ i }}">{{ i }}</option>
+      {%- endfor -%}
+    </select>
+    <button class="plp__add" type="button"
+            data-variant-id="{{ variant.id }}"
+            {% if stock_tracked %}data-max="{{ stock_cap }}"{% endif %}
+            aria-label="Add to cart">
+      {% render 'icon-cart-plus' %}
+    </button>
+  </div>
+{%- else -%}
+  <div class="plp__desc-item plp__cart-row">
+    <span class="plp__price">{{ variant.price | money_without_trailing_zeros }}</span>
+    <span class="plp__soldout">SOLD OUT</span>
+  </div>
+{%- endif -%}

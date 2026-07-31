@@ -30,10 +30,31 @@ document.querySelectorAll('.window__close').forEach(btn => {
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(item)
     });
-    if (!res.ok) throw new Error('Cart add failed');
+    if (!res.ok) {
+      /* Shopify rejects over-stock adds with a 422 and a human-readable
+         `description` ("You can only add 4 of that to your cart"). That's the
+         backstop behind our client-side caps — stock can change between page
+         load and click — so pass the real reason back to the caller. */
+      let msg = '';
+      try { const body = await res.json(); msg = body.description || body.message || ''; } catch (e) {}
+      const err = new Error(msg || 'Cart add failed');
+      err.cartMessage = msg;
+      throw err;
+    }
     await updateBadge();
     if (window.SFRToast) SFRToast.show('ADDED TO CART');
     return res.json();
+  }
+  /* How many of `variantId` are already in the cart. /cart/add.js stacks on top
+     of existing lines, so any stock ceiling has to subtract this first. */
+  async function inCart(variantId) {
+    try {
+      const cart = await read();
+      const id = String(variantId);
+      return (cart.items || [])
+        .filter(line => String(line.variant_id) === id)
+        .reduce((n, line) => n + line.quantity, 0);
+    } catch (e) { return 0; }
   }
   async function change(payload) {
     /* payload: { id (line key/variant id), quantity } or { line, quantity } */
@@ -55,12 +76,14 @@ document.querySelectorAll('.window__close').forEach(btn => {
   }
   function flash(btn, msg) {
     if (!btn) return;
-    const orig = btn.textContent;
+    /* innerHTML, not textContent — icon-only buttons (the PLP card's + button)
+       would otherwise be restored as an empty string and lose their SVG. */
+    const orig = btn.innerHTML;
     btn.textContent = msg || 'ADDED ✓';
     btn.disabled = true;
-    setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 1200);
+    setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 1200);
   }
-  window.SFRCart = { read, add, change, updateBadge, flash };
+  window.SFRCart = { read, add, change, updateBadge, flash, inCart };
   document.addEventListener('DOMContentLoaded', updateBadge);
 })();
 
@@ -194,12 +217,27 @@ document.querySelectorAll('.window__close').forEach(btn => {
     if (!btn || !window.SFRCart) return;
     e.preventDefault();
     const qtySel = btn.closest('.plp__cart-row')?.querySelector('.plp__qty');
-    const qty = qtySel ? parseInt(qtySel.value, 10) || 1 : 1;
+    const want = qtySel ? parseInt(qtySel.value, 10) || 1 : 1;
+    /* data-max is only present when Shopify tracks this variant's stock with a
+       "deny" policy. Absent means oversell is allowed, so there is no ceiling. */
+    const max = btn.hasAttribute('data-max') ? parseInt(btn.getAttribute('data-max'), 10) : null;
     try {
+      let qty = want;
+      if (max !== null && !isNaN(max)) {
+        const room = max - (await SFRCart.inCart(btn.getAttribute('data-variant-id')));
+        if (room <= 0) {
+          SFRCart.flash(btn, '!');
+          if (window.SFRToast) SFRToast.show('ALL AVAILABLE STOCK IS ALREADY IN YOUR CART');
+          return;
+        }
+        qty = Math.min(want, room);
+      }
       await SFRCart.add({ id: btn.getAttribute('data-variant-id'), quantity: qty });
       SFRCart.flash(btn, '✓');
+      if (qty < want && window.SFRToast) SFRToast.show('ONLY ' + qty + ' LEFT — ADDED ' + qty);
     } catch (err) {
       SFRCart.flash(btn, '!');
+      if (window.SFRToast && err && err.cartMessage) SFRToast.show(err.cartMessage.toUpperCase());
     }
   });
 })();

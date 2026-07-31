@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "text_align": "center"
+      }
+    }
+  },
+  "order": ["main"]
+}
