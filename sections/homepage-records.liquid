@@ -10,74 +10,83 @@
 {%- assign records = collections.records -%}
 <section class="main-content" id="records">
   <div class="plp">
-    <div class="plp__track-wrap" id="plpWrap">
-      <ul class="plp__track" id="plpTrack">
-        {%- for product in records.products -%}
-          {%- assign cat = product.metafields.custom.cat_no | default: 'SFR—' -%}
-          {%- assign first_variant = product.selected_or_first_available_variant -%}
-          {%- assign cover_url = '' -%}
-          {%- if product.featured_image -%}
-            {%- assign cover_url = product.featured_image | image_url: width: 1200 -%}
-          {%- endif -%}
-          <li class="plp__card">
-            <a class="plp__artwork-link" href="{{ product.url }}">
-              {%- if product.featured_image -%}
-                <img class="plp__artwork"
-                     src="{{ product.featured_image | image_url: width: 600 }}"
-                     alt="{{ product.title | escape }}"
-                     width="600" height="600"
-                     loading="lazy">
-              {%- else -%}
-                {{ 'product-1' | placeholder_svg_tag: 'plp__artwork' }}
-              {%- endif -%}
-            </a>
-            <div class="plp__info window">
-              <div class="border-left"></div>
-              <div class="border-right"></div>
-              <div class="window__titlebar">
-                <a class="window__text" href="{{ product.url }}">CAT: {{ cat }}</a>
+    {%- comment -%}
+      The hands sit outside the scroll container — inside it they would scroll
+      away with the cards. They duplicate the nav arrows below, so they are
+      hidden from assistive tech rather than announced twice.
+    {%- endcomment -%}
+    <div class="plp__viewport">
+      <button type="button" class="plp__hand plp__hand--prev" id="plpHandPrev" aria-hidden="true" tabindex="-1"></button>
+      <button type="button" class="plp__hand plp__hand--next" id="plpHandNext" aria-hidden="true" tabindex="-1"></button>
+      <div class="plp__track-wrap" id="plpWrap">
+        <ul class="plp__track" id="plpTrack">
+          {%- for product in records.products -%}
+            {%- assign cat = product.metafields.custom.cat_no | default: 'SFR—' -%}
+            {%- assign first_variant = product.selected_or_first_available_variant -%}
+            {%- assign cover_url = '' -%}
+            {%- if product.featured_image -%}
+              {%- assign cover_url = product.featured_image | image_url: width: 1200 -%}
+            {%- endif -%}
+            <li class="plp__card">
+              <a class="plp__artwork-link" href="{{ product.url }}">
+                {%- if product.featured_image -%}
+                  <img class="plp__artwork"
+                       src="{{ product.featured_image | image_url: width: 600 }}"
+                       alt="{{ product.title | escape }}"
+                       width="600" height="600"
+                       loading="lazy">
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'plp__artwork' }}
+                {%- endif -%}
+              </a>
+              <div class="plp__info window">
+                <div class="border-left"></div>
+                <div class="border-right"></div>
+                <div class="window__titlebar">
+                  <a class="window__text" href="{{ product.url }}">CAT: {{ cat }}</a>
+                </div>
+                <ul class="plp__desc">
+                  <li><a class="plp__desc-item" href="{{ product.url }}">ARTIST: {{ product.vendor | upcase }}</a></li>
+                  <li><a class="plp__desc-item" href="{{ product.url }}">ALBUM: {{ product.title | upcase }}</a></li>
+                  <li>
+                    {%- assign clip_files = product.metafields.custom.clips.value -%}
+                    {%- capture clips_json -%}
+                      [
+                      {%- for file in clip_files -%}
+                        {%- if file.alt != blank -%}
+                          {%- assign t = file.alt -%}
+                        {%- else -%}
+                          {%- assign t = file.url | split: '?' | first | split: '/' | last | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | replace: '%20', ' ' | strip -%}
+                        {%- endif -%}
+                        {"title":"{{ t | escape }}","url":"{{ file.url }}"}{% unless forloop.last %},{% endunless %}
+                      {%- endfor -%}
+                      ]
+                    {%- endcapture -%}
+                    <a class="mac-btn plp__play"
+                       href="{{ product.url }}"
+                       {% if clip_files.size > 0 %}
+                         data-clips="{{ clips_json | strip | escape }}"
+                         data-title="{{ product.title | escape }}"
+                         data-artist="{{ product.vendor | escape }}"
+                         data-cover="{{ cover_url }}"
+                         data-variant-id="{{ first_variant.id }}"
+                         data-available="{{ first_variant.available }}"
+                       {% endif %}>
+                      <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor" aria-hidden="true"><polygon points="0,0 0,10 8,5"/></svg>
+                      PLAY CLIPS
+                    </a>
+                  </li>
+                  <li>
+                    {% render 'plp-cart-row', product: product, variant: first_variant %}
+                  </li>
+                </ul>
               </div>
-              <ul class="plp__desc">
-                <li><a class="plp__desc-item" href="{{ product.url }}">ARTIST: {{ product.vendor | upcase }}</a></li>
-                <li><a class="plp__desc-item" href="{{ product.url }}">ALBUM: {{ product.title | upcase }}</a></li>
-                <li>
-                  {%- assign clip_files = product.metafields.custom.clips.value -%}
-                  {%- capture clips_json -%}
-                    [
-                    {%- for file in clip_files -%}
-                      {%- if file.alt != blank -%}
-                        {%- assign t = file.alt -%}
-                      {%- else -%}
-                        {%- assign t = file.url | split: '?' | first | split: '/' | last | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | replace: '%20', ' ' | strip -%}
-                      {%- endif -%}
-                      {"title":"{{ t | escape }}","url":"{{ file.url }}"}{% unless forloop.last %},{% endunless %}
-                    {%- endfor -%}
-                    ]
-                  {%- endcapture -%}
-                  <a class="mac-btn plp__play"
-                     href="{{ product.url }}"
-                     {% if clip_files.size > 0 %}
-                       data-clips="{{ clips_json | strip | escape }}"
-                       data-title="{{ product.title | escape }}"
-                       data-artist="{{ product.vendor | escape }}"
-                       data-cover="{{ cover_url }}"
-                       data-variant-id="{{ first_variant.id }}"
-                       data-available="{{ first_variant.available }}"
-                     {% endif %}>
-                    <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor" aria-hidden="true"><polygon points="0,0 0,10 8,5"/></svg>
-                    PLAY CLIPS
-                  </a>
-                </li>
-                <li>
-                  {% render 'plp-cart-row', product: product, variant: first_variant %}
-                </li>
-              </ul>
-            </div>
-          </li>
-        {%- else -%}
-          <li class="plp__card plp__card--empty">No products yet. Add products to the "{{ section.settings.collection | default: 'records' }}" collection.</li>
-        {%- endfor -%}
-      </ul>
+            </li>
+          {%- else -%}
+            <li class="plp__card plp__card--empty">No products yet. Add products to the "{{ section.settings.collection | default: 'records' }}" collection.</li>
+          {%- endfor -%}
+        </ul>
+      </div>
     </div>
     <div class="plp__nav">
       <div class="plp__page-counter">
@@ -109,6 +118,8 @@
   const pageEl  = document.getElementById('plpPage');
   const totalEl = document.getElementById('plpTotal');
   const sliderNode = document.getElementById('plpSliderNode');
+  const handPrev = document.getElementById('plpHandPrev');
+  const handNext = document.getElementById('plpHandNext');
 
   function sizePlpCards() {
     const perPage = window.innerWidth <= 780 ? 1 : 5;
@@ -127,6 +138,13 @@
     return card ? card.offsetWidth + 16 : 0;
   }
   function getPerPage() { return window.innerWidth <= 780 ? 1 : 5; }
+  /* scroll-snap parks the track at its left padding, not 0, so being at the
+     start does NOT mean scrollLeft === 0. Read the padding rather than
+     hardcoding it, so it stays correct if the track spacing changes. */
+  function atStart() {
+    const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+    return wrap.scrollLeft <= pad + 1;
+  }
   let isSliderDragging = false;
   function updatePagination() {
     const perPage = getPerPage();
@@ -137,6 +155,9 @@
     const current = atEnd ? total : (cardW > 0 ? Math.min(Math.round(wrap.scrollLeft / (cardW * perPage)) + 1, total) : 1);
     pageEl.textContent = current;
     totalEl.textContent = total;
+    /* Hands mirror real scroll room, not page count — they disappear at each end. */
+    if (handPrev) handPrev.classList.toggle('is-visible', !atStart());
+    if (handNext) handNext.classList.toggle('is-visible', !atEnd);
     const navEl = document.querySelector('.plp__nav');
     if (navEl) navEl.style.display = total <= 1 ? 'none' : '';
     if (sliderNode && !isSliderDragging) {
@@ -148,9 +169,20 @@
   }
   prevBtn.addEventListener('click', () => wrap.scrollBy({ left: -(getCardWidth() * getPerPage()), behavior: 'smooth' }));
   nextBtn.addEventListener('click', () => wrap.scrollBy({ left:   getCardWidth() * getPerPage(),  behavior: 'smooth' }));
+  if (handPrev) handPrev.addEventListener('click', () => prevBtn.click());
+  if (handNext) handNext.addEventListener('click', () => nextBtn.click());
   wrap.addEventListener('scroll', updatePagination);
   window.addEventListener('resize', updatePagination);
   updatePagination();
+
+  /* Double-nudge whichever hand is already showing on first paint, then hand
+     over to the hover nudge. Intro plays once per page load, not every time
+     a hand reappears mid-scroll. */
+  [handPrev, handNext].forEach(function (h) {
+    if (!h || !h.classList.contains('is-visible')) return;
+    h.classList.add('is-intro');
+    h.addEventListener('animationend', function () { h.classList.remove('is-intro'); }, { once: true });
+  });
 })();
 </script>
 

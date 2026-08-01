@@ -12,7 +12,29 @@
 {%- assign has_sizes = false -%}
 {%- if product.variants.size > 1 -%}{%- assign has_sizes = true -%}{%- endif -%}
 
+{%- comment -%}
+  Back target: the collection the visitor actually arrived through when the URL
+  carries one (/collections/x/products/y), otherwise inferred from the product
+  using the same records-vs-merch split as the panel below.
+{%- endcomment -%}
+{%- assign back_collection = collection -%}
+{%- if back_collection == blank -%}
+  {%- if is_record -%}
+    {%- assign back_collection = collections.records -%}
+  {%- else -%}
+    {%- assign back_collection = collections.merch -%}
+  {%- endif -%}
+{%- endif -%}
+
 <section class="pdp">
+  {%- if back_collection != blank and back_collection.url != blank -%}
+    <div class="pdp__back-row">
+      <a class="pdp__back" href="{{ back_collection.url }}">
+        <span class="pdp__back-arrow" aria-hidden="true"></span>
+        <span class="pdp__back-label">BACK TO {{ back_collection.title | upcase }}</span>
+      </a>
+    </div>
+  {%- endif -%}
   <div class="pdp__inner">
 
     <!-- Media -->
@@ -183,11 +205,30 @@
 
 <script>
 (function () {
-  /* Slide the vinyl out from behind the cover.
+  /* Slide the vinyl out from behind the cover — but hold it until both the
+     sleeve and the record have actually decoded, or it slides out from behind
+     an empty box on a cold cache.
      Double rAF guarantees the initial left:0 paints before we change to left:100%
      so the CSS transition actually runs. */
   const vinyl = document.querySelector('.pdp__vinyl');
-  if (vinyl) requestAnimationFrame(() => requestAnimationFrame(() => { vinyl.style.left = '100%'; }));
+  if (vinyl) {
+    const cover = document.getElementById('pdpMainImg');
+    function settled(img) {
+      if (!img) return Promise.resolve();                      /* placeholder SVG, no <img> */
+      if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+      return new Promise(function (done) {
+        img.addEventListener('load', done, { once: true });
+        img.addEventListener('error', done, { once: true });    /* a broken image must not stall it */
+      });
+    }
+    /* Race a timeout so a hanging request can never strand the record behind the sleeve. */
+    Promise.race([
+      Promise.all([settled(vinyl), settled(cover)]),
+      new Promise(function (done) { setTimeout(done, 3000); })
+    ]).then(function () {
+      requestAnimationFrame(() => requestAnimationFrame(() => { vinyl.style.left = '100%'; }));
+    });
+  }
 
   /* Variant data for client-side switching.
      `max` is the purchasable ceiling: real stock when Shopify tracks the variant

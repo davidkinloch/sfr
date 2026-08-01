@@ -427,6 +427,8 @@ a.menu__item:hover {
   font-family: 'merchant_copy_wideregular'; font-size: 13px;
   color: #000; white-space: nowrap;
 }
+/* Hovering anywhere on the link lights the label, matching .mac-btn. */
+.checkout:hover .checkout__label { background: #f0f0f0; }
 .checkout:active .checkout__label { box-shadow: none; transform: translate(3px, 3px); }
 
 .login {
@@ -449,6 +451,8 @@ a.menu__item:hover {
   font-family: 'merchant_copy_wideregular'; font-size: 13px;
   color: #000; white-space: nowrap;
 }
+/* Hovering anywhere on the link lights the label, matching .mac-btn. */
+.login:hover .login__label { background: #f0f0f0; }
 .login:active .login__label { box-shadow: none; transform: translate(3px, 3px); }
 
 @media (min-width: 781px) {
@@ -553,6 +557,34 @@ a.menu__item:hover {
 
 /* ───────── PDP (product detail page) ───────── */
 .pdp { padding: 100px 0 60px; }
+/* Back to the collection this product sits in. Reuses the slider's prev arrow
+   so it speaks the same visual language as the rest of the chrome, and lines up
+   with the left edge of the cover below it. */
+.pdp__back-row {
+  max-width: 1280px;
+  margin: 0 auto 24px;
+  padding: 0 24px;
+}
+.pdp__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.pdp__back-arrow {
+  width: 29px;
+  height: 30px;
+  flex-shrink: 0;
+  background: url('plp-arrow-left.png') no-repeat center / 100% 100%;
+}
+/* Plain white text — deliberately not a CTA chip. */
+.pdp__back-label {
+  font-family: 'merchant_copy_wideregular';
+  font-size: 13px;
+  color: #fff;
+  white-space: nowrap;
+}
 .pdp__inner {
   max-width: 1280px;
   margin: 0 auto;
@@ -964,6 +996,81 @@ a.menu__item:hover {
 /* ───────── PLP (product listing page — records / merch) ───────── */
 .main-content { padding: 100px 0; }
 .plp { padding: 40px 0 20px; }
+/* Scroll-affordance hands. They live outside .plp__track-wrap because anything
+   inside it scrolls away with the cards. Shown only when there is actually room
+   to scroll that way — JS toggles .is-visible. */
+.plp__viewport { position: relative; }
+.plp__hand {
+  display: none;
+  position: absolute;
+  top: 50%;
+  /* translate(), not translateY() — the nudge keyframes drive both axes and
+     have to carry this -50% or the hand jumps out of vertical centre. */
+  transform: translate(0, -50%);
+  width: 48px;
+  height: 37px;
+  padding: 0;
+  border: none;
+  background: transparent no-repeat center / contain;
+  cursor: pointer;
+  z-index: 2;
+  /* Pixel art: keep the stair-stepped edges crisp when scaled down from 108px. */
+  image-rendering: pixelated;
+}
+/* Sit 60px outside the 1264px track, clamped so the hand never leaves the
+   viewport. The clamp only bites below 1400px, where the margin beside the
+   track is narrower than the hand — there it overlaps the outer card slightly.
+   Each side names its own keyframes so the nudge points the way the hand does. */
+.plp__hand--prev {
+  left: max(8px, calc(50% - 692px));
+  background-image: url('hand-left.png');
+  --hand-nudge: sfr-hand-nudge-left;
+}
+.plp__hand--next {
+  right: max(8px, calc(50% - 692px));
+  background-image: url('hand-right.png');
+  --hand-nudge: sfr-hand-nudge-right;
+}
+@keyframes sfr-hand-nudge-left {
+  0%, 100% { transform: translate(0, -50%); }
+  50%      { transform: translate(-9px, -50%); }
+}
+@keyframes sfr-hand-nudge-right {
+  0%, 100% { transform: translate(0, -50%); }
+  50%      { transform: translate(9px, -50%); }
+}
+
+/* Wide viewports only. Below 1400px the hand overlaps the outer card —
+   accepted deliberately so the affordance reaches more laptop widths. */
+@media (min-width: 1280px) {
+  /* Stays in the layout and fades, because `display` cannot be transitioned.
+     visibility flips instantly on the way in, and is held back until the fade
+     finishes on the way out. */
+  .plp__hand {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
+  .plp__hand.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.3s ease, visibility 0s;
+  }
+  /* Two nudges on load to advertise that the row scrolls; the delay lets the
+     fade land first. JS drops .is-intro once it has played. */
+  .plp__hand.is-intro { animation: var(--hand-nudge) 0.4s ease-in-out 0.35s 2; }
+}
+/* One nudge on rollover. Guarded so it cannot latch on touch devices. */
+@media (min-width: 1280px) and (hover: hover) {
+  .plp__hand.is-visible:hover { animation: var(--hand-nudge) 0.4s ease-in-out 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plp__hand { animation: none !important; transition: none; }
+}
+
 .plp__track-wrap {
   max-width: 1264px;
   margin: 0 auto;
