@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "name": "Branding",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32x32 PNG recommended. If left empty, the theme falls back to the bundled icon-32 / icon-180 / icon-192 assets."
+      }
+    ]
+  },
+  {
+    "name": "Contact",
+    "settings": [
+      {
+        "type": "text",
+        "id": "stock_email",
+        "label": "Out-of-stock enquiry email",
+        "default": "info@sfrrecords.com",
+        "info": "Shown on the product page when an item is sold out."
+      }
+    ]
+  },
+  {
+    "name": "Navigation",
+    "settings": [
+      {
+        "type": "text",
+        "id": "main_menu_handle",
+        "label": "Main menu handle",
+        "default": "main-menu",
+        "info": "Handle of the linklist shown in the menu modal, from the menu's URL slug in Navigation. This is the handle, not the menu title."
+      }
+    ]
+  }
+]

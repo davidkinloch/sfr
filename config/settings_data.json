@@ -1,11 +1,11 @@
 {
   "current": {
-    "stock_email": "info@sfr-records.com",
+    "stock_email": "info@sfrrecords.com",
     "main_menu_handle": "main-menu"
   },
   "presets": {
     "Default": {
-      "stock_email": "info@sfr-records.com",
+      "stock_email": "info@sfrrecords.com",
       "main_menu_handle": "main-menu"
     }
   }

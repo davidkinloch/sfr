@@ -11,7 +11,13 @@
       <span class="window__text">Menu</span>
     </div>
     <ul class="menu-modal__list">
-      {%- assign main_menu = linklists[settings.main_menu_handle | default: 'main-menu'] -%}
+      {%- comment -%}
+        Resolve the handle first: Liquid does not evaluate filters inside a
+        bracket lookup, so linklists[settings.x | default: 'y'] silently
+        returns nil and the menu renders empty.
+      {%- endcomment -%}
+      {%- assign menu_handle = settings.main_menu_handle | default: 'main-menu' -%}
+      {%- assign main_menu = linklists[menu_handle] -%}
       {%- for link in main_menu.links -%}
         <li><a class="menu__item{% if link.active %} is-active{% endif %}" href="{{ link.url }}">{{ link.title | upcase }}</a></li>
       {%- endfor -%}
