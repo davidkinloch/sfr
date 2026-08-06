@@ -1,13 +1,16 @@
 {%- comment -%}
-  Contact / About — single window, two columns:
-  Left: CONTACT INFO header, socials, booking pill, contact form
-  Right: SFR logos row (3 cells), about copy
+  Contact / About — single contained window, one column (2026-08 design).
+  Stacked: CONTACT INFO header, socials, booking pill, contact form, about copy.
   About copy comes from section.settings.about_html (rich text).
+
+  Width is contained via .contact-page__inner--narrow rather than by changing
+  .contact-page__inner itself, because main-page.liquid (About Us, Distribution
+  and every generic page) shares that class and must stay full width.
 {%- endcomment -%}
 <section class="contact-page" id="contact">
   <img class="about-us__homie" src="{{ 'sfr-homie.png' | asset_url }}" alt="" aria-hidden="true"
        width="917" height="963" loading="lazy">
-  <div class="contact-page__inner">
+  <div class="contact-page__inner contact-page__inner--narrow">
 
     <div class="contact-window window">
       <div class="border-left"></div>
@@ -15,10 +18,9 @@
       <div class="window__titlebar">
         <span class="window__text">{{ section.settings.titlebar | default: 'ABOUT US' }}</span>
       </div>
-      <div class="window__content contact-window__body">
+      <div class="window__content contact-window__body contact-window__body--single">
 
-        <!-- LEFT -->
-        <div class="contact-window__col contact-window__col--left">
+        <div class="contact-window__col">
 
           <div class="contact-info__header">CONTACT INFO</div>
 
@@ -83,24 +85,7 @@
             <input type="hidden" name="contact[email]" id="cfNewsEmail" value="">
           {%- endform -%}
 
-        </div>
-
-        <!-- RIGHT -->
-        <div class="contact-window__col contact-window__col--right">
-
-          <div class="pdp__purchase about-us__logos">
-            <div class="pdp__price">
-              {%- if section.settings.logo_1 -%}<img src="{{ section.settings.logo_1 | image_url: width: 360 }}" alt="" width="{{ section.settings.logo_1.width }}" height="{{ section.settings.logo_1.height }}" loading="lazy">{%- endif -%}
-            </div>
-            <div class="pdp__stock">
-              {%- if section.settings.logo_2 -%}<img src="{{ section.settings.logo_2 | image_url: width: 360 }}" alt="" width="{{ section.settings.logo_2.width }}" height="{{ section.settings.logo_2.height }}" loading="lazy">{%- endif -%}
-            </div>
-            <div class="pdp__buy">
-              {%- if section.settings.logo_3 -%}<img src="{{ section.settings.logo_3 | image_url: width: 360 }}" alt="" width="{{ section.settings.logo_3.width }}" height="{{ section.settings.logo_3.height }}" loading="lazy">{%- endif -%}
-            </div>
-          </div>
-
-          <div class="about-us__copy">
+          <div class="about-us__copy contact-window__copy">
             {{ section.settings.about_html }}
           </div>
 
@@ -146,9 +131,6 @@
     { "type": "url",          "id": "instagram_url",  "label": "Instagram URL" },
     { "type": "url",          "id": "youtube_url",    "label": "YouTube URL" },
     { "type": "url",          "id": "discogs_url",    "label": "Discogs URL" },
-    { "type": "image_picker", "id": "logo_1",         "label": "About logo 1" },
-    { "type": "image_picker", "id": "logo_2",         "label": "About logo 2 (green badge)" },
-    { "type": "image_picker", "id": "logo_3",         "label": "About logo 3" },
     { "type": "richtext",     "id": "about_html",     "label": "About copy" }
   ],
   "presets": [

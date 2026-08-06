@@ -14,6 +14,16 @@
   font-style: normal;
   font-display: swap;
 }
+/* Doublesize is a separate cut, not the regular scaled up — it carries its own
+   level of dot-matrix detail, so it cannot be faked with font-size. */
+@font-face {
+  font-family: 'merchant_copy_doublesizeregular';
+  src: url('merchant_copy_doublesize-webfont.woff2') format('woff2'),
+       url('merchant_copy_doublesize-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -807,10 +817,9 @@ a.menu__item:hover {
 }
 .pdp__desc-body {
   padding: 14px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'merchant_copy_doublesizeregular';
   font-size: 14px;
-  text-transform: uppercase;
-  line-height: 1.2;
+  line-height: 1.5;
 }
 .pdp__desc-body p + p { margin-top: 10px; }
 
@@ -960,9 +969,9 @@ a.menu__item:hover {
 }
 .shopify-policy__body {
   padding: 24px 28px 28px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'merchant_copy_doublesizeregular';
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.8;
   letter-spacing: 0.01em;
   color: #050505;
 }
@@ -1194,6 +1203,19 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .contact-window__col > * { max-width: 100%; min-width: 0; }
 .contact-window__col--left { border-right: 2px solid #000; }
 .contact-window__col--right { padding: 0; gap: 0; }
+
+/* Contact page, 2026-08 design: one contained column instead of two.
+   Scoped with --narrow / --single so main-page.liquid (About Us, Distribution
+   and every generic page) keeps the full-width window it shares these classes
+   with. Do not fold these into .contact-page__inner / .contact-window__body. */
+.contact-page__inner--narrow { max-width: 640px; }
+.contact-window__body--single { grid-template-columns: 1fr; }
+.contact-window__body--single .contact-window__col { border-right: none; }
+/* The column already pads, so the copy must not pad again. Two-class selector
+   on purpose: .about-us__copy is declared later in this file, so a single-class
+   rule here would lose the cascade to it. */
+.contact-window__body--single .contact-window__copy { padding: 0; line-height: 1.5; }
+
 .contact-window .window__content { overflow: hidden; }
 @media (max-width: 900px) {
   .contact-window__body { grid-template-columns: 1fr; }
@@ -1341,10 +1363,9 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .about-us__body { padding: 20px 24px 28px; display: flex; flex-direction: column; gap: 18px; }
 .about-us__copy {
   padding: 24px 28px 28px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'merchant_copy_doublesizeregular';
   font-size: 14px;
-  text-transform: uppercase;
-  line-height: 1.55;
+  line-height: 2;
   letter-spacing: 0.01em;
   color: #050505;
 }
