@@ -1314,6 +1314,8 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 }
 .about-us__copy p { margin: 0 0 14px; }
 .about-us__copy p:last-child { margin-bottom: 0; }
+.about-us__copy a { color: inherit; text-decoration: underline; }
+.about-us__copy a:hover { text-decoration: none; }
 .about-us__copy strong { font-weight: normal; text-transform: uppercase; }
 .about-us__copy em { font-style: normal; color: #6a6a6a; font-size: 13px; letter-spacing: 0.04em; }
 /* Opt-in per page via the Page section's "Body text alignment" setting. */
