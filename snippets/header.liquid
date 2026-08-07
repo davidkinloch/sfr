@@ -1,5 +1,18 @@
 {%- assign main_menu = linklists['main-menu'] -%}
 {%- assign cart_count = cart.item_count | default: 0 -%}
+
+{%- comment -%}
+  A PDP's own URL (product.url) never contains /collections/..., so link.active
+  alone misses "on a Records product page, highlight RECORDS". Build the set of
+  collections the current product belongs to and match it against each nav
+  link's target collection handle instead.
+{%- endcomment -%}
+{%- assign product_collection_handles = '|' -%}
+{%- if template.name == 'product' -%}
+  {%- for c in product.collections -%}
+    {%- assign product_collection_handles = product_collection_handles | append: c.handle | append: '|' -%}
+  {%- endfor -%}
+{%- endif -%}
 <nav class="topnav">
   <div class="container">
 
@@ -13,7 +26,15 @@
       </div>
       <ul class="window__content menu__list">
         {%- for link in main_menu.links -%}
-          <li><a class="menu__item{% if link.active %} is-active{% endif %}" href="{{ link.url }}">{{ link.title | upcase }}</a></li>
+          {%- assign is_active = link.active -%}
+          {%- if link.url contains '/collections/' -%}
+            {%- assign link_handle = link.url | split: '/collections/' | last | split: '/' | first -%}
+            {%- assign link_needle = '|' | append: link_handle | append: '|' -%}
+            {%- if product_collection_handles contains link_needle -%}
+              {%- assign is_active = true -%}
+            {%- endif -%}
+          {%- endif -%}
+          <li><a class="menu__item{% if is_active %} is-active{% endif %}" href="{{ link.url }}">{{ link.title | upcase }}</a></li>
         {%- endfor -%}
       </ul>
     </div>

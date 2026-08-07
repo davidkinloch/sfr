@@ -1,6 +1,6 @@
 {%- comment -%}
   Contact / About — single contained window, one column (2026-08 design).
-  Stacked: CONTACT INFO header, socials, booking pill, contact form, about copy.
+  Stacked: socials, contact form (email, name, message), about copy.
   About copy comes from section.settings.about_html (rich text).
 
   Width is contained via .contact-page__inner--narrow rather than by changing
@@ -16,13 +16,11 @@
       <div class="border-left"></div>
       <div class="border-right"></div>
       <div class="window__titlebar">
-        <span class="window__text">{{ section.settings.titlebar | default: 'ABOUT US' }}</span>
+        <span class="window__text">{{ section.settings.titlebar | default: 'CONTACT' }}</span>
       </div>
       <div class="window__content contact-window__body contact-window__body--single">
 
         <div class="contact-window__col">
-
-          <div class="contact-info__header">CONTACT INFO</div>
 
           <div class="contact-info__socials">
             <a class="mac-btn" href="{{ section.settings.instagram_url | default: '#' }}" target="_blank" rel="noopener">INSTAGRAM</a>
@@ -30,14 +28,20 @@
             <a class="mac-btn" href="{{ section.settings.discogs_url   | default: '#' }}" target="_blank" rel="noopener">DISCOGS</a>
           </div>
 
-          <button type="button" class="contact-info__booking-btn" id="contactBookingBtn">
-            EVENT BOOKINGS / REQUEST FORM
-          </button>
-
           {%- form 'contact', class: 'contact-form', id: 'contactForm' -%}
+            <div class="contact-form__group">
+              <label class="contact-form__label" for="cfName">NAME</label>
+              <input class="contact-form__input" type="text" id="cfName" name="contact[name]" placeholder="YOUR NAME" required>
+            </div>
+
             <div class="contact-form__group">
               <label class="contact-form__label" for="cfEmail">CONTACT</label>
               <input class="contact-form__input" type="email" id="cfEmail" name="contact[email]" placeholder="EMAIL ADDRESS" required>
+            </div>
+
+            <div class="contact-form__group">
+              <label class="contact-form__label" for="cfMessage">MESSAGE</label>
+              <textarea class="contact-form__input" id="cfMessage" name="contact[body]" rows="5" placeholder="YOUR MESSAGE" required></textarea>
             </div>
 
             <label class="contact-form__check">
@@ -45,20 +49,6 @@
               <span class="contact-form__check-box" aria-hidden="true"></span>
               <span>EMAIL ME WITH NEWS AND OFFERS</span>
             </label>
-
-            <div class="contact-form__booking" id="contactBooking" hidden>
-              <label class="contact-form__row"><span>CONTACT NAME:</span> <input type="text" name="contact[contact_name]"></label>
-              <label class="contact-form__row"><span>EVENT NAME:</span> <input type="text" name="contact[event_name]"></label>
-              <label class="contact-form__row"><span>LOCATION:</span> <input type="text" name="contact[location]"></label>
-              <label class="contact-form__row"><span>DATE:</span> <input type="text" name="contact[date]" placeholder="YYYY-MM-DD"></label>
-              <label class="contact-form__row"><span>EXPECTED NUMBER OF GUESTS:</span> <input type="text" name="contact[guests]"></label>
-              <label class="contact-form__row"><span>EVENT HOURS:</span> <input type="text" name="contact[hours]"></label>
-              <label class="contact-form__row"><span>DJ SESSION / MUSIC HOURS:</span> <input type="text" name="contact[dj_hours]"></label>
-              <label class="contact-form__row"><span>PARKING / LOADING INFO:</span> <input type="text" name="contact[parking]"></label>
-              <label class="contact-form__row"><span>WITH PA OR WITHOUT PA:</span> <input type="text" name="contact[pa]"></label>
-              <label class="contact-form__row"><span>CASH OR INVOICE:</span> <input type="text" name="contact[payment]"></label>
-              <label class="contact-form__row contact-form__row--full"><span>OTHER INFO / QUESTIONS:</span> <textarea name="contact[body]" rows="3"></textarea></label>
-            </div>
 
             {%- if form.errors -%}
               <div class="contact-form__error is-visible">{{ form.errors | default_errors }}</div>
@@ -99,10 +89,6 @@
 
 <script>
 (function () {
-  const btn = document.getElementById('contactBookingBtn');
-  const box = document.getElementById('contactBooking');
-  if (btn && box) btn.addEventListener('click', () => box.hidden = !box.hidden);
-
   /* Real newsletter signup: when the news checkbox is ticked, subscribe the
      entered email via the hidden customer (newsletter) form. sendBeacon posts
      in the background so it survives the contact form's full-page submit. */
@@ -127,7 +113,7 @@
 {
   "name": "Contact / About",
   "settings": [
-    { "type": "text",         "id": "titlebar",       "label": "Titlebar text", "default": "ABOUT US" },
+    { "type": "text",         "id": "titlebar",       "label": "Titlebar text", "default": "CONTACT" },
     { "type": "url",          "id": "instagram_url",  "label": "Instagram URL" },
     { "type": "url",          "id": "youtube_url",    "label": "YouTube URL" },
     { "type": "url",          "id": "discogs_url",    "label": "Discogs URL" },

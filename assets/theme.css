@@ -1,25 +1,7 @@
 @font-face {
-  font-family: 'merchant_copy_wideregular';
-  src: url('merchant_copy_wide-webfont.woff2') format('woff2'),
-       url('merchant_copy_wide-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'merchant_copyregular';
-  src: url('merchant_copy-webfont.woff2') format('woff2'),
-       url('merchant_copy-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-/* Doublesize is a separate cut, not the regular scaled up — it carries its own
-   level of dot-matrix detail, so it cannot be faked with font-size. */
-@font-face {
-  font-family: 'merchant_copy_doublesizeregular';
-  src: url('merchant_copy_doublesize-webfont.woff2') format('woff2'),
-       url('merchant_copy_doublesize-webfont.woff') format('woff');
+  font-family: 'Chicago Plain';
+  src: url('chicago-webfont.woff2') format('woff2'),
+       url('chicago-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -34,7 +16,8 @@ img { max-width: 100%; height: auto; }
 body {
   min-height: 100vh;
   background: #D3D0D4;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
+  line-height: 1.7;
   display: flex;
   flex-direction: column;
 }
@@ -121,7 +104,7 @@ main {
   background-size: 16px 14px;
 }
 .window__text {
-  font-size: 18px;
+  font-size: 16px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -152,7 +135,7 @@ main {
   border: 1px solid #000;
   border-radius: 0;
   box-shadow: 3px 3px 0 #000;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 18px;
   color: #000;
   text-decoration: none;
@@ -227,7 +210,7 @@ main {
   flex-direction: column;
 }
 .player__bar-title {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 12px;
   padding: 6px 10px;
   white-space: nowrap;
@@ -280,7 +263,7 @@ main {
   left: 10px;
 }
 .player__bar-now {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 10px;
   padding: 0 8px 5px;
   text-align: center;
@@ -311,7 +294,7 @@ main {
   width: 100%;
   padding: 5px 10px;
   text-align: left;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 11px;
   background: #fff;
   border: none;
@@ -327,7 +310,7 @@ main {
   border: 1px solid #000;
   border-radius: 0;
   box-shadow: 2px 2px 0 #000;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 12px;
   cursor: pointer;
   padding: 0 10px;
@@ -358,7 +341,7 @@ main {
 .player__loading {
   display: none;
   text-align: center;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 12px;
   padding: 4px 0;
   letter-spacing: 2px;
@@ -398,7 +381,8 @@ main {
   color: #050505;
   background: #fff;
 }
-a.menu__item:hover {
+a.menu__item:hover,
+a.menu__item.is-active {
   background: #fff url('hover.png') no-repeat;
   background-size: 100% 100%;
 }
@@ -434,7 +418,7 @@ a.menu__item:hover {
   padding: 0 16px; height: 32px;
   background: #fff; border: 1px solid #000; border-radius: 0;
   box-shadow: 3px 3px 0 #000;
-  font-family: 'merchant_copy_wideregular'; font-size: 13px;
+  font-family: 'Chicago Plain'; font-size: 13px;
   color: #000; white-space: nowrap;
 }
 /* Hovering anywhere on the link lights the label, matching .mac-btn. */
@@ -458,7 +442,7 @@ a.menu__item:hover {
   padding: 0 16px; height: 32px;
   background: #fff; border: 1px solid #000; border-radius: 0;
   box-shadow: 3px 3px 0 #000;
-  font-family: 'merchant_copy_wideregular'; font-size: 13px;
+  font-family: 'Chicago Plain'; font-size: 13px;
   color: #000; white-space: nowrap;
 }
 /* Hovering anywhere on the link lights the label, matching .mac-btn. */
@@ -544,7 +528,7 @@ a.menu__item:hover {
   padding: 14px 18px;
 }
 .pdp__stock {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 24px;
   padding: 14px 16px;
   background: url('green-bg.png') repeat center center;
@@ -590,7 +574,7 @@ a.menu__item:hover {
 }
 /* Plain white text — deliberately not a CTA chip. */
 .pdp__back-label {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 13px;
   color: #fff;
   white-space: nowrap;
@@ -645,7 +629,7 @@ a.menu__item:hover {
   border: 1px solid #000;
   border-radius: 6px;
   padding: 6px 16px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 44px;
   letter-spacing: -1px;
   white-space: nowrap;
@@ -658,7 +642,7 @@ a.menu__item:hover {
 .pdp__stock-msg {
   display: none;
   padding: 10px 16px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   letter-spacing: 0.04em;
   text-align: center;
@@ -679,7 +663,7 @@ a.menu__item:hover {
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 16px;
   line-height: 1;
   padding: 0;
@@ -688,7 +672,7 @@ a.menu__item:hover {
 /* Greyed at 1 and at the stock ceiling — the classic disabled-chrome look. */
 .pdp__qty-btn:disabled { color: #808080; cursor: default; }
 .pdp__qty-val {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 18px;
   min-width: 24px;
   text-align: center;
@@ -700,7 +684,7 @@ a.menu__item:hover {
   border: 1px solid #000;
   border-radius: 0;
   box-shadow: 3px 3px 0 #000;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 18px;
   color: #000;
   cursor: pointer;
@@ -736,7 +720,7 @@ a.menu__item:hover {
   flex-wrap: wrap;
 }
 .pdp__size-label {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 18px;
   letter-spacing: 0.05em;
 }
@@ -746,7 +730,7 @@ a.menu__item:hover {
   padding: 0 8px;
   background: #fff;
   border: 1px solid #000;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 16px;
   cursor: pointer;
   user-select: none;
@@ -780,7 +764,7 @@ a.menu__item:hover {
   width: 90px;
   flex-shrink: 0;
   padding: 6px 13px 6px 10px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   background-color: #fff;
   background-image: url('vertical-right.png');
@@ -791,7 +775,7 @@ a.menu__item:hover {
 }
 .pdp__val {
   padding: 6px 12px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   background: #fff;
   line-height: 1;
@@ -806,7 +790,7 @@ a.menu__item:hover {
   padding-top: 2px;
 }
 .pdp__desc-label {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 18px;
   padding: 12px;
   text-align: center;
@@ -817,7 +801,7 @@ a.menu__item:hover {
 }
 .pdp__desc-body {
   padding: 14px;
-  font-family: 'merchant_copy_doublesizeregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   line-height: 1.5;
 }
@@ -844,7 +828,7 @@ a.menu__item:hover {
   border: 1px solid #000;
   border-radius: 0;
   box-shadow: 3px 3px 0 #000;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 18px;
   color: #000;
   cursor: pointer;
@@ -880,7 +864,7 @@ a.menu__item:hover {
   height: 32px; padding: 0 22px;
   background: #fff; border: 1px solid #000; border-radius: 0;
   box-shadow: 3px 3px 0 #000;
-  font-family: 'merchant_copy_wideregular'; font-size: 13px;
+  font-family: 'Chicago Plain'; font-size: 13px;
   color: #000; text-decoration: none; cursor: pointer; white-space: nowrap; user-select: none;
 }
 .footer-btn:hover { background: #f0f0f0; }
@@ -888,7 +872,7 @@ a.menu__item:hover {
 .footer-meta {
   text-align: center;
   margin-top: 24px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 12px;
   color: #555;
 }
@@ -960,7 +944,7 @@ a.menu__item:hover {
   white-space: nowrap;
   background: #fff;
   padding: 0 8px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 18px;
   font-weight: normal;
   letter-spacing: 0.02em;
@@ -969,7 +953,7 @@ a.menu__item:hover {
 }
 .shopify-policy__body {
   padding: 24px 28px 28px;
-  font-family: 'merchant_copy_doublesizeregular';
+  font-family: 'Chicago Plain';
   font-size: 15px;
   line-height: 1.8;
   letter-spacing: 0.01em;
@@ -1119,7 +1103,7 @@ a.menu__item:hover {
 .plp__desc-item {
   display: flex; align-items: center; justify-content: center; gap: 6px;
   width: 100%; min-height: 24px; padding: 0 8px;
-  font-family: 'merchant_copy_wideregular'; font-size: 12px;
+  font-family: 'Chicago Plain'; font-size: 12px;
   color: #000; background: #fff;
   border: none; cursor: default;
   text-align: center;
@@ -1130,10 +1114,10 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .plp__info a.window__text { text-decoration: none; cursor: pointer; color: inherit; }
 .plp__cart-row { gap: 10px; }
 .plp__price {
-  font-family: 'merchant_copy_wideregular'; font-size: 13px;
+  font-family: 'Chicago Plain'; font-size: 13px;
 }
 .plp__qty {
-  font-family: 'merchant_copy_wideregular'; font-size: 11px;
+  font-family: 'Chicago Plain'; font-size: 11px;
   border: 1px solid #000; background: #fff;
   height: 24px; line-height: 22px;
   padding: 0 6px; cursor: pointer;
@@ -1155,7 +1139,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 }
 .plp__soldout {
   padding: 0 8px; height: 20px; line-height: 20px;
-  font-family: 'merchant_copy_wideregular'; font-size: 11px;
+  font-family: 'Chicago Plain'; font-size: 11px;
   color: #fff;
   background-image: url('yellow-bg.png');
   background-color: #d81e1e;
@@ -1170,7 +1154,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .plp__counter-text {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'merchant_copy_wideregular'; font-size: 14px; white-space: nowrap;
+  font-family: 'Chicago Plain'; font-size: 14px; white-space: nowrap;
 }
 .plp__bar-wrap { display: flex; align-items: center; height: 30px; }
 .plp__arrow { flex-shrink: 0; width: 29px; height: 30px; border: none; cursor: pointer; padding: 0; background-repeat: no-repeat; background-size: 100% 100%; }
@@ -1233,7 +1217,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 /* "CONTACT INFO" header pill */
 .contact-info__header {
   align-self: center;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 22px;
   letter-spacing: 0.04em;
   padding: 6px 22px;
@@ -1242,35 +1226,17 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 }
 .contact-info__socials { display: flex; gap: 12px; flex-wrap: wrap; }
 .contact-info__socials .mac-btn { flex: 1 1 0; min-width: 100px; height: 36px; font-size: 15px; padding: 0 12px; }
-.contact-info__booking-btn {
-  width: 100%;
-  height: 44px;
-  background: #fff url('hover.png') no-repeat;
-  background-size: 100% 100%;
-  border: 1px solid #000;
-  box-shadow: 3px 3px 0 #000;
-  font-family: 'merchant_copy_wideregular';
-  font-size: 17px;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  color: #000;
-}
-.contact-info__booking-btn:hover { filter: brightness(1.05); }
-.contact-info__booking-btn:active { box-shadow: none; transform: translate(3px, 3px); }
-
 /* Form */
 .contact-form { display: flex; flex-direction: column; gap: 14px; }
 .contact-form__group { display: flex; flex-direction: column; gap: 6px; }
 .contact-form__label {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 16px;
   letter-spacing: 0.04em;
 }
-.contact-form__input,
-.contact-form__row input,
-.contact-form__row textarea {
+.contact-form__input {
   width: 100%;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 15px;
   color: #000;
   background: #fff;
@@ -1281,9 +1247,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .contact-form__input::placeholder { color: #999; letter-spacing: 0.04em; }
 /* Focus: 2px outline offset clear of the 1px border, so the focused state is
    unmistakably distinct from the resting state (WCAG 2.4.11). */
-.contact-form__input:focus-visible,
-.contact-form__row input:focus-visible,
-.contact-form__row textarea:focus-visible {
+.contact-form__input:focus-visible {
   box-shadow: inset 0 0 0 1px #000;
   outline: 2px solid #000;
   outline-offset: 2px;
@@ -1292,7 +1256,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 /* Custom checkbox */
 .contact-form__check {
   display: inline-flex; align-items: center; gap: 10px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   cursor: pointer;
   user-select: none;
@@ -1312,27 +1276,6 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
     #fff;
 }
 
-/* Booking details */
-.contact-form__booking {
-  display: flex; flex-direction: column;
-  gap: 8px;
-  padding: 14px;
-  border: 1px solid #000;
-  background: #fff;
-}
-.contact-form__booking[hidden] { display: none; }
-.contact-form__row {
-  display: flex; align-items: center; gap: 8px;
-  font-family: 'merchant_copy_wideregular';
-  font-size: 13px;
-  letter-spacing: 0.02em;
-}
-.contact-form__row > span { flex: 0 0 auto; white-space: nowrap; color: #000; }
-.contact-form__row > input,
-.contact-form__row > textarea { flex: 1 1 auto; padding: 8px 8px; font-size: 13px; }
-.contact-form__row--full { flex-direction: column; align-items: stretch; gap: 4px; }
-.contact-form__row--full > span { white-space: normal; }
-
 /* SEND + thanks */
 .contact-form__send {
   align-self: flex-start;
@@ -1342,7 +1285,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
   background: #fff;
   border: 1px solid #000;
   box-shadow: 3px 3px 0 #000;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 16px;
   color: #000;
   cursor: pointer;
@@ -1351,7 +1294,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .contact-form__send:active { box-shadow: none; transform: translate(3px, 3px); }
 
 .contact-form__thanks {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 13px;
   letter-spacing: 0.04em;
   line-height: 1.55;
@@ -1363,7 +1306,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .about-us__body { padding: 20px 24px 28px; display: flex; flex-direction: column; gap: 18px; }
 .about-us__copy {
   padding: 24px 28px 28px;
-  font-family: 'merchant_copy_doublesizeregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   line-height: 2;
   letter-spacing: 0.01em;
@@ -1426,14 +1369,14 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
   gap: 0;
 }
 .events__month {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: clamp(22px, 5vw, 46px);
   letter-spacing: -0.05em;
   color: #e2e4e3;
   line-height: 1;
 }
 .events__year {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: clamp(10px, 2vw, 18px);
   letter-spacing: 0.35em;
   text-indent: 0.35em; /* offset trailing letter-spacing so the year optically centers */
@@ -1452,7 +1395,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: clamp(14px, 3vw, 32px);
   letter-spacing: 0.35em;
   color: #282627;
@@ -1471,7 +1414,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: clamp(10px, 2vw, 18px);
   letter-spacing: 0.2em;
   color: #fff;
@@ -1534,7 +1477,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 .mv__desc-item {
   display: flex; align-items: center; justify-content: center; gap: 6px;
   width: 100%; height: 24px; padding: 0 8px;
-  font-family: 'merchant_copy_wideregular'; font-size: 12px;
+  font-family: 'Chicago Plain'; font-size: 12px;
   color: #000; background: #fff;
   border: none; cursor: default;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -1550,7 +1493,7 @@ button.mv__desc-item:hover {
 .mv__counter-text {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'merchant_copy_wideregular'; font-size: 14px; white-space: nowrap;
+  font-family: 'Chicago Plain'; font-size: 14px; white-space: nowrap;
 }
 .mv__bar-wrap { display: flex; align-items: center; height: 30px; }
 .mv__arrow { flex-shrink: 0; width: 29px; height: 30px; border: none; cursor: pointer; padding: 0; background-repeat: no-repeat; background-size: 100% 100%; }
@@ -1604,7 +1547,7 @@ button.mv__desc-item:hover {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 16px;
   letter-spacing: 0.12em;
   color: #fff;
@@ -1658,7 +1601,7 @@ button.mv__desc-item:hover {
   left: 10px;
 }
 .vm__transport { display: flex; align-items: center; gap: 6px; padding: 6px 8px; }
-.vm__time { font-family: 'merchant_copy_wideregular'; font-size: 11px; flex: 1; }
+.vm__time { font-family: 'Chicago Plain'; font-size: 11px; flex: 1; }
 
 /* ───────── Checkout page ───────── */
 .checkout-page { padding: 100px 0 80px; }
@@ -1686,19 +1629,19 @@ button.mv__desc-item:hover {
   flex-wrap: wrap;
 }
 .checkout-section__aux {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 13px;
   color: #000;
 }
 .checkout-label {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 15px;
   letter-spacing: 0.04em;
   color: #000;
 }
 .checkout-label--big { font-size: 22px; letter-spacing: 0.02em; }
 .checkout-link {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   letter-spacing: 0.04em;
   color: #3795ff;
@@ -1723,7 +1666,7 @@ button.mv__desc-item:hover {
   box-shadow: 3px 3px 0 #000;
   text-decoration: none;
   color: #000;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   letter-spacing: 0.02em;
   cursor: pointer;
@@ -1742,7 +1685,7 @@ button.mv__desc-item:hover {
 /* Inputs */
 .checkout-input {
   width: 100%;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 15px;
   letter-spacing: 0.03em;
   color: #000;
@@ -1818,7 +1761,7 @@ button.mv__desc-item:hover {
   height: calc(100% - 12px);
   background: #fff;
   border: 1px solid #000;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 13px;
   cursor: pointer;
   white-space: nowrap;
@@ -1826,7 +1769,7 @@ button.mv__desc-item:hover {
 .checkout-address__find:hover { background: #f0f0f0; }
 
 .checkout-empty {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   color: #838383;
   letter-spacing: 0.03em;
@@ -1843,7 +1786,7 @@ button.mv__desc-item:hover {
   border-bottom: 2px solid #000;
 }
 .cart-summary__count {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 48px;
   line-height: 1;
 }
@@ -1858,7 +1801,7 @@ button.mv__desc-item:hover {
 .cart-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 15px;
   table-layout: fixed;
 }
@@ -1918,7 +1861,7 @@ button.mv__desc-item:hover {
   justify-content: space-between;
   align-items: center;
   padding: 10px 16px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 16px;
   letter-spacing: 0.04em;
   background: url('horizontal.png') repeat-x bottom left;
@@ -1932,7 +1875,7 @@ button.mv__desc-item:hover {
   list-style: none;
   margin: 0 0 10px;
   padding: 0;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   letter-spacing: 0.04em;
 }
@@ -1947,7 +1890,7 @@ button.mv__desc-item:hover {
   padding: 8px 10px;
   border: 2px solid #000;
   background: #fff;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 14px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1983,7 +1926,7 @@ button.mv__desc-item:hover {
   border: 2px solid #000;
   box-shadow: 3px 3px 0 #000;
   padding: 10px 18px;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 16px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -2013,13 +1956,13 @@ button.mv__desc-item:hover {
 .account-view { padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 16px; }
 .account-view[hidden] { display: none; }
 .account-view__title {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 22px;
   letter-spacing: 0.02em;
   margin: 0;
 }
 .account-view__sub {
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 13px;
   color: #6a6a6a;
   letter-spacing: 0.04em;
@@ -2040,7 +1983,7 @@ button.mv__desc-item:hover {
   background: #fff;
   border: 1px solid #000;
   box-shadow: 3px 3px 0 #000;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 16px;
   cursor: pointer;
   margin-top: 6px;
@@ -2049,7 +1992,7 @@ button.mv__desc-item:hover {
 .account-form__submit:active { box-shadow: none; transform: translate(3px, 3px); }
 .account-form__error {
   display: none;
-  font-family: 'merchant_copy_wideregular';
+  font-family: 'Chicago Plain';
   font-size: 13px;
   color: #b00;
   padding: 6px 10px;

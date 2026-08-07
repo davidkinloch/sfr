@@ -4,20 +4,13 @@
 
 {%- comment -%}
   Resolve policy URLs from shop.policies rather than hardcoding /policies/*.
-  Legal falls back to the contact-information policy, which carries the
-  trader-identification detail while the dedicated Legal notice is empty.
 {%- endcomment -%}
 {%- assign privacy_url = '' -%}
 {%- assign terms_url = '' -%}
-{%- assign legal_url = '' -%}
-{%- assign contact_info_url = '' -%}
 {%- for policy in shop.policies -%}
   {%- if policy.url contains '/privacy-policy' -%}{%- assign privacy_url = policy.url -%}{%- endif -%}
   {%- if policy.url contains '/terms-of-service' -%}{%- assign terms_url = policy.url -%}{%- endif -%}
-  {%- if policy.url contains '/legal-notice' -%}{%- assign legal_url = policy.url -%}{%- endif -%}
-  {%- if policy.url contains '/contact-information' -%}{%- assign contact_info_url = policy.url -%}{%- endif -%}
 {%- endfor -%}
-{%- if legal_url == blank -%}{%- assign legal_url = contact_info_url -%}{%- endif -%}
 
 <footer class="sitefooter">
   <div class="footer-btns">
@@ -49,11 +42,6 @@
           {%- if terms_url != blank -%}
             {%- if shown > 0 -%}<span class="footer-meta__sep">·</span>{%- endif -%}
             <a class="footer-meta__link" href="{{ terms_url }}">Terms</a>
-            {%- assign shown = shown | plus: 1 -%}
-          {%- endif -%}
-          {%- if legal_url != blank -%}
-            {%- if shown > 0 -%}<span class="footer-meta__sep">·</span>{%- endif -%}
-            <a class="footer-meta__link" href="{{ legal_url }}">Legal</a>
           {%- endif -%}
         {%- endif -%}
       </div>
