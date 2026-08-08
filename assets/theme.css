@@ -1077,7 +1077,7 @@ a.menu__item.is-active {
 }
 .plp__track-wrap::-webkit-scrollbar { display: none; }
 .plp__track-wrap.is-dragging { cursor: grabbing; scroll-snap-type: none; }
-.plp__track { display: flex; gap: 16px; padding: 0 0 60px 16px; width: max-content; }
+.plp__track { display: flex; list-style: none; gap: 16px; padding: 0 0 60px 16px; width: max-content; }
 .plp__card {
   width: var(--plp-card-w, calc((100cqw - 80px) / 5));
   flex-shrink: 0;

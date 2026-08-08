@@ -30,7 +30,7 @@
       <div class="footer-meta__row">
         {%- if legal_links.links.size > 0 -%}
           {%- for link in legal_links.links -%}
-            {%- unless forloop.first -%}<span class="footer-meta__sep">·</span>{%- endunless -%}
+            {%- unless forloop.first -%}<span class="footer-meta__sep">|</span>{%- endunless -%}
             <a class="footer-meta__link" href="{{ link.url }}">{{ link.title }}</a>
           {%- endfor -%}
         {%- else -%}
@@ -40,7 +40,7 @@
             {%- assign shown = shown | plus: 1 -%}
           {%- endif -%}
           {%- if terms_url != blank -%}
-            {%- if shown > 0 -%}<span class="footer-meta__sep">·</span>{%- endif -%}
+            {%- if shown > 0 -%}<span class="footer-meta__sep">|</span>{%- endif -%}
             <a class="footer-meta__link" href="{{ terms_url }}">Terms</a>
           {%- endif -%}
         {%- endif -%}
@@ -48,9 +48,11 @@
     {%- endif -%}
 
     <div class="footer-meta__row">
-      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }} all rights reserved</span>
+      <span class="footer-meta__sep">|</span>
+      <span>Design by <a class="footer-meta__link" href="https://ags303.studio/" target="_blank" rel="noopener">AGS303</a></span>
       {%- if section.settings.show_credit and section.settings.credit_name != blank -%}
-        <span class="footer-meta__sep">·</span>
+        <span class="footer-meta__sep">|</span>
         <span>
           {{ section.settings.credit_prefix }}
           {%- if credit_url != blank -%}
