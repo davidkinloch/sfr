@@ -148,13 +148,30 @@
     const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
     return wrap.scrollLeft <= pad + 1;
   }
-  function updatePagination() {
+  function getTotalPages() {
+    return Math.max(1, Math.ceil(track.querySelectorAll('.plp__card').length / getPerPage()));
+  }
+  function getCurrentPage() {
     const perPage = getPerPage();
-    const items = track.querySelectorAll('.plp__card').length;
-    const total = Math.max(1, Math.ceil(items / perPage));
-    const cardW = getCardWidth();
+    const cardW   = getCardWidth();
+    const total   = getTotalPages();
+    const atEnd   = wrap.scrollLeft + wrap.offsetWidth >= wrap.scrollWidth - 1;
+    return atEnd ? total : (cardW > 0 ? Math.min(Math.round(wrap.scrollLeft / (cardW * perPage)) + 1, total) : 1);
+  }
+  /* Scroll to the target page's first card rather than nudging scrollLeft by a
+     fixed page-width delta — the last page is often a partial row, so a fixed
+     delta from there overshoots the intended page and lands back at the start. */
+  function scrollToPage(targetPage) {
+    const perPage = getPerPage();
+    const cards   = track.querySelectorAll('.plp__card');
+    targetPage = Math.max(1, Math.min(targetPage, getTotalPages()));
+    const card = cards[Math.min((targetPage - 1) * perPage, cards.length - 1)];
+    if (card) card.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+  }
+  function updatePagination() {
+    const total = getTotalPages();
     const atEnd = wrap.scrollLeft + wrap.offsetWidth >= wrap.scrollWidth - 1;
-    const current = atEnd ? total : (cardW > 0 ? Math.min(Math.round(wrap.scrollLeft / (cardW * perPage)) + 1, total) : 1);
+    const current = getCurrentPage();
     pageEl.textContent = current; totalEl.textContent = total;
     /* Hands mirror real scroll room, not page count — they disappear at each end. */
     if (handPrev) handPrev.classList.toggle('is-visible', !atStart());
@@ -168,8 +185,8 @@
       sliderNode.style.left = (pct * max) + 'px';
     }
   }
-  prevBtn.addEventListener('click', () => wrap.scrollBy({ left: -(getCardWidth() * getPerPage()), behavior: 'smooth' }));
-  nextBtn.addEventListener('click', () => wrap.scrollBy({ left:   getCardWidth() * getPerPage(),  behavior: 'smooth' }));
+  prevBtn.addEventListener('click', () => scrollToPage(getCurrentPage() - 1));
+  nextBtn.addEventListener('click', () => scrollToPage(getCurrentPage() + 1));
   if (handPrev) handPrev.addEventListener('click', () => prevBtn.click());
   if (handNext) handNext.addEventListener('click', () => nextBtn.click());
   wrap.addEventListener('scroll', updatePagination);
