@@ -1459,7 +1459,7 @@ a.plp__desc-item { cursor: pointer; text-decoration: none; }
 }
 .mv__track-wrap::-webkit-scrollbar { display: none; }
 .mv__track-wrap.is-dragging { cursor: grabbing; scroll-snap-type: none; }
-.mv__track { display: flex; gap: 16px; padding: 0 0 60px 16px; width: max-content; }
+.mv__track { display: flex; list-style: none; gap: 16px; padding: 0 0 60px 16px; width: max-content; }
 .mv__card {
   width: var(--mv-card-w, calc((100cqw - 48px) / 3));
   flex-shrink: 0;
