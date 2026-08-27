@@ -197,9 +197,9 @@ main {
 }
 .player__artwork {
   width: calc(100% + 24px);
+  max-width: none;          /* beat the global img{max-width:100%} so it bleeds to the panel edges */
   margin: -10px -12px 0;
-  aspect-ratio: 1/1;
-  object-fit: cover;
+  height: auto;             /* native ratio — no crop */
   display: block;
   border: 1px solid #000;
 }
@@ -559,24 +559,33 @@ a.menu__item.is-active {
   margin: 0 auto 24px;
   padding: 0 24px;
 }
+/* Same CTA chip language as ADD TO CART, deliberately smaller. */
 .pdp__back {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  padding: 5px 12px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 0;
+  box-shadow: 2px 2px 0 #000;
   text-decoration: none;
   cursor: pointer;
+  user-select: none;
 }
+.pdp__back:hover { background: #f0f0f0; }
+.pdp__back:active { box-shadow: none; transform: translate(2px, 2px); }
 .pdp__back-arrow {
-  width: 29px;
-  height: 30px;
+  width: 15px;
+  height: auto;
   flex-shrink: 0;
-  background: url('plp-arrow-left.png') no-repeat center / 100% 100%;
+  color: #000;
+  display: block;
 }
-/* Plain white text — deliberately not a CTA chip. */
 .pdp__back-label {
   font-family: 'Chicago Plain';
-  font-size: 13px;
-  color: #fff;
+  font-size: 12px;
+  color: #000;
   white-space: nowrap;
 }
 .pdp__inner {
@@ -590,6 +599,10 @@ a.menu__item.is-active {
 }
 
 /* Cover + vinyl peek */
+/* min-width:0 so this grid column can shrink below its content — without it a
+   long .pdp__thumbs row sets the track's min-content width and the whole page
+   overflows sideways (worst on mobile). */
+.pdp__media { min-width: 0; }
 .pdp__cover-wrap { position: relative; overflow: visible; }
 .pdp__cover {
   display: block; width: 100%;
@@ -605,8 +618,19 @@ a.menu__item.is-active {
   transition: left 0.5s ease-in-out;
 }
 
-/* Thumbnails */
-.pdp__thumbs { display: flex; gap: 10px; margin-top: 14px; }
+/* Thumbnails — scroll horizontally inside their own strip rather than widening
+   the media column (a 5-up thumb row is ~440px). */
+.pdp__thumbs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin-top: 14px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.pdp__thumbs::-webkit-scrollbar { display: none; }
 .pdp__thumb {
   width: 80px; height: 80px;
   object-fit: cover;
@@ -619,7 +643,7 @@ a.menu__item.is-active {
 .pdp__thumb:hover { border-color: #555; }
 
 /* Info panel */
-.pdp__panel { position: relative; z-index: 2; }
+.pdp__panel { position: relative; z-index: 2; min-width: 0; }
 .pdp__panel .border-left { left: -1px; }
 .pdp__body { padding: 0; }
 
@@ -2037,8 +2061,40 @@ button.mv__desc-item:hover {
   .checkout-page,
   .account-page { padding-top: 24px; padding-bottom: 24px; }
   .pdp__inner { gap: 24px; padding: 0 16px; }
-  /* Stack the PDP purchase row vertically so children don't overflow */
-  .pdp__purchase { grid-template-columns: 1fr; }
-  .pdp__price,
-  .pdp__stock { border-right: none; border-bottom: 2px solid #000; }
+
+  /* Purchase strip on mobile: price + stock share one compact row so they stop
+     dominating; ADD TO CART gets its own full-width row and larger text so it
+     reads as the primary action (standard white CTA styling kept). */
+  .pdp__purchase { display: flex; flex-wrap: wrap; }
+  .pdp__price {
+    border-right: 2px solid #000;
+    border-bottom: 2px solid #000;
+    padding: 8px 14px;
+  }
+  .pdp__price-tag { font-size: 20px; padding: 4px 12px; border-radius: 4px; }
+  .pdp__stock {
+    flex: 1;
+    border-right: none;
+    border-bottom: 2px solid #000;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    padding: 8px 12px;
+    background-size: 180px;
+  }
+  .pdp__buy {
+    flex-basis: 100%;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px;
+  }
+  .pdp__qty-wrap { flex-shrink: 0; }
+  .pdp__add-cart {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    padding: 12px;
+  }
 }
