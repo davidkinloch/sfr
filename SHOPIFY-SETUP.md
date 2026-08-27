@@ -22,6 +22,49 @@ If you'd rather develop live: `shopify theme dev` — gives you a localhost prev
 
 ---
 
+## 1a. Local development environment
+
+One-time:
+
+```bash
+cd /Users/dk/Sites/SFR/shopify
+npm install            # prettier + liquid plugin + local Shopify CLI
+shopify auth login     # browser OAuth against the account that owns sfr-records
+```
+
+Day-to-day (`shopify.theme.toml` defines the `dev` / `live` environments):
+
+```bash
+npm run dev            # shopify theme dev  → http://127.0.0.1:9393  (SFR is pinned to 9393, not the default 9292)
+npm run dev:sync       # same, but pull theme-editor changes back to local files
+npm run check          # theme-check (config in .theme-check.yml)
+npm run check:fix      # theme-check --auto-correct
+npm run pull:merchant  # pull config/ + locales/ that merchants edited in admin
+```
+
+`npm run dev` spins up a throwaway **development theme** on the store (it doesn't
+touch `main` or the published theme). In the terminal: `t` opens the storefront
+preview, `e` the theme editor. Auth token is cached after the first login.
+
+Port is pinned to **9393** and store to `sfr-records.myshopify.com` in the `dev`
+script so it never collides with another `shopify theme dev` running on the
+default `9292` for a different project — both can run at once.
+
+`npm run format` runs Prettier over every `.liquid` file — the existing theme was
+**not** written with Prettier, so the first run is a large reformat. Only do it if
+the team agrees to adopt it; it's wired but not enforced.
+
+Notes:
+- No build step. Shopify auto-minifies CSS/JS on upload; first-party files are
+  committed unminified on purpose (Theme Store rule + keeps diffs readable).
+- `shopify.theme.toml`, `package.json`, `.theme-check.yml`, `.prettierrc.json` are
+  tooling only — they're listed in `.shopifyignore` so they never upload.
+- `shopify theme dev` auth: if a collaborator without full admin needs to run it,
+  they need a Theme Access `shptka_…` password via `--password` (the store's
+  permanent `.myshopify.com` handle, not its display name).
+
+---
+
 ## 2. Set up in Shopify admin
 
 ### Collections

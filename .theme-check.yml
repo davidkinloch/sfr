@@ -1,0 +1,19 @@
+# Theme Check config for the SFR Records theme.
+# Run:  shopify theme check           (or --auto-correct, or --fail-level error for CI)
+extends: theme-check:recommended
+
+# First-party JS/CSS is hand-written and Shopify auto-minifies on upload, so the
+# "asset too big" heuristics only create noise here.
+AssetSizeCSS:
+  enabled: false
+AssetSizeJavaScript:
+  enabled: false
+
+# Flag dead `assign`s as a warning rather than ignoring them entirely.
+UnusedAssign:
+  enabled: true
+  severity: warning
+
+ignore:
+  - node_modules/**
+  - .git/**

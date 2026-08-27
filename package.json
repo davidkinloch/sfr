@@ -1,0 +1,20 @@
+{
+  "name": "sfr-records-theme",
+  "private": true,
+  "description": "SFR Records Shopify theme — tooling only (no build step; Shopify auto-minifies on upload).",
+  "scripts": {
+    "dev": "shopify theme dev -e dev --store sfr-records.myshopify.com --port 9393",
+    "dev:sync": "shopify theme dev -e dev --store sfr-records.myshopify.com --port 9393 --theme-editor-sync",
+    "check": "shopify theme check",
+    "check:fix": "shopify theme check --auto-correct",
+    "format": "prettier --write \"**/*.liquid\" \"**/*.{json,css,js}\"",
+    "format:check": "prettier --check \"**/*.liquid\"",
+    "pull:merchant": "shopify theme pull -e live --only config locales"
+  },
+  "devDependencies": {
+    "@shopify/cli": "^3.93.2",
+    "@shopify/prettier-plugin-liquid": "^1.9.3",
+    "prettier": "^3.4.2",
+    "puppeteer-core": "^23.11.1"
+  }
+}

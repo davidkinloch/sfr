@@ -7,3 +7,15 @@
 *.swp
 *.swo
 .DS_Store
+
+# Repo/tooling files that are not part of the theme upload.
+.git/*
+.github/*
+node_modules/*
+.shopify/*
+shopify.theme.toml
+.theme-check.yml
+.prettierrc.json
+package.json
+package-lock.json
+SHOPIFY-SETUP.md

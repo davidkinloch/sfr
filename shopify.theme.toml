@@ -1,0 +1,16 @@
+# Shopify CLI environments for the SFR Records theme.
+#   shopify theme dev  -e dev         # local hot-reload preview (creates a development theme)
+#   shopify theme push -e live        # push to the connected/published theme  (asks first)
+#   shopify theme pull -e live --only config locales   # grab merchant edits from admin
+#
+# `theme` is intentionally omitted from `dev` so the CLI spins up a throwaway
+# development theme instead of touching a real one. Fill in the numeric id under
+# [environments.live] once you've run `shopify theme list` (or leave it and the
+# CLI will prompt).
+
+[environments.dev]
+store = "sfr-records.myshopify.com"
+
+[environments.live]
+store = "sfr-records.myshopify.com"
+# theme = "123456789012"   # <- published theme id from `shopify theme list`
