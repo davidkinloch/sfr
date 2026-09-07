@@ -748,10 +748,15 @@ a.menu__item.is-active {
   font-size: 18px;
   letter-spacing: 0.05em;
 }
-.pdp__size-options { display: flex; gap: 6px; }
+.pdp__size-options { display: flex; flex-wrap: wrap; gap: 6px; }
 .pdp__size-btn {
-  min-width: 38px; height: 32px;
-  padding: 0 8px;
+  min-width: 38px; min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.2;
+  padding: 6px 10px;
   background: #fff;
   border: 1px solid #000;
   font-family: 'Chicago Plain';
